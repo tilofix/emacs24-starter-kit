@@ -8,6 +8,30 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 My config.
 
+** Changes done to move from org-7/Emacs-23 to org-8/Emacs-24
+
+New environment variable necessary =ORG_HOME=.
+
+Removed following directories due to warning from git:
+- src/auctex
+- src/magit
+- src/zenburn-emacs
+
+warning: unable to rmdir src/auctex: Directory not empty
+warning: unable to rmdir src/magit: Directory not empty
+warning: unable to rmdir src/org: Directory not empty
+warning: unable to rmdir src/zenburn-emacs: Directory not empty
+
+Manually copied from backup =.emacs.d_20131011.bak=:
+- cygwin-mount.el
+- message-outlook.el
+- outlook.py
+- outlookedit.el
+- p4-lowlevel.el
+- plantuml-mode.el
+- pymacs.el
+- vc-p4.el
+
 ** Extend dired-mode with a key to open a file for browsing
 #+begin_src emacs-lisp 
   (add-hook 'dired-mode-hook
@@ -473,14 +497,14 @@ Indeed org-remember seems to do the job.
 **** Setting up org-remember
 Source: [[info:org-6.06b:Setting%20Remember][info:org-6.06b:Setting Remember]]
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (org-remember-insinuate)
   (define-key global-map "\C-cr" 'org-remember)
 #+end_src
 
 **** Setting up Remember templates
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   (setq org-remember-templates
         '(("Note" ?n "* %?\n"  "~/Documents/Wiki/org/notes.org" "Notes")
           ("Todo" ?t "* TODO %?\n %u"  "~/Documents/Wiki/org/TODO.org" "Tasks")
@@ -2338,7 +2362,9 @@ Source: https://gist.github.com/zerogravity/emacs-starter-kit/blob/master/starte
 OK, I just download cedet-1.0 as I could not manage to get sources via bzr.
 There is no type of URL for http.
 
-#+BEGIN_SRC emacs-lisp
+Maybe I will install cedet later via package-el.
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (load-file "~/.emacs.d/src/cedet/common/cedet.el")
   
   (global-ede-mode t)
@@ -2405,7 +2431,9 @@ Now I'd like to install lua-mode for emacs
 
 Lua-mode downloaded from http://luaforge.net/frs/download.php/4814/lua-mode-20110428.zip.
 
-#+BEGIN_SRC emacs-lisp
+Maybe I will install lua-mode later via package-el.
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (load-file "~/.emacs.d/src/lua-mode/lua-mode.el")
   (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
   (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
@@ -2471,7 +2499,9 @@ According to web site "http://alexott.net/en/writings/emacs-vcs/EmacsMercurial.h
 Copied tar entry mercurial-1.9.2/contrib/mercurial.el to d:/wt000780/.emacs.d/src/mercurial.el
 from ~c:/cygwin/usr/src/mercurial-1.9.2.tar.gz~ 
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+Maybe I will install mercurial later via package-el.
+
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'mercurial)
 #+END_SRC
 
