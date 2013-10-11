@@ -1,0 +1,2605 @@
+#-*- coding: utf-8-unix -*-
+#+TITLE: Tilo's Starter Kit Config
+#+OPTIONS: num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Tilo's Stater Kit Config
+
+My config.
+
+** Extend dired-mode with a key to open a file for browsing
+#+begin_src emacs-lisp 
+  (add-hook 'dired-mode-hook
+    (function (lambda ()
+      (local-set-key "\C-co" 
+         (function (lambda () 
+           (interactive)
+           (browse-url (concat "file://" (dired-get-filename))))))
+      ))
+    )
+#+end_src
+
+
+** ClearCase
+*** Added ClearCase Extension
+Source: http://members.verizon.net/kevin.a.esler/EmacsClearCase/clearcase.el
+To: ~/.emacs.d/src/clearcase.el
+ClearCase-version "/main/laptop/166"
+
+Don't know if following code snippets found in old
+".emacs.starter-kit" file as "custom-set-variables" are still important:
+(custom-set-variables
+ '(clearcase-normal-diff-switches "-urN")
+ '(clearcase-use-normal-diff nil)
+ '(clearcase-viewroot-drive "v:")
+ )
+
+#+begin_src emacs-lisp :tangle no
+(load "clearcase")
+#+end_src
+
+*** ConfigSpec mode ;* ClCa Config Spec mode
+
+#+begin_src emacs-lisp
+  (define-generic-mode 'config_spec-mode
+    ;; COMMENT-LIST
+    '(?#)
+    ;; KEYWORD-LIST
+    '("element" "mkbranch" "time" "include" "load" "end")
+    ;; FONT-LOCK-LIST
+    '(
+      ("\\[[^[:blank:]]+:[^[:blank:]]+\\]" . 'font-lock-variable-name-face)
+      ("{.*}" . 'font-lock-builtin-face)
+      ("-\\(file\\|dir\\w*\\|mkbranch\\|eltype\\|error\\)[[:blank:][:cntrl:]]"
+       . 'font-lock-builtin-face)
+      ("-\\(config\\|select\\|ci\\|nocheckout\\|none\\|overwrite\\)[[:blank:][:cntrl:]]"
+       . 'font-lock-builtin-face)
+      ("\\(CHECKEDOUT\\|LATEST\\)[[:blank:][:cntrl:]]" . 'font-lock-warning-face))
+    ;; AUTO-MODE-LIST
+    '("\\.\\(cs\\|ascs\\)\\'")
+    ;; FUNCTION-LIST
+    nil
+    ;; DESCRIPTION
+    "Major mode for ClCa config specs highlighting.")
+#+end_src
+
+
+** Some configuration for emacs and cygwin integration
+"cygwin integration" conflicts with "msys integration".
+One of the two must not be tangled.
+
+#+begin_src emacs-lisp 
+  (custom-set-variables
+   '(Info-additional-directory-list (quote ("~/share/info" "c:/cygwin/usr/share/info")))
+   '(ange-ftp-ftp-program-name "c:/cygwin/bin/ftp.exe")
+   '(ange-ftp-gateway-ftp-program-name "c:/cygwin/bin/ftp.exe")
+   )
+  
+  (if (eq system-type 'windows-nt)
+      (progn
+        ;; From http://www.cygwin.com/faq/faq_3.html#SEC63
+        ;; This assumes that Cygwin is installed in C:\cygwin (the
+        ;; default) and that C:\cygwin\bin is not already in your
+        ;; Windows Path (it generally should not be).
+        ;;
+        (setq exec-path (cons "C:/cygwin/bin" exec-path))
+        (setenv "PATH" (concat "C:\\cygwin\\bin;" (getenv "PATH")))
+        ;;
+        ;; NT-emacs assumes a Windows command shell, which you change
+        ;; here.
+        ;;
+        (setq process-coding-system-alist '(("bash" . undecided-unix)))
+        (setq shell-file-name "bash")
+        (setenv "SHELL" shell-file-name) 
+        (setq explicit-shell-file-name shell-file-name) 
+        (setq shell-command-switch "-c")      ; SHOULD IT BE (setq shell-command-switch "-ic")?
+  
+        ;; From http://www.emacswiki.org/elisp/index.html
+        ;; use cygwin-style filenames
+        (require 'cygwin-mount)
+        (cygwin-mount-activate)
+  
+        (setenv "CYGWIN" (concat "nodosfilewarning" (getenv "CYGWIN")))
+        ))
+  
+  (setenv "MANPATH" (concat "~/share/man:/usr/share/man" (getenv "MANPATH")))
+#+end_src
+
+*** Trouble with e-lisp files read doubled
+Had some trouble with this section and setting of environment variable CYGWIN.
+Actually file [[file:starter-kit.org][starter-kit.org]] loads E-lisp customization for system
+and user but first reads the '*.el' config file and second the '*.org' file via
+=org-babel-load-file=. But according to help of this function:
+#+begin_example
+org-babel-load-file is an interactive compiled Lisp function in
+`ob-tangle.el'.
+
+(org-babel-load-file FILE)
+
+Load Emacs Lisp source code blocks in the Org-mode FILE.
+This function exports the source code using
+`org-babel-tangle' and then loads the resulting file using
+`load-file'.
+#+end_example
+it does not only tangles e-lisp source code into a '*.el' file but also
+loads resulting '*.el' file afterwards.
+Thus enviroment variable "CYGWIN" has got following content
+"nodosfilewarningnodosfilewarning".
+
+#+begin_src diff :tangle no
+diff --git a/starter-kit.org b/starter-kit.org
+index 464ac3d..f862d58 100644
+--- a/starter-kit.org
++++ b/starter-kit.org
+@@ -521,9 +521,9 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
+   (if (file-exists-p system-specific-config) (load system-specific-config))
+   (if (file-exists-p system-specific-literate-config)
+       (org-babel-load-file system-specific-literate-config))
+-  (if (file-exists-p user-specific-config) (load user-specific-config))
+   (if (file-exists-p user-specific-literate-config)
+-      (org-babel-load-file user-specific-literate-config))
++      (org-babel-load-file user-specific-literate-config)
++      (if (file-exists-p user-specific-config) (load user-specific-config)))
+   (when (file-exists-p user-specific-dir)
+     (let ((default-directory user-specific-dir))
+       (mapc #'load (directory-files user-specific-dir nil ".*el$"))
+#+end_src
+
+*** TODO Do not load org-files within each emacs start-up
+Only load org-files and tangle them when a org-file has been changed.
+Check time stamp of org-file, el-file, and elc-file.
+
+
+
+
+** Some configuration for emacs and msys integration
+"msys integration" conflicts with "cygwin integration".
+
+Configuration expects a MinGW/MSYS installation in "C:\MinGW" 
+done with help of "C:\MinGW\bin\mingw-get.ext".
+- ~C:\MinGW>bin\mingw-get.exe install mgwport~
+- ~C:\MinGW>bin\mingw-get.exe install msys-base~
+
+Edit msys fstab file to add mount "/mingw".
+#+BEGIN_EXAMPLE
+#Win32_Path		Mount_Point
+c:/mingw		/mingw
+#+END_EXAMPLE
+
+What needs to be done?
+- set environment to find tools like grep and find in PATH.
+- make sure neither a cygwin based application nor cygwin.dll is found in PATH.
+  (ACI installation copies cygwin.dll in system directory of Windows).
+
+Start msys shell taken from ErgoEmacs installation:
+[[file:c:/Program%20Files/ErgoEmacs/ergoemacs/init_functions.el][file:c:/Program Files/ErgoEmacs/ergoemacs/init_functions.el]]
+
+# As long as git does not run in msys I need to keep cygwin.
+#+BEGIN_SRC emacs-lisp :tangle no
+  (if (eq system-type 'windows-nt)
+      (progn
+        (setq exec-path (cons "C:/MinGW/msys/1.0/bin" exec-path))
+        (defun msys-shell (&optional arg)
+          "Run MSYS shell (sh.exe).  It's like a Unix Shell in Windows.
+  A numeric prefix arg switches to the specified session, creating
+  it if necessary."
+          (interactive "P")
+          (let ((buf-name (cond ((numberp arg)
+                                 (format "*msys<%d>*" arg))
+                                (arg
+                                 (generate-new-buffer-name "*msys*"))
+                                (t
+                                 "*msys*")))
+                (explicit-shell-file-name "sh.exe"))
+            (shell buf-name)))
+        ))
+#+END_SRC
+
+
+** Python
+*** Python interpreter to be started
+Without customization command "python" will be executed. In my
+environment due to cygwin intergration above
+=C:/cygwin/bin/python.exe= is started.
+So change to Python2.5.
+
+#+begin_src emacs-lisp
+  (if (eq system-type 'windows-nt)
+    (custom-set-variables
+     '(python-python-command "c:/Python25/python.exe" t)
+     '(py-python-command "c:/Python25/python.exe" t))
+    )
+#+end_src
+
+Now it is working with Python-2.5
+
+#+begin_example
+Python 2.5.4 (r254:67916, Dec 23 2008, 15:10:54) [MSC v.1310 32 bit (Intel)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import sys
+>>> sys.modules
+{'copy_reg': <module 'copy_reg' from 'c:\Python25\lib\copy_reg.pyc'>, 'sre_compile': <module 'sre_compile' from 'c:\Python25\lib\sre_compile.pyc'>, 'locale': <module 'locale' from 'c:\Python25\lib\locale.pyc'>, '_sre': <module '_sre' (built-in)>, '__main__': <module '__main__' (built-in)>, 'site': <module 'site' from 'c:\Python25\lib\site.pyc'>, '__builtin__': <module '__builtin__' (built-in)>, 'operator': <module 'operator' (built-in)>, 'encodings': <module 'encodings' from 'c:\Python25\lib\encodings\__init__.pyc'>, 'os.path': <module 'ntpath' from 'c:\Python25\lib\ntpath.pyc'>, 'encodings.encodings': None, 'errno': <module 'errno' (built-in)>, 'encodings.codecs': None, 'sre_constants': <module 'sre_constants' from 'c:\Python25\lib\sre_constants.pyc'>, 're': <module 're' from 'c:\Python25\lib\re.pyc'>, 'ntpath': <module 'ntpath' from 'c:\Python25\lib\ntpath.pyc'>, 'UserDict': <module 'UserDict' from 'c:\Python25\lib\UserDict.pyc'>, 'nt': <module 'nt' (built-in)>, 'stat': <module 'stat' from 'c:\Python25\lib\stat.pyc'>, 'zipimport': <module 'zipimport' (built-in)>, 'warnings': <module 'warnings' from 'c:\Python25\lib\warnings.pyc'>, 'encodings.types': None, '_codecs': <module '_codecs' (built-in)>, 'encodings.cp1252': <module 'encodings.cp1252' from 'c:\Python25\lib\encodings\cp1252.pyc'>, 'sys': <module 'sys' (built-in)>, 'codecs': <module 'codecs' from 'c:\Python25\lib\codecs.pyc'>, 'types': <module 'types' from 'c:\Python25\lib\types.pyc'>, '_types': <module '_types' (built-in)>, '_locale': <module '_locale' (built-in)>, 'signal': <module 'signal' (built-in)>, 'linecache': <module 'linecache' from 'c:\Python25\lib\linecache.pyc'>, 'encodings.aliases': <module 'encodings.aliases' from 'c:\Python25\lib\encodings\aliases.pyc'>, 'exceptions': <module 'exceptions' (built-in)>, 'sre_parse': <module 'sre_parse' from 'c:\Python25\lib\sre_parse.pyc'>, 'os': <module 'os' from 'c:\Python25\lib\os.pyc'>}
+>>> 
+>>> import Pymacs
+>>> help(Pymacs)
+Help on package Pymacs:
+
+NAME
+    Pymacs - Interface between Emacs Lisp and Python - Module initialisation.
+
+FILE
+    c:\python25\lib\site-packages\pymacs-0.23-py2.5.egg\pymacs\__init__.py
+
+DESCRIPTION
+    A few symbols are moved in here so they appear to be defined at this level.
+
+PACKAGE CONTENTS
+    pymacs
+
+DATA
+    __loader__ = <zipimporter object "c:\Python25\lib\site-packages\pymacs...
+    __package__ = 'Pymacs'
+    __version__ = '0.23'
+    lisp = <Pymacs.pymacs.Lisp_Interface object at 0x00B28DD0>
+
+VERSION
+    0.23
+
+>>> 
+#+end_example
+
+
+*** Enable Pymacs support
+Quickstart: http://wiki.python.de/Pymacs
+
+**** Insatll Pymacs module for Python
+#+begin_example
+21K454J[Projects]$ easy_install Pymacs
+Processing Pymacs
+Running setup.py -q bdist_egg --dist-dir D:\wt000780\Projects\Pymacs\egg-dist-tmp-4hkxno
+zip_safe flag not set; analyzing archive contents...
+Adding pymacs 0.23 to easy-install.pth file
+
+Installed c:\python25\lib\site-packages\pymacs-0.23-py2.5.egg
+Processing dependencies for pymacs==0.23
+Finished processing dependencies for pymacs==0.23
+21K454J[Projects]$
+#+end_example
+
+After move to ADTRAN image and start to install pymacs: error.
+Difference was to use distribute and pip.
+
+#+begin_example
+D:\twirkner\src\pinard-Pymacs-5989046>
+D:\twirkner\src\pinard-Pymacs-5989046>python pppp -C ppppconfig.py pppp.rst.in p
+ymacs.el.in Pymacs.py.in pymacs.rst.in contrib tests
+
+D:\twirkner\src\pinard-Pymacs-5989046>python setup.py build
+running build
+running build_py
+creating build
+creating build\lib
+copying Pymacs.py -> build\lib
+
+D:\twirkner\src\pinard-Pymacs-5989046>
+D:\twirkner\src\pinard-Pymacs-5989046>python setup.py install
+running install
+running build
+running build_py
+running install_lib
+copying build\lib\Pymacs.py -> C:\Python25\Lib\site-packages
+byte-compiling C:\Python25\Lib\site-packages\Pymacs.py to Pymacs.pyc
+running install_egg_info
+Writing C:\Python25\Lib\site-packages\Pymacs-0.25-py2.5.egg-info
+
+D:\twirkner\src\pinard-Pymacs-5989046>
+#+end_example
+
+
+**** Install pymacs-el
+File could be copied from Pymacs module into lisp path. 
+=21K454J[Projects]$ cp Pymacs/pymacs.el ../share/emacs/site-lisp/=
+
+Or we load directly from Python package, which creates a dependency
+for a cerain Pymacs version. Oh, does not work, pymacs-el is not
+included in Python module, only local copy.
+=21K454J[Pymacs]$ cp pymacs.el ~/.emacs.d/src=
+
+Documentation can be found is ReST
+[[file:~/Projects/Pymacs/pymacs.rst::..%20role::%20code(strong)][file:~/Projects/Pymacs/pymacs.rst::.. role:: code(strong)]]. 
+
+#+begin_src emacs-lisp
+  ; (load "c:\python25\lib\site-packages\pymacs-0.23-py2.5.egg")
+  (require 'pymacs)
+  (eval-after-load "pymacs"
+    '(add-to-list 'pymacs-load-path (expand-file-name "~/lib/python2.5/site-packages")))
+#+end_src
+
+**** Check if pymacs works
+'hello_world' function defined in
+[[file:~/lib/python2.5/site-packages/hello.py::def%20hello_world():][file:~/lib/python2.5/site-packages/hello.py::def hello_world():]]. 
+
+***** M+x hello-hello-world does not work yet.
+Found following in [[buffer:*Messages*]]
+
+Pymacs loading hello...
+pymacs-report-error: Pymacs helper did not start within 30 seconds
+
+Found following in [[buffer:*Pymacs*]]
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ImportError: No module named Pymacs.pymacs
+
+Process pymacs exited abnormally with code 1
+
+***** Pymacs function to interact with Python
+[[elisp:pymacs-start-services]]
+
+Launch the Pymacs helper with variable =python= for command to start
+interpreter. When environment variable =PYMACS_PYTHON= is not set and
+when =python= is null or empty then command is set to "python" which
+calls - in my environment - cygwin's CPython which has no module "Pymacs"
+installed. 
+
+***** Solution: set variable =PYMACS_PYTHON=
+
+#+begin_src emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (setenv "PYMACS_PYTHON" python-python-command)
+    )
+#+end_src
+
+***** M+x hello-hello-world works
+Precondition, pymacs-load "hello".
+Pymacs loading hello...done
+
+***** Still error during emacs start up
+The variable =python-python-command= is not available during
+start-up. But it is customized. When are customized variables are going
+to be initialized, set?
+
+Note: removed byte code below to get this file back to text!?
+#+BEGIN_EXAMPLE
+Debugger entered--Lisp error: (void-variable python-python-command)
+  (setenv "PYMACS_PYTHON" python-python-command)
+  eval-buffer(#<buffer  *load*<3>> nil "d:/wt000780/.emacs.d/wt000780.el" nil t)  ; Reading at buffer position 6580
+  load-with-code-conversion("d:/wt000780/.emacs.d/wt000780.el" "d:/wt000780/.emacs.d/wt000780.el" nil nil)
+  load("d:/wt000780/.emacs.d/wt000780.el" nil nil t)
+  load-file("d:/wt000780/.emacs.d/wt000780.el")
+  org-babel-load-file("d:/wt000780/.emacs.d/wt000780.org")
+  (if (file-exists-p user-specific-literate-config) (org-babel-load-file user-specific-literate-config) (if (file-exists-p user-specific-config) (load user-specific-config)))
+  eval-buffer(#<buffer  *load*<2>> nil "d:/wt000780/.emacs.d/starter-kit.el" nil t)  ; Reading at buffer position 4223
+  load-with-code-conversion("d:/wt000780/.emacs.d/starter-kit.el" "d:/wt000780/.emacs.d/starter-kit.el" nil nil)
+  load("d:/wt000780/.emacs.d/starter-kit.el" nil nil t)
+  load-file("d:/wt000780/.emacs.d/starter-kit.el")
+  org-babel-load-file("d:/wt000780/.emacs.d/starter-kit.org")
+  eval-buffer(#<buffer  *load*> nil "d:/wt000780/.emacs.d/init.el" nil t)  ; Reading at buffer position 573
+  load-with-code-conversion("d:/wt000780/.emacs.d/init.el" "d:/wt000780/.emacs.d/init.el" t t)
+  load("d:/wt000780/.emacs.d/init" t t)
+  #[nil "...full of back-slash numbers..." [init-file-user system-type user-init-file-1 user-init-file otherfile source ms-dos "~" "/_emacs" windows-nt directory-files nil "^\\.emacs\\(\\.elc?\\)?$" "~/.emacs" "^_emacs\\(\\.elc?\\)?$" "~/_emacs" "/.emacs" t load expand-file-name "init" file-name-as-directory "/.emacs.d" file-name-extension "elc" file-name-sans-extension ".el" file-exists-p file-newer-than-file-p message "Warning: %s is newer than %s" sit-for 1 "default" alt inhibit-default-init inhibit-startup-screen] 7]()
+  command-line()
+  normal-top-level()
+
+#+END_EXAMPLE
+
+Indeed function =custom-set-variables= only stores an expression
+without evaluationg it. But there are some possible arguments.
+
+****** Help:custom-set-variables
+custom-set-variables is a compiled Lisp function in `custom.el'.
+
+(custom-set-variables &rest ARGS)
+
+Install user customizations of variable values specified in ARGS.
+These settings are registered as theme `user'.
+The arguments should each be a list of the form:
+
+  (SYMBOL EXP [NOW [REQUEST [COMMENT]]])
+
+This stores EXP (without evaluating it) as the saved value for SYMBOL.
+
+If NOW is present and non-nil, then also evaluate EXP and set
+the default value for the SYMBOL to the value of EXP.
+
+REQUEST is a list of features we must require in order to
+handle SYMBOL properly.
+
+COMMENT is a comment string about SYMBOL.
+
+
+***** NOW, pymacs works after start-up
+Please see changed customization for =python-python-command=.
+
+
+** Setting up org-mode
+Don't need to check for running org-mode as org-mode is up and running
+when org-babel reads and tangles this file.
+
+#+begin_src emacs-lisp
+  (global-set-key "\C-cl" 'org-store-link)
+  (global-set-key "\C-ca" 'org-agenda)
+  (global-set-key "\C-cb" 'org-iswitchb)
+  (global-set-key "\C-cp" 'org-publish-current-file)
+  (setq org-directory (expand-file-name "~/Documents/Wiki/org/"))
+  (setq org-default-notes-file (concat org-directory "notes.org"))
+  (setq org-agenda-ndays 7)
+  ;; always start with TODAY
+  (setq org-agenda-start-on-weekday nil) 
+  ;; always start with MONDAY
+  ;; (setq org-agenda-start-on-weekday 1) 
+  (setq org-agenda-files (list (concat org-directory "TODO.org")))
+  ;; read directory according to 
+  ;; (setq org-agenda-files (list org-directory))
+  (setq org-export-htmlize-output-type (quote inline-css))
+#+end_src
+
+*** These are John's custom views
+(skipped \"show all waiting toto items\").
+source: http://www.newartisans.com/2007/08/using-org-mode-as-a-day-planner.html
+
+#+begin_src emacs-lisp
+  (setq org-agenda-custom-commands 
+        (quote 
+         (("c" "List all completed todo items." todo "DONE|DEFERRED|CANCELLED" nil) 
+          ;;     ("d" "List all delegated todo items." todo "DELEGATED" nil) 
+          ("W" "Show next 21 days in an agenda view." agenda "" 
+           ((org-agenda-ndays 21))) 
+          ("A" "Show all today's Priority #A tasks." agenda "" 
+           ((org-agenda-skip-function 
+             (lambda nil (org-agenda-skip-entry-if (quote notregexp) "\\=.*\\[#A\\]"))) 
+            (org-agenda-ndays 1) (org-agenda-overriding-header "Today's Priority #A tasks: "))) 
+          ("u" "Show all un-scheduled, -deadlined, and -dated tasks." alltodo "" 
+           ((org-agenda-skip-function 
+             (lambda nil (org-agenda-skip-entry-if (quote scheduled) (quote deadline) (quote regexp) "<[^>]+>"))) 
+            (org-agenda-overriding-header "Unscheduled TODO entries: "))))))
+#+end_src
+
+*** Remember-el and org mode
+**** Setting up Remember
+Just found following information on website "http://www.emacswiki.org/emacs/RememberMode":
+
+#+begin_example
+This excellent feature inspired Capture in OrgMode and that is now
+(Aug2010) recommended for new users, see
+http://orgmode.org/manual/Capture.html#Capture
+#+end_example
+
+Mmh, maybe for the moment I will go with remember.
+Oops, not nessary to have remember-el explicitely installed.
+Indeed org-remember seems to do the job.
+
+**** Setting up org-remember
+Source: [[info:org-6.06b:Setting%20Remember][info:org-6.06b:Setting Remember]]
+
+#+begin_src emacs-lisp
+  (org-remember-insinuate)
+  (define-key global-map "\C-cr" 'org-remember)
+#+end_src
+
+**** Setting up Remember templates
+
+#+begin_src emacs-lisp
+  (setq org-remember-templates
+        '(("Note" ?n "* %?\n"  "~/Documents/Wiki/org/notes.org" "Notes")
+          ("Todo" ?t "* TODO %?\n %u"  "~/Documents/Wiki/org/TODO.org" "Tasks")
+          ("Journal" ?j "* %U %?\n\n %i\n  %a" "~/Documents/Wiki/org/JOURNAL.org" "Journal")
+          ("Idea" ?i "* %^{Title}\n %i\n  %a" "~/Documents/Wiki/org/JOURNAL.org" "New Ideas")
+          ("Bug" ?b "* BUG %?\n %i\n %a" "~/Documents/Wiki/org/BUGS.org" "Bugs" (emacs-lisp-mode))))
+#+end_src
+
+*** Project to Publish
+
+#+begin_src emacs-lisp
+  (setq org-publish-project-alist
+        '(("org"
+           :base-directory "~/Documents/Wiki/org/"
+           :base-extension "org"
+           :publishing-directory "~/public_html/org/"
+           :publishing-function org-publish-org-to-html
+           :section-numbers nil
+           :table-of-contents nil
+           :style "<link rel=stylesheet
+                       href=\"../other/mystyle.css\"
+                       type=\"text/css\">"
+           :auto-index t)))
+#+end_src
+
+*** org-mode export filter mediawiki from release_7.5/EXPERIMENTAL
+; maybe replaced by org-export-generic.el with wikipedia as example
+;  (require 'org-mediawiki)
+
+*** org-mode plain lists starting with alphanumeric
+#+begin_src emacs-lisp
+  (setq org-alphabetical-lists t) 
+#+end_src
+
+*** Link to man page in org-mode
+**** Define org-man as org-link
+Mmh, don't know if this was copied from somewhere or created on my own
+based on another link type. Anyway I copied content of "org-man.el"
+into this emacs-lisp code block.
+
+#+srcname: org-man
+#+begin_src emacs-lisp
+  (require 'org)
+  
+  (org-add-link-type "man" 'org-man-open)
+  (add-hook 'org-store-link-functions 'org-man-store-link)
+  
+  (defcustom org-man-command 'man
+    "The Emacs command to be used to display a man page."
+    :group 'org-link
+    :type '(choice (const man) (const woman)))
+  
+  (defun org-man-open (path)
+    "Visit the manpage on PATH.
+     PATH should be a topic that can be thrown at the man command."
+    (funcall org-man-command path))
+  
+  (defun org-man-store-link ()
+    "Store a link to a README file."
+    (when (memq major-mode '(Man-mode woman-mode))
+      ;; This is a man page, we do make this link
+      (let* ((page (org-man-get-page-name))
+             (link (concat "man:" page))
+             (description (format "Manpage for %s" page)))
+        (org-store-link-props
+         :type "man"
+         :link link
+         :description description))))
+  
+  (defun org-man-get-page-name ()
+    "Extract the page name from the buffer name."
+    ;; This works for both `Man-mode' and `woman-mode'.
+    (if (string-match " \\(\\S-+\\)\\*" (buffer-name))
+        (match-string 1 (buffer-name))
+      (error "Cannot create link to this man page")))
+  
+  (provide 'org-man)
+#+end_src
+
+**** Load org-man
+#+begin_src emacs-lisp
+  (require 'org-man)
+#+end_src
+
+**** Test org-man
+Test link: [[man:git]]
+
+*** org-mode and auto-fill
+Auto-fill mode is switched on for every text-mode in starterkit config:
+[[file:starter-kit-misc.org::*Other][Starter Kit Misc - Other]]
+
+Auto-fill is nice but somehow does bothering myself when I format
+groups of words as =verbatim= of *bold*. After line wrap having a goup
+of verbatim words on two lines org-export does not recognize format
+information. I switch of auto-fill mode for org-mode.
+
+#+BEGIN_SRC emacs-lisp
+  (add-hook 'org-mode-hook 'turn-off-auto-fill)
+#+END_SRC
+
+*** org-mode export to MS-Outlook
+**** DONE MsOutlook
+Some general, old approaches are listed under this emacswiki entry :
+http://www.emacswiki.org/emacs/MsOutlook
+
+
+***** Using Emacs with Outlook (and Python)
+http://web.archive.org/web/20040220113545/http://disgruntled-programmer.com/notes/emacs-with-outlook.html
+
+Originally posted to comp.lang.python on 29 May, 2001...
+
+****** Motivation
+Every so often, I make it a point to try some other language or tool, so as to widen my perspective a bit. For example, I'm an ardent emacs fan, but I've learned vi so that I'm able to edit anywhere (well, on any Unix machine), and so as to appreciate other ways to edit files.
+
+In this same way, I decided to try Microsoft Outlook. I'm an exmh hacker/fan (have been, for years), but thought I'd try Outlook just to see what my business/marketing/managements friends have to deal with. :-)
+
+My one biggest gripe is that you can't use the editor of your choice when you edit your drafts. The Outlook editor is okay... I mean, it's like every other Microsoft editor -- that is, reasonable, but lacking features (like the ability to reflow your text).
+
+So, I decided to give Outlook the ability to use the editor of my choice. I'm also a perl fan, but discovered that what I wanted to do was a lot harder (or at least seemed to be) in perl. So, I turned to python. Python seems to have a lot of nice Win32 support... This is maybe my fifth or sixth small python script, and I'm liking it (python) more and more. 
+
+****** Bottom Line
+
+    I wanted to be able to edit my drafts, in Microsoft Outlook, with the editor of my choice. In this case, Emacs. The following script does this for me... You tell Outlook to start a reply, and then you hit the "Edit" button that this script creates. It sucks the text out of Outlook, puts it into Emacs (you need to tweak the paths), then puts it back into Outlook when you're finished. 
+
+****** The Code
+That said, here's the script. It's undoubtedly ugly, but the important stuff is there. :-)
+
+#+BEGIN_SRC python :tangle no
+  import win32com.client
+  import os
+  import Tkinter
+  from Tkconstants import *
+  
+  def launch():
+  
+      # Default to an empty body.
+  
+      body = ""
+  
+      # Get a handle to Outlook.
+  
+      o = win32com.client.Dispatch("Outlook.Application")
+  
+      # Work our way down to the reply (a "MailItem").
+  
+      insp = o.ActiveInspector()
+      if insp == None: return
+      item = insp.CurrentItem
+      if item == None: return
+  
+      # Grab the body.
+  
+      body = item.Body
+  
+      # Should make this a guaranteed-unique file...
+  
+      fh = open("c:/temp/editor.txt", "w")
+  
+      # Write the body.  Had to add a try/except because of ASCII
+      # encoding problems when the reply is in one of Outlook's more
+      # funky formats.
+  
+      try:
+          fh.write(body)
+      except:
+          fh.write("")
+  
+      fh.close()
+  
+      # Launch emacs to edit the file.  Should make this configurable.
+      # Note that by default, Emacs seems to come up in Unix mode, and
+      # so the ^M characters are visible.  A persistent, bound-to-a-key
+      # Emacs macro takes care of that nicely, however.
+  
+      os.spawnv(os.P_WAIT,
+                "d:/Editors/emacs-20.7/bin/emacs",
+                ["d:/Editors/emacs-20.7/bin/emacs", "c:/temp/editor.txt"])
+  
+      # Read the result back into memory.
+  
+      fh = open("c:/temp/editor.txt", "r")
+      body = fh.read()
+      fh.close()
+  
+      # Store it as the body of the reply.
+  
+      item.Body = body
+  
+  
+  # Create a single button that, when clicked, takes care of the rest.
+  
+  if __name__=='__main__':
+  
+      tk = Tkinter.Tk()
+  
+      frame = Tkinter.Frame(tk, relief=RIDGE, borderwidth=2, background="white")
+      frame.pack(fill=BOTH, expand=1)
+  
+      button = Tkinter.Button(frame, text="Edit", command=launch,
+                              background="white")
+      button.pack(fill=BOTH, expand=1)
+  
+      tk.mainloop()
+#+END_SRC
+
+****** To Do
+The thing I'd like to add, still, is the ability to put an icon into the system tray, rather than have it be a free-floating application with a button. The sample code I found was a bit hard to grok (given that I'm not a Windows programmer, nor more than a novice python programmer). If you know how to do that, and would care to add it in, I'd love to hear from you. :-) 
+
+****** Snags
+The only issue I've found is that you can't run the script without having run makepy.py first, to make the Outlook library available. The full dynamic dispatch mechanism doesn't work, for some reason. 
+
+***** DONE Using Emacs with Outlook (and ELisp and JScript)
+~outlookedit.el~ 
+source: https://github.com/dholm/outlookedit.git
+commit: c30f33db16
+
+Downloaded ~outlookedit~ into starter-kit:
+file:src/outlookedit.el.
+
+~outlook_emacs.wsf~
+source: http://www.emacswiki.org/emacs/MsOutlook
+
+If your machine has the windows script host installed which should be true for almost all versions currently in use (see http://msdn.microsoft.com/library/default.asp?url=/nhp/default.asp?contentid=28001169) then you can use the following script instead of python or tcl. It is merely a port from tcl to Windows script. The outlookedit.el from the first link mentioned above is still needed. Simply save the following code with extension .wsf somewhere on your path and adjust the variables mno-get-outlook-body and mno-put-outlook-body - MartinStemplinger
+
+=outlookedit.el= can also be downloaded from http://wiki.tcl.tk/9198 or https://github.com/dholm/outlookedit if you prefer to use Git.
+
+Created ~outlookedit.wsf~ in starter-kit:
+file:src/outlookedit.wsf.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'outlookedit)
+#+END_SRC
+
+In outlookedit.el (assuming you put the wsf script in ~/bin) --TimAnderson
+
+#+BEGIN_SRC emacs-lisp :tangle no
+ (defvar mno-get-outlook-body
+   "cscript //Job:getMessage ~/bin/outlook_emacs.wsf")
+ (defvar mno-put-outlook-body
+   "cscript //Job:putMessage ~/bin/outlook_emacs.wsf")
+#+END_SRC
+
+You can also add a macro to Outlook and place that macro on a customized button in the toolbar:
+
+#+BEGIN_SRC vb :tangle no
+Sub mnoEditInEmacs()
+  Shell ("<PATH_TO_EMACS>\bin\gnudoit.exe (mno-edit-outlook-message)")
+End Sub
+#+END_SRC
+
+When you are replying to a mail, just press this button.
+
+It is worth adding //B to above cscript call – 
+this ensures that no banner is being output. 
+[TFX]: This seems to be wrong -> //NoLogo
+
+Also, it maybe worth using //U switch to force UNICODE communication, but 
+this would require forcing that onto outlookedit mode as well...
+[TFX]: Umlaute are not supported by this meachism.
+I tried unicode for the jscript but this is no solution.
+Even though I thought the message-buffer runs unicode.
+But maybe "U" in status line means utf-8.
+
+The message has to be opened for Reply for the above to work 
+(M-r in Outlook ;-)). 
+I added the snippet after the line beginning var inspector... to remind myself:
+done with git:src/outlookedit.wsf::45938898.
+
+***** [2012-05-25 Fr] Result of investiagtion
+~outlookedit~ works fine for text messages with ascii text.
+There is an issue if the text is written in utf-8 in emacs with umlauts.
+
+Just did some html - just access "CurrentItem.HTMLBody" instead of "CurrentItem.Body".
+This is not useful for ~getMessage~ as the outlook html (MS-Word)
+is not readable.
+This works somehow for ~putMessage~ in combination with ~org-mime~.
+You need to add line "--text follows this line--" into the buffer, so that
+~org-mime-htmlize~ can find the text of the message.
+But as in case of ~message-outlook~ this function generates multipart mime
+with a ~org-mode~'s text respresentation and with html.
+The html part was nicely displayed in outlook but 
+was surrounded by org markup text and mml.
+
+**** OrgOutlook
+http://www.emacswiki.org/emacs/OrgOutlook
+
+Org mode lets you organize your tasks. 
+However, sometimes you may wish to integrate org-mode with outlook 
+since your company forces you to use Microsoft Outlook. 
+[[http://www.emacswiki.org/emacs/org-outlook.el]] allows:
+- Creating Tasks from outlook items:
+  - org-outlook-task. 
+    All selected items in outlook will be added to a task-list at current point. 
+    Requires task.vbs
+- Create Link from outlook items:
+  - org-outlook-copy.
+    Single selected item in outlook will be added to org-file at current point.
+    Requires guid.vbs
+- Open Outlook Links in org-mode:
+  - Requires org-outlook-location to be customized when using Outlook 2007 
+    (this way you don't have to edit the registry).
+
+This is based loosely on: http://superuser.com/questions/71786/can-i-create-a-link-to-a-specific-email-message-in-outlook
+
+**** DONE MessageOutlook
+Source: http://www.emacswiki.org/emacs/MessageOutlook
+
+Message mode is an alternative to mail mode for composing and 
+sending messages inside emacs. 
+This is part of the standard emacs distribution, and 
+is the preferred mode used by gnus for composing and sending messages. 
+
+Message mode handles MIME attachments. 
+This is the main benefit over the default mail mode.
+
+~message-outlook~ allows outlook to act as a "mail-server" for message-mode. 
+To setup put [[http://www.emacswiki.org/emacs/message-outlook.el]] 
+into the load path, and put the following in =~/.emacs=:
+
+Downloaded ~message-outlook.el~ into starter-kit:
+file:src/message-outlook.el.
+
+#+BEGIN_SRC emacs-lisp
+  (setq mail-user-agent 'message-user-agent)
+  (require 'message-outlook)
+  (custom-set-variables
+   '(message-send-mail-function (quote message-send-mail-with-outlook))
+   )
+#+END_SRC
+
+***** Understandíng elisp-module ~message-outlook~
+Module ~message-outlook~ utilizes following outlook objects
+- Library Outlook
+    =C:\Program Files\Microsoft Office\Office12\msoutl.olb=
+    Microsoft Outlook 12.0 Object Library
+- Class MailItem
+    Member of Outlook
+- Property To As String
+    Member of Outlook.MailItem
+- Property Subject As String
+    Member of Outlook.MailItem
+- Property Body As String
+    Member of Outlook.MailItem
+- Sub Display([Modal])
+    Member of Outlook.MailItem
+
+Interesting outlook objects
+- Property BodyFormat As OlBodyFormat
+    Member of Outlook.MailItem
+- Enum OlBodyFormat
+    Member of Outlook
+  - Const olFormatHTML = 2
+    Member of Outlook.OlBodyFormat
+  - Const olFormatPlain = 1
+    Member of Outlook.OlBodyFormat
+  - Const olFormatRichText = 3
+    Member of Outlook.OlBodyFormat
+  - Const olFormatUnspecified = 0
+    Member of Outlook.OlBodyFormat
+
+***** Outlook 2007 Developer Reference > Outlook Object Model Reference > Application Object
+Outlook Developer Reference 
+
+Application Object
+
+Represents the entire Outlook application.
+
+****** Remarks
+
+This is the only object in the hierarchy that can be returned by using the CreateObject method or the intrinsic Visual Basic GetObject function.
+
+The Outlook Application object has several purposes:
+
+As the root object, it allows access to other objects in the Outlook hierarchy. 
+It allows direct access to a new item 
+(item: An item is the basic element that holds information in Outlook (similar to a file in other programs). 
+Items include e-mail messages, appointments, contacts, tasks, journal entries, notes, posted items, and documents.)
+created by using CreateItem, without having to traverse the object hierarchy. 
+It allows access to the active interface objects (the explorer and the inspector). 
+When you use Automation to control Microsoft Outlook from another application, 
+you use the CreateObject method to create an Outlook Application object.
+
+****** Example
+
+The following Visual Basic for Applications (VBA) example starts Microsoft Outlook (if it's not already running) and opens the default Inbox folder.
+
+Visual Basic for Applications 
+#+BEGIN_SRC vbs :tangle no
+Set myNameSpace = Application.GetNameSpace("MAPI")
+Set myFolder= _
+    myNameSpace.GetDefaultFolder(olFolderInbox)
+myFolder.Display 
+#+END_SRC
+
+The following Visual Basic for Applications (VBA) example uses the Application object to create and open a new contact.
+
+Visual Basic for Applications 
+
+#+BEGIN_SRC vbs :tangle no
+Set myItem = Application.CreateItem(olContactItem)
+myItem.Display 
+#+END_SRC
+
+***** Outlook 2007 Developer Reference > Outlook Object Model Reference > Application Object Members
+Outlook Developer Reference 
+
+Application Object Members 
+
+Represents the entire Outlook application.
+
+****** Methods
+
+| Name                   | Description                                                                                                                                                                                  |
+|------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ActiveExplorer         | Returns the topmost Explorer object on the desktop. If no explorer is active, returns Nothing.                                                                                               |
+| ActiveInspector        | Returns the topmost Inspector object on the desktop.                                                                                                                                         |
+| ActiveWindow           | Returns an object representing the topmost Microsoft Outlook window on the desktop, either an Explorer or an Inspector object. If no Outlook explorer or inspector is open, returns Nothing. |
+| AdvancedSearch         | Performs a search based on a specified Microsoft SQL Server search string.                                                                                                                   |
+| CopyFile               | Copies a file from a specified location into a Microsoft Outlook store.                                                                                                                      |
+| CreateItem             | Creates and returns a new Microsoft Outlook item.                                                                                                                                            |
+| CreateItemFromTemplate | Creates a new Microsoft Outlook item from an Outlook template (.oft) and returns the new item.                                                                                               |
+| CreateObject           | Creates an Automation object of the specified class. If the application is already running, CreateObject will create a new instance.                                                         |
+| GetNamespace           | Returns a NameSpace object of the specified type.                                                                                                                                            |
+| GetObjectReference     | Creates a strong or weak object reference for a specified Outlook object.                                                                                                                    |
+| IsSearchSynchronous    | Returns a Boolean indicating if a search will be synchronous or asynchronous. Read-only.                                                                                                     |
+| Quit                   | Closes all currently open windows.                                                                                                                                                           |
+
+****** Properties
+
+| Name               | Description                                                                                                                        |
+|--------------------+------------------------------------------------------------------------------------------------------------------------------------|
+| Application        | Returns an Application object that represents the parent Outlook application for the object. Read-only.                            |
+| Assistance         | Returns an IAssistance object used to invoke help. Read-only.                                                                      |
+| Class              | Returns an OlObjectClass constant indicating the object's class. Read-only.                                                        |
+| COMAddIns          | Returns a COMAddIns collection that represents all the Component Object Model (COM) add-ins currently loaded in Microsoft Outlook. |
+| DefaultProfileName | Returns a String representing the name of the default profile name. Read-only.                                                     |
+| Explorers          | Returns an Explorers collection object that contains the Explorer objects representing all open explorers. Read-only.              |
+| Inspectors         | Returns an Inspectors collection object that contains the Inspector objects representing all open inspectors. Read-only.           |
+| IsTrusted          | Returns a Boolean to indicate if an add-in or external caller is considered trusted by Outlook. Read-only                          |
+| LanguageSettings   | Returns a LanguageSettings object for the application that contains the language-specific attributes of Outlook. Read-only.        |
+| Name               | Returns the display name for the object. Read-only.                                                                                |
+| Parent             | Returns the parent Object of the specified object. Read-only.                                                                      |
+| ProductCode        | Returns a String specifying the Microsoft Outlook globally unique identifier (GUID). Read-only.                                    |
+| Reminders          | Returns a Reminders collection that represents all current reminders. Read-only.                                                   |
+| Session            | Returns the NameSpace object for the current session. Read-only.                                                                   |
+| TimeZones          | Returns a TimeZones collection that represents the set of time zones supported by Outlook. Read-only.                              |
+| Version            | Returns or sets a String indicating the number of the version. Read-only.                                                          |
+
+****** Events
+
+| Name                         | Description                                                                                                                                                                                                                                       |
+|------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AdvancedSearchStopped        | Occurs when a specified Search object's Stop method has been executed.                                                                                                                                                                            |
+| AttachmentContextMenuDisplay | Occurs before a context menu is displayed for a collection of attachments.                                                                                                                                                                        |
+| BeforeFolderSharingDialog    | Occurs before the Sharing dialog box is displayed for a selected Folder object.                                                                                                                                                                   |
+| ContextMenuClose             | Occurs after a context menu is closed.                                                                                                                                                                                                            |
+| FolderContextMenuDisplay     | Occurs before a context menu is displayed for a folder.                                                                                                                                                                                           |
+| ItemContextMenuDisplay       | Occurs before a context menu is displayed for a collection of Outlook items.                                                                                                                                                                      |
+| ItemLoad                     | Occurs when an Outlook item is loaded into memory.                                                                                                                                                                                                |
+| ItemSend                     | Occurs whenever an Outlook item is sent, either by the user through an Inspector (before the inspector is closed, but after the user clicks the Send button) or when the Send method for an Outlook item, such as MailItem, is used in a program. |
+| MAPILogonComplete            | Occurs after the user has logged onto the system.                                                                                                                                                                                                 |
+| NewMail                      | Occurs when one or more new e-mail messages are received in the Inbox.                                                                                                                                                                            |
+| NewMailEx                    | Occurs when one or more new items are received in the Inbox.                                                                                                                                                                                      |
+| OptionsPagesAdd              | Occurs whenever the Options dialog box (on the Tools menu) or a folder Properties dialog box is opened.                                                                                                                                           |
+| Quit                         | Occurs when Outlook begins to close.                                                                                                                                                                                                              |
+| Reminder                     | Occurs immediately before a reminder is displayed.                                                                                                                                                                                                |
+| ShortcutContextMenuDisplay   | Occurs before a context menu is displayed for a shortcut.                                                                                                                                                                                         |
+| Startup                      | Occurs when Microsoft Outlook is starting, but after all add-in programs have been loaded.                                                                                                                                                        |
+| StoreContextMenuDisplay      | Occurs before a context menu is displayed for a store.                                                                                                                                                                                            |
+| ViewContextMenuDisplay       | Occurs before a context menu is displayed for a view.                                                                                                                                                                                             |
+
+***** Outlook 2007 Developer Reference > Outlook Object Model Reference > OlItemType Enumeration
+Outlook Developer Reference 
+
+OlItemType Enumeration 
+
+Indicates the Outlook Item type.
+
+| Name                   | Value | Description                   |
+|------------------------+-------+-------------------------------|
+| olAppointmentItem      |     1 | Represents an AppointmentItem |
+| olContactItem          |     2 | Represents a ContactItem      |
+| olDistributionListItem |     7 | Represents an DistListItem    |
+| olJournalItem          |     4 | Represents a JournalItem      |
+| olMailItem             |     0 | Represents a MailItem         |
+| olNoteItem             |     5 | Represents a NoteItem         |
+| olPostItem             |     6 | Represents a PostItem         |
+| olTaskItem             |     3 | Represents a TaskItem         |
+
+***** Outlook 2007 Developer Reference > Outlook Object Model Reference > MailItem Object
+Outlook Developer Reference 
+
+MailItem Object 
+
+Represents a mail message in an Inbox folder.
+
+****** Remarks
+
+- Use the CreateItem method to create a MailItem object that represents a new mail message.
+- Use Items (index), where index is the index number of a mail message or a value 
+  used to match the default property of a message, 
+  to return a single MailItem object from an Inbox folder.
+
+****** Example
+
+The following example creates and displays a new mail message.
+
+Visual Basic for Applications 
+#+BEGIN_SRC vba :tangle no
+Set myItem = Application.CreateItem(olMailItem)
+myItem.Display 
+#+END_SRC
+
+The following example sets the current folder as the Inbox and displays the second mail message in the folder.
+
+Visual Basic for Applications 
+#+BEGIN_SRC vba :tangle no
+Set myNamespace = Application.GetNamespace("MAPI")
+Set myFolder = myNamespace.GetDefaultFolder(olFolderInbox)
+myFolder.Display
+Set myItem = myFolder.Items(2)
+myItem.Display 
+#+END_SRC
+
+***** Outlook 2007 Developer Reference > Outlook Object Model Reference > MailItem Object Members 
+Outlook Developer Reference 
+
+MailItem Object Members 
+
+Represents a mail message in an Inbox folder.
+
+****** Methods
+
+| Name                   | Description                                                                                                                                                            |
+|------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AddBusinessCard        | Appends contact information based on the Electronic Business Card (EBC) associated with the specified ContactItem object to the MailItem object.                       |
+| ClearConversationIndex | Clears the index of the conversation thread for the mail message.                                                                                                      |
+| ClearTaskFlag          | Clears the MailItem object as a task.                                                                                                                                  |
+| Close                  | Closes and optionally saves changes to the Outlook item.                                                                                                               |
+| Copy                   | Creates another instance of an object.                                                                                                                                 |
+| Delete                 | Deletes an object from the collection.                                                                                                                                 |
+| Display                | Displays a new Inspector object for the item.                                                                                                                          |
+| Forward                | Executes the Forward action for an item and returns the resulting copy as a MailItem object.                                                                           |
+| MarkAsTask             | Marks a MailItem object as a task and assigns a task interval for the object.                                                                                          |
+| Move                   | Moves a Microsoft Outlook item to a new folder.                                                                                                                        |
+| PrintOut               | Prints the Outlook item using all default settings.The PrintOut method is the only Outlook method that can be used for printing.                                       |
+| Reply                  | Creates a reply, pre-addressed to the original sender, from the original message.                                                                                      |
+| ReplyAll               | Creates a reply to all original recipients from the original message.                                                                                                  |
+| Save                   | Saves the Microsoft Outlook item to the current folder or, if this is a new item, to the Outlook default folder for the item type.                                     |
+| SaveAs                 | Saves the Microsoft Outlook item to the specified path and in the format of the specified file type. If the file type is not specified, the MSG format (.msg) is used. |
+| Send                   | Sends the e-mail message.                                                                                                                                              |
+| ShowCategoriesDialog   | Displays the Show Categories dialog box, which allows you to select categories that correspond to the subject of the item.                                             |
+
+******* MailItem.Display Method
+Outlook Developer Reference 
+
+MailItem.Display Method
+
+Displays a new Inspector object for the item.
+
+******** Syntax
+
+expression.Display(Modal)
+
+expression   A variable that represents a MailItem object.
+
+Parameters
+
+Name Required/Optional Data Type Description 
+Modal Optional Variant True to make the window modal. The default value is False. 
+
+******** Remarks
+The Display method is supported for explorer and inspector windows for the sake of backward compatibility. 
+To activate an explorer or inspector window, use the Activate method.
+
+If you attempt to open an "unsafe" file system object (or "freedoc" file) by using the Microsoft Outlook object model, 
+you receive the E\_FAIL return code in the C or C++ programming languages. 
+In Outlook 2000 and earlier, you could open an "unsafe" file system object by using the Display method.
+
+******** Example
+This Visual Basic for Applications example displays the first item (item: An item is the basic element that holds information in Outlook (similar to a file in other programs). Items include e-mail messages, appointments, contacts, tasks, journal entries, notes, posted items, and documents.) in the Inbox folder. This example will return an error if the Inbox is empty, because you are trying to display a specific item. If there are no items in the folder, a message box will be displayed to inform the user.
+
+- Note :: The items in the Items collection object are not guaranteed to be in any particular order. 
+
+Visual Basic for Applications 
+#+BEGIN_SRC vba :tangle no
+Sub DisplayFirstItem()
+    Dim myNameSpace As Outlook.NameSpace
+    Dim myFolder As Outlook.Folder
+	
+    Set myNameSpace = Application.GetNamespace("MAPI")
+    Set myFolder = myNameSpace.GetDefaultFolder(olFolderInbox)
+    On Error GoTo ErrorHandler
+    myFolder.Items(1).Display
+    Exit Sub
+ErrorHandler:
+    MsgBox "There are no items to display."
+End Sub 
+#+END_SRC
+
+****** Properties
+
+| Name                              | Description                                                                                                                                                                                                     |
+|-----------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Actions                           | Returns an Actions collection that represents all the available actions for the item. Read-only.                                                                                                                |
+| AlternateRecipientAllowed         | Returns True if the mail message can be forwarded. Read/write.                                                                                                                                                  |
+| Application                       | Returns an Application object that represents the parent Outlook application for the object. Read-only.                                                                                                         |
+| Attachments                       | Returns an Attachments object that represents all the attachments for the specified item. Read-only.                                                                                                            |
+| AutoForwarded                     | A Boolean value that returns True if the item was automatically forwarded. Read/write.                                                                                                                          |
+| AutoResolvedWinner                | Returns a Boolean that determines if the item is a winner of an automatic conflict resolution. Read-only.                                                                                                       |
+| BCC                               | Returns a String representing the display list of blind carbon copy (BCC) names for a MailItem. Read/write.                                                                                                     |
+| BillingInformation                | Returns or sets a String representing the billing information associated with the Outlook item. Read/write.                                                                                                     |
+| Body                              | Returns or sets a String representing the clear-text body of the Outlook item. Read/write.                                                                                                                      |
+| BodyFormat                        | Returns or sets an OlBodyFormat constant indicating the format of the body text. Read/write.                                                                                                                    |
+| Categories                        | Returns or sets a String representing the categories assigned to the Outlook item. Read/write.                                                                                                                  |
+| CC                                | Returns a String representing the display list of carbon copy (CC) names for a MailItem . Read/write.                                                                                                           |
+| Class                             | Returns an OlObjectClass constant indicating the object's class. Read-only.                                                                                                                                     |
+| Companies                         | Returns or sets a String representing the names of the companies associated with the Outlook item. Read/write.                                                                                                  |
+| Conflicts                         | Return the Conflicts object that represents the items that are in conflict for any Outlook item object. Read-only.                                                                                              |
+| ConversationIndex                 | Returns a String representing the index of the conversation thread of the Outlook item. Read-only.                                                                                                              |
+| ConversationTopic                 | Returns a String representing the topic of the conversation thread of the Outlook item. Read-only.                                                                                                              |
+| CreationTime                      | Returns a Date indicating the creation time for the Outlook item. Read-only.                                                                                                                                    |
+| DeferredDeliveryTime              | Returns or sets a Date indicating the date and time the mail message is to be delivered. Read/write.                                                                                                            |
+| DeleteAfterSubmit                 | Returns or sets a Boolean value that is True if a copy of the mail message is not saved upon being sent, and False if a copy is saved. Read/write.                                                              |
+| DownloadState                     | Returns a constant that belongs to the OlDownloadState enumeration indicating the download state of the item. Read-only.                                                                                        |
+| EntryID                           | Returns a String representing the unique Entry ID of the object. Read-only.                                                                                                                                     |
+| ExpiryTime                        | Returns or sets a Date indicating the date and time at which the item becomes invalid and can be deleted. Read/write.                                                                                           |
+| FlagRequest                       | Returns or sets a String that indicates the requested action for a mail item. Read/write.                                                                                                                       |
+| FormDescription                   | Returns the FormDescription object that represents the form description for the specified Outlook item. Read-only.                                                                                              |
+| GetInspector                      | Returns an Inspector object that represents an inspector initialized to contain the specified item. Read-only.                                                                                                  |
+| HTMLBody                          | Returns or sets a String representing the HTML body of the specified item. Read/write.                                                                                                                          |
+| Importance                        | Returns or sets an OlImportance constant indicating the relative importance level for the Outlook item. Read/write.                                                                                             |
+| InternetCodepage                  | Returns or sets a Long that determines the Internet code page used by the item. Read/write.                                                                                                                     |
+| IsConflict                        | Returns a Boolean that determines if the item is in conflict. Read-only.                                                                                                                                        |
+| IsMarkedAsTask                    | Returns a Boolean value that indicates whether the MailItem is marked as a task. Read-only.                                                                                                                     |
+| ItemProperties                    | Returns an ItemProperties collection that represents all standard and user-defined properties associated with the Outlook item. Read-only.                                                                      |
+| LastModificationTime              | Returns a Date specifying the date and time that the Outlook item was last modified. Read-only.                                                                                                                 |
+| Links                             | Returns a Links collection that represents the contacts to which the item is linked. Read-only.                                                                                                                 |
+| MarkForDownload                   | Returns or sets an OlRemoteStatus constant that determines the status of an item once it is received by a remote user. Read/write.                                                                              |
+| MessageClass                      | Returns or sets a String representing the message class for the Outlook item. Read/write.                                                                                                                       |
+| Mileage                           | Returns or sets a String representing the mileage for an item. Read/write.                                                                                                                                      |
+| NoAging                           | Returns or sets a Boolean value that is True to not age the Outlook item. Read/write.                                                                                                                           |
+| OriginatorDeliveryReportRequested | Returns or sets a Boolean value that determines whether the originator of the meeting item or mail message will receive a delivery report. Read/write.                                                          |
+| OutlookInternalVersion            | Returns a Long representing the build number of the Outlook application for an Outlook item. Read-only.                                                                                                         |
+| OutlookVersion                    | Returns a String indicating the major and minor version number of the Outlook application for an Outlook item. Read-only.                                                                                       |
+| Parent                            | Returns the parent Object of the specified object. Read-only.                                                                                                                                                   |
+| Permission                        | Sets or returns an OlPermission constant that determines the permissions the recipients will have on the e-mail item. Read/write.                                                                               |
+| PermissionService                 | Sets or returns an OlPermissionService constant that determines the permission service that will be used when sending a message protected by Information Rights Management (IRM). Read/write.                   |
+| PropertyAccessor                  | Returns a PropertyAccessor object that supports creating, getting, setting, and deleting properties of the parent MailItem object. Read-only.                                                                   |
+| ReadReceiptRequested              | Returns a Boolean value that indicates True if a read receipt has been requested by the sender.                                                                                                                 |
+| ReceivedByEntryID                 | Returns a String representing the EntryID for the true recipient as set by the transport provider delivering the mail message. Read-only.                                                                       |
+| ReceivedByName                    | Returns a String representing the display name of the true recipient for the mail message. Read-only.                                                                                                           |
+| ReceivedOnBehalfOfEntryID         | Returns a String representing the EntryID of the user delegated to represent the recipient for the mail message. Read-only.                                                                                     |
+| ReceivedOnBehalfOfName            | Returns a String representing the display name of the user delegated to represent the recipient for the mail message. Read-only.                                                                                |
+| ReceivedTime                      | Returns a Date indicating the date and time at which the item was received. Read-only.                                                                                                                          |
+| RecipientReassignmentProhibited   | Returns a Boolean that indicates True if the recipient cannot forward the mail message. Read/write.                                                                                                             |
+| Recipients                        | Returns a Recipients collection that represents all the recipients for the Outlook item. Read-only.                                                                                                             |
+| ReminderOverrideDefault           | Returns or sets a Boolean value that is True if the reminder overrides the default reminder behavior for the item. Read/write.                                                                                  |
+| ReminderPlaySound                 | Returns or sets a Boolean value that is True if the reminder should play a sound when it occurs for this item. Read/write.                                                                                      |
+| ReminderSet                       | Returns or sets a Boolean value that is True if a reminder has been set for this item. Read/write.                                                                                                              |
+| ReminderSoundFile                 | Returns or sets a String indicating the path and file name of the sound file to play when the reminder occurs for the Outlook item. Read/write.                                                                 |
+| ReminderTime                      | Returns or sets a Date indicating the date and time at which the reminder should occur for the specified item. Read/write.                                                                                      |
+| RemoteStatus                      | Returns or sets an OlRemoteStatus constant specifying the remote status of the mail message. Read/write.                                                                                                        |
+| ReplyRecipientNames               | Returns a semicolon-delimited String list of reply recipients for the mail message. Read-only.                                                                                                                  |
+| ReplyRecipients                   | Returns a Recipients collection that represents all the reply recipient objects for the Outlook item. Read-only.                                                                                                |
+| Saved                             | Returns a Boolean value that is True if the Outlook item has not been modified since the last save. Read-only.                                                                                                  |
+| SaveSentMessageFolder             | Returns or sets a Folder object that represents the folder in which a copy of the e-mail message will be saved after being sent. Read/write.                                                                    |
+| SenderEmailAddress                | Returns a String that represents the e-mail address of the sender of the Outlook item. Read-only.                                                                                                               |
+| SenderEmailType                   | Returns a String that represents the type of entry for the e-mail address of the sender of the Outlook item, such as 'SMTP' for Internet address, 'EX' for a Microsoft Exchange server address, etc. Read-only. |
+| SenderName                        | Returns a String indicating the display name of the sender for the Outlook item. Read-only.                                                                                                                     |
+| SendUsingAccount                  | Returns or sets an Account object that represents the account under which the MailItem is to be sent. Read/write.                                                                                               |
+| Sensitivity                       | Returns or sets a constant in the OlSensitivity enumeration indicating the sensitivity for the Outlook item. Read/write.                                                                                        |
+| Sent                              | Returns a Boolean value that indicates if a message has been sent. Read-only.                                                                                                                                   |
+| SentOn                            | Returns a Date indicating the date and time on which the Outlook item was sent. Read-only.                                                                                                                      |
+| SentOnBehalfOfName                | Returns a String indicating the display name for the intended sender of the mail message. Read/write.                                                                                                           |
+| Session                           | Returns the NameSpace object for the current session. Read-only.                                                                                                                                                |
+| Size                              | Returns a Long indicating the size (in bytes) of the Outlook item. Read-only.                                                                                                                                   |
+| Subject                           | Returns or sets a String indicating the subject for the Outlook item. Read/write.                                                                                                                               |
+| Submitted                         | Returns a Boolean value that is True if the item has been submitted. Read-only.                                                                                                                                 |
+| TaskCompletedDate                 | Returns or sets a Date value that represents the completion date of the task for this MailItem. Read/write.                                                                                                     |
+| TaskDueDate                       | Returns or sets a Date value that represents the due date of the task for this MailItem. Read/write.                                                                                                            |
+| TaskStartDate                     | Returns or sets a Date value that represents the start date of the task for this MailItem object. Read/write.                                                                                                   |
+| TaskSubject                       | Returns or sets a String value that represents the subject of the task for the MailItem object. Read/write.                                                                                                     |
+| To                                | Returns or sets a semicolon-delimited String list of display names for the To recipients for the Outlook item. Read/write.                                                                                      |
+| ToDoTaskOrdinal                   | Returns or sets a Date value that represents the ordinal value of the task for the MailItem. Read/write.                                                                                                        |
+| UnRead                            | Returns or sets a Boolean value that is True if the Outlook item has not been opened (read). Read/write.                                                                                                        |
+| UserProperties                    | Returns the UserProperties collection that represents all the user properties for the Outlook item. Read-only.                                                                                                  |
+| VotingOptions                     | Returns or sets a String specifying a delimited string containing the voting options for the mail message. Read/write.                                                                                          |
+| VotingResponse                    | Returns or sets a String specifying the voting response for the mail message. Read/write.                                                                                                                       |
+
+******* MailItem.Body Property
+Outlook Developer Reference 
+
+- MailItem.Body Property :: Returns or sets a String representing 
+the clear-text body of the Outlook item 
+(item: An item is the basic element that holds information in Outlook 
+(similar to a file in other programs). 
+Items include e-mail messages, appointments, contacts, tasks, journal entries, notes, posted items, and documents.). 
+Read/write.
+
+******** Syntax
+
+expression.Body
+
+expression   A variable that represents a MailItem object.
+
+******** Remarks
+
+The MailItem.BodyFormat property allows you to programmatically change the editor that is used for the body of an item.
+
+******* MailItem.BodyFormat Property 
+Outlook Developer Reference 
+
+MailItem.BodyFormat Property 
+
+Returns or sets an OlBodyFormat constant indicating the format of the body text. Read/write.
+
+******** Syntax
+
+expression.BodyFormat
+
+expression   A variable that represents a MailItem object.
+
+******** Remarks
+
+The body text format determines the standard used to display the text of the message. 
+Microsoft Outlook provides three body text format options: Plain Text, Rich Text (RTF), and HTML.
+
+All text formatting will be lost when the BodyFormat property is switched from RTF to HTML and vice-versa.
+
+******** Example
+
+The following Microsoft Visual Basic/Visual Basic for Applications (VBA) example 
+creates a new MailItem object and sets the BodyFormat property to olFormatHTML. 
+The body text of the e-mail item will now appear in HTML format.
+
+Visual Basic for Applications 
+#+BEGIN_SRC vba :tangle no
+Sub CreateHTMLMail()
+    'Creates a new e-mail item and modifies its properties.
+    Dim objMail As MailItem
+
+    'Create mail item
+    Set objMail = Application.CreateItem(olMailItem)
+    With objMail
+       'Set body format to HTML
+       .BodyFormat = olFormatHTML
+       .HTMLBody = "<HTML><H2>The body of this message will appear in HTML.</H2><BODY>Type the message text here. </BODY></HTML>"
+       .Display
+    End With
+End Sub 
+#+END_SRC
+
+****** Events
+
+| Name                            | Description                                                                                                                                                                                                      |
+|---------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| AttachmentAdd                   | Occurs when an attachment has been added to an instance of the parent object.                                                                                                                                    |
+| AttachmentRead                  | Occurs when an attachment in an instance of the parent object has been opened for reading.                                                                                                                       |
+| AttachmentRemove                | Occurs when an attachment has been removed from an instance of the parent object.                                                                                                                                |
+| BeforeAttachmentAdd             | Occurs before an attachment is added to an instance of the parent object.                                                                                                                                        |
+| BeforeAttachmentPreview         | Occurs before an attachment associated with an instance of the parent object is previewed.                                                                                                                       |
+| BeforeAttachmentRead            | Occurs before an attachment associated with an instance of the parent object is read from the file system, an attachment stream, or an Attachment object.                                                        |
+| BeforeAttachmentSave            | Occurs just before an attachment is saved.                                                                                                                                                                       |
+| BeforeAttachmentWriteToTempFile | Occurs before an attachment associated with an instance of the parent object is written to a temporary file.                                                                                                     |
+| BeforeAutoSave                  | Occurs before the item is automatically saved by Outlook.                                                                                                                                                        |
+| BeforeCheckNames                | Occurs just before Microsoft Outlook starts resolving names in the recipient collection for an item (which is an instance of the parent object).                                                                 |
+| BeforeDelete                    | Occurs before an item (which is an instance of the parent object) is deleted.                                                                                                                                    |
+| Close                           | Occurs when the inspector associated with an item (which is an instance of the parent object) is being closed.                                                                                                   |
+| CustomAction                    | Occurs when a custom action of an item (which is an instance of the parent object) executes.                                                                                                                     |
+| CustomPropertyChange            | Occurs when a custom property of an item (which is an instance of the parent object) is changed.                                                                                                                 |
+| Forward                         | Occurs when the user selects the Forward action for an item, or when the Forward method is called for the item, which is an instance of the parent object.                                                       |
+| Open                            | Occurs when an instance of the parent object is being opened in an Inspector.                                                                                                                                    |
+| PropertyChange                  | Occurs when an explicit built-in property (for example, Subject) of an instance of the parent object is changed.                                                                                                 |
+| Read                            | Occurs when an instance of the parent object is opened for editing by the user.                                                                                                                                  |
+| Reply                           | Occurs when the user selects the Reply action for an item, or when the Reply method is called for the item, which is an instance of the parent object.                                                           |
+| ReplyAll                        | Occurs when the user selects the ReplyAll action for an item, or when the ReplyAll method is called for the item, which is an instance of the parent object.                                                     |
+| Send                            | Occurs when the user selects the Send action for an item, or when the Send method is called for the item, which is an instance of the parent object.                                                             |
+| Unload                          | Occurs before an Outlook item is unloaded from memory, either programmatically or by user action.                                                                                                                |
+| Write                           | Occurs when an instance of the parent object is saved, either explicitly (for example, using the Save or SaveAs methods) or implicitly (for example, in response to a prompt when closing the item's inspector). |
+
+***** Outlook 2007 Developer Reference > Outlook Object Model Reference > OlBodyFormat Enumeration 
+Outlook Developer Reference 
+
+OlBodyFormat Enumeration 
+
+Specifies the format of the body text of an item.
+
+| Name                | Value | Description        |
+|---------------------+-------+--------------------|
+| olFormatHTML        |     2 | HTML format        |
+| olFormatPlain       |     1 | Plain format       |
+| olFormatRichText    |     3 | Rich text format   |
+| olFormatUnspecified |     0 | Unspecified format |
+
+***** Outlook 2007 Developer Reference > Visual Basic for Applications Language Reference > Visual Basic Language Reference > Constants
+Miscellaneous Constants 
+
+The following constants are defined in the Visual Basic for Applications type library and 
+can be used anywhere in your code in place of the actual values:
+
+| Constant      | Equivalent                                      | Description                                                                                                        |
+|---------------+-------------------------------------------------+--------------------------------------------------------------------------------------------------------------------|
+| vbCrLf        | Chr(13) + Chr(10)                               | Carriage return–linefeed combination                                                                               |
+| vbCr          | Chr(13)                                         | Carriage return character                                                                                          |
+| vbLf          | Chr(10)                                         | Linefeed character                                                                                                 |
+| vbNewLine     | Chr(13) + Chr(10) or, on the Macintosh, Chr(13) | Platform-specific new line character; whichever is appropriate for current platform                                |
+| vbNullChar    | Chr(0)                                          | Character having value 0                                                                                           |
+| vbNullString  | String having value 0                           | Not the same as a zero-length string (""); used for calling external procedures                                    |
+| vbObjectError | -2147221504                                     | User-defined error numbers should be greater than this value. For example: Err.Raise Number = vbObjectError + 1000 |
+| vbTab         | Chr(9)                                          | Tab character                                                                                                      |
+| vbBack        | Chr(8)                                          | Backspace character                                                                                                |
+| vbFormFeed    | Chr(12)                                         | Not useful in Microsoft Windows or on the Macintosh                                                                |
+| vbVerticalTab | Chr(11)                                         | Not useful in Microsoft Windows or on the Macintosh                                                                |
+
+***** [2012-05-21 Mo] Result of investigation
+After about a day of investigating the tool chain
+- org
+- org-mime
+- message
+- message-outlook
+I came to the conclusion: it is too complicated.
+I just don't practise to work with emacs for email,
+so I don't know message-mode 
+(which is by the way also used by module:
+weblogger.el - Weblog maintenance via XML-RPC APIs)
+
+Open issues:
+- Don't understand why =org-mime= creates a multipart mime email.
+  One part is ~text/plain~ and ~text/html~.
+- When =message= sends email it does some mime specific(?) encoding;
+  replace "=" with "=3D" and " " with "=20" 
+  (also new-line to "=\n", but not all of them?).
+  Don't know why it does so for ~text/html~.
+- Solution to go via "Windows Scripting Host" is sufficient for plain text,
+  but in case of message with mime (mml) visual basic quoting is challanging:
+  strange characters =& vbCrLf & _= for line feed.
+- Finally created email in html looks better with some changes
+  introduced in =message-outlook= (git:src/message-outlook.el::42a2a249).
+  But there are still markup errors as tables are broken,
+  head lines not finished and bold text run across the list items.
+
+**** Specification
+***** org-export-outlook-text
+***** org-export-outlook-rtf
+Requires an export filter for org to rtf itself. 
+I did somehting for muse-mode via latex.
+
+***** org-export-outlook-html
+
+***** org-export-message
+
+***** org-export-gnus
+
+**** Code Snippets for interaction between Python and Outlook
+These are code snippets recorded during Python32 session 
+with python3 and win32com installed.
+
+~org-babel~ makes the CPU busy so I did not include large srings in python session below.
+See example file file:python-outlook.html for the whole document with style and
+the body element only.
+
+#+BEGIN_SRC fundamental :tangle no
+  ActivePython 3.2.0.0 (ActiveState Software Inc.) based on
+  Python 3.2 (r32:88445, Feb 21 2011, 11:29:37) [MSC v.1500 32 bit (Intel)] on win32
+  Type "help", "copyright", "credits" or "license" for more information.
+  >>> import win32com.client
+  >>> 
+  >>> objOutlk = win32com.client.Dispatch("Outlook.Application")
+  >>> objOutlk
+  <COMObject Outlook.Application>
+  >>> 
+  >>> item = objOutlk.CreateItem(0)
+  >>> item.Display()
+  >>> item.BodyFormat = 0
+  >>> 
+  >>> old_html_doc  = item.HTMLBody
+  >>> old_html_doc
+
+  >>> 
+  >>> new_html_doc = """  """
+  >>> new_html_doc
+
+  >>> 
+  >>> item.HTMLBody = new_html_doc
+  >>> 
+  >>> new_html_body = """  """
+  >>> 
+  >>> 
+  >>> new_html_body
+
+  >>> item.HTMLBody = new_html_body
+  >>> 
+#+END_SRC
+
+*** org-mode and plantuml
+Source: http://eschulte.github.com/babel-dev/DONE-integrate-plantuml-support.html
+
+Babel now support blocks of plantuml code. 
+Thanks to Zhang Weize for adding this support. 
+
+Additionally I needed to install plantuml-java-archive 
+from http://plantuml.sourceforge.net/download.html.
+
+#+BEGIN_SRC emacs-lisp
+  ;; active Org-babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(;; other Babel languages
+     (plantuml . t)))
+  (setq org-plantuml-jar-path
+        (expand-file-name "~/lib/plantuml.jar"))
+  (add-to-list 'auto-mode-alist '("\\.puml$" . plantuml-mode))
+        
+  (require 'plantuml-mode)
+  
+#+END_SRC
+
+**** Example for a block
+#+BEGIN_SRC plantuml :file plantuml-example.png  :exports both :tangle no
+  Alice -> Bob: synchronous call
+  Alice ->> Bob: asynchronous call
+#+END_SRC
+
+#+results:
+[[file:plantuml-example.png]]
+
+**** plantuml command line
+#+begin_src fundamental
+D:\twirkner\lib>java -jar plantuml.jar -?
+Usage: java -jar plantuml.jar [options] -gui
+        (to execute the GUI)
+    or java -jar plantuml.jar [options] [file/dir] [file/dir] [file/dir]
+        (to process files or directories)
+
+You can use the following wildcards in files/dirs:
+        *       means any characters but '\'
+        ?       one and only one character but '\'
+        **      means any characters (used to recurse through directories)
+
+where options include:
+    -gui                To run the graphical user interface
+    -tsvg               To generate images using SVG format
+    -teps               To generate images using EPS format
+    -txmi               To generate XMI file for classes diagrams
+    -tdot               To generate DOT intermediate file
+    -ttxt               To generate images with ASCII art
+    -tutxt              To generate images with ASCII art using Unicode characters
+    -o[utput] "dir"     To generate images in the specified directory
+    -DVAR1=value        To set a preprocessing variable as if '!define VAR1 value' were used
+    -Sparam1=value      To set a skin parameter as if 'skinparam param1 value' were used
+    -config "file"      To read the provided config file before each diagram
+    -charset xxx        To use a specific charset (default is windows-1252)
+    -e[x]clude pattern  To exclude files that match the provided pattern
+    -metadata           To retrieve PlantUML sources from PNG images
+    -version            To display information about PlantUML and Java versions
+    -v[erbose]          To have log information
+    -quiet              To NOT print error message into the console
+    -forcegd            To force dot to use GD PNG library
+    -forcecairo         To force dot to use Cairo PNG library
+    -keepfiles          To NOT delete temporary files after process
+    -h[elp]             To display this help message
+    -testdot            To test the installation of graphviz
+    -graphvizdot "exe"  To specify dot executable
+    -p[ipe]             To use stdin for PlantUML source and stdout for PNG/SVG/EPS generation
+    -computeurl         To compute the encoded URL of a PlantUML source file
+    -decodeurl          To retrieve the PlantUML source from an encoded URL
+    -syntax             To report any syntax error from standard input without generating images
+    -language           To print the list of PlantUML keywords
+    -nosuggestengine    To disable the suggest engine when errors in diagrams
+    -checkonly          To check the syntax of files without generating images
+    -failonerror        To stop processing if syntax error in diagram occurs
+    -pattern            To print the list of Regular Expression used by PlantUML
+
+    -duration           To print the duration of complete diagrams processing
+    -nbthread N To use (N) threads for processing
+    -nbthread auto      To use 2 threads for processing
+
+If needed, you can setup the environment variable GRAPHVIZ_DOT.
+
+D:\twirkner\lib>
+#+end_src
+
+*** org-mode change faces for TODO keywords
+Based on help from [[info:org#Faces%20for%20TODO%20keywords][info:org#Faces for TODO keywords]].
+Available colors can access via command [[elisp:list-colors-display]].
+
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keyword-faces
+        '(("STARTED" . "DarkOrange")
+          ("WAITING" . "RoyalBlue")))
+#+END_SRC
+
+*** org-mode replace underscore "_" with escaped underscore "\_"
+As long as character "_" is not part of a verbatim section 
+it should be replaced by an escaped character to be kept during export.
+
+=org-code= and ~org-verbatim~ are emacs faces 
+used by font-lock to highlight emphasized text 
+where special character "=" is used to highlight code and
+where special character "~" is used to highlight text exported verbatim.
+Both are exported into html with tags "<code>" and "</code>" respectivily.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(add-hook 'org-mode-hook
+  (function (lambda ()
+    (local-set-key "_"
+      (function (lambda () (interactive)
+        (insert "\\_")
+        ))))))
+#+END_SRC
+
+#+results:
+
+Yes, it works correct. 
+Requirement within vebatim block is nonsense, as such block can not be determinded during writing.
+
+*** org-mode-export-and-open with Windows Application in Cygwin
+I used emacs-windowsnt mainly due to compatibility with windows file paths.
+I learnt that I can browse-url files in eamcs-cygwin and open it with default Windows application.
+I changed org-mode to export-and-open with default system application of Windows.
+In combination of below patch and and a customized variable 
+emacs-cygwin now opens exported file in default Windows browser.
+
+Most important fact I had to learn was 
+"default" in variable "org-file-apps" matches 
+"t" in variable "org-file-apps-defaults-cygwin".
+
+See entry in documentation:
+Possible values for the command are:
+- `default' :: Use the default application for this file type, 
+               which is the association for t in the list, 
+               most likely in the system-specific part.
+               This can be used to overrule an unwanted setting in the
+               system-specific variable.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (custom-set-variables
+   '(org-file-apps (quote (
+                           (auto-mode . emacs) 
+                           ("\\.mm\\'" . default) 
+                           ("\\.x?html?\\'" . system) 
+                           ("\\.pdf\\'" . default))
+                          )))
+#+END_SRC
+
+Here is the patch introducing new type of file applications.
+#+BEGIN_SRC diff :tangle no
+  ,*** /tmp/ediff7920ZQj   2012-04-20 11:47:29.282982700 +0200
+  --- /cygdrive/d/wt000780/.emacs.d/src/org/lisp/org.el   2012-04-20 11:37:06.404317200 +0200
+  ,***************
+  ,*** 1655,1660 ****
+  --- 1655,1669 ----
+    The system \"open\" is used for most files.
+    See `org-file-apps'.")
+    
+  + (defconst org-file-apps-defaults-cygwin
+  +   (list
+  +    '(remote . emacs)
+  +    (cons 'system
+  +        '(call-process "cygstart" nil nil nil file)))
+  +   "Default file applications on a Cygwin system.
+  + The Cygwin's \"cygstart\" application is used for most files.
+  + See `org-file-apps'.")
+  + 
+    (defcustom org-file-apps
+      '(
+        (auto-mode . emacs)
+  ,***************
+  ,*** 1733,1738 ****
+  --- 1742,1748 ----
+    For more examples, see the system specific constants
+    `org-file-apps-defaults-macosx'
+    `org-file-apps-defaults-windowsnt'
+  + `org-file-apps-defaults-cygwin'
+    `org-file-apps-defaults-gnu'."
+      :group 'org-link-follow
+      :type '(repeat
+  ,***************
+  ,*** 9964,9969 ****
+  --- 9974,9981 ----
+        org-file-apps-defaults-macosx)
+       ((eq system-type 'windows-nt)
+        org-file-apps-defaults-windowsnt)
+  +    ((eq system-type 'cygwin)
+  +     org-file-apps-defaults-cygwin)
+       (t org-file-apps-defaults-gnu)))
+    
+    (defun org-apps-regexp-alist (list &optional add-auto-mode)
+#+END_SRC
+
+*** Link to specific git revisions
+Source: http://orgmode.org/worg/org-contrib/org-git-link.html
+
+Package is part of "Org-mode Contributed Packages".
+
+This package adds new link types to link to specific versions of a file, 
+which will be checked out when the link is activated. 
+Written by Reimar Finken. [[http://orgmode.org/w/?p%3Dorg-mode.git%3Ba%3Dblob_plain%3Bf%3Dcontrib/lisp/org-git-link.el%3Bhb%3DHEAD][Link to raw file]]. 
+
+From modules documentation.
+
+**** User friendy form
+=git:/path/to/file::searchstring=
+
+This form is the familiar from normal org file links including search options. 
+However, its use is restricted to files in a working directory and 
+does not handle bare repositories on purpose (see the bare form for that).
+
+The search string references a commit (a tree-ish in Git terminology). 
+The two most useful types of search strings are
+- A symbolic ref name, usually a branch or tag name (e.g. master or nobelprize).
+- A ref followed by the suffix @ with a date specification
+  enclosed in a brace pair (e.g. {yesterday}, {1 month 2
+  weeks 3 days 1 hour 1 second ago} or {1979-02-26 18:30:00})
+  to specify the value of the ref at a prior point in time
+
+**** Bare git form
+=gitbare:$GIT_DIR::$OBJECT=
+
+This is the more bare metal version, 
+which gives the user most control. 
+It directly translates to the git command
+git --no-pager --git-dir=$GIT_DIR show $OBJECT
+Using this version one can also view files from a bare git repository. 
+For detailed information on how to specify an object, 
+see the man page of man:git-rev-parse (section SPECIFYING REVISIONS). 
+A specific blob (file) can be specified by a suffix clolon (:) followed by a path.
+
+**** Load org-git
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'org-git-link)
+#+END_SRC
+
+**** Test org-git
+Intial revision of this file:
+git:wt000780.org::3bfa5872499
+
+Latest revision on branch "jf" of file reports:
+gitbare:../Documents/Wiki/org/.git::jf:reports.org
+
+*** org-mime — org html export for text/html MIME emails
+Source: http://orgmode.org/worg/org-contrib/org-mime.html
+
+~org-mime~ can be used to send HTML email using Org-mode HTML export.
+This approximates a WYSiWYG HTML mail editor from within Emacs, and 
+can be useful for sending tables, fontified source code, and 
+inline images in email.
+
+If the org-mode ~contrib/~ directory is in your load path, then 
+
+Next you need to tell ~org-mime~ which Emacs mail agent you use. 
+- for gnus – this is set by default 
+- for Wanderlust (WL) 
+- for VM – not yet supported 
+
+~org-mime~ exposes two functions:
+- ~org-mime-htmlize~ :: can be called from within a mail composition buffer 
+     to export either the entire buffer or just the active region to html, and 
+     embed the results into the buffer as a text/html mime section. 
+- ~org-mime-org-buffer-htmlize~ :: can be called from within an Org-mode buffer 
+     to export either the whole buffer or the narrowed subtree or 
+     active region to HTML, and open a new email buffer 
+     including the resulting HTML content as an embedded mime section. 
+
+
+#+BEGIN_SRC emacs-lisp
+  (require 'org-mime)
+  (setq org-mime-library 'mml)
+  (add-hook 'message-mode-hook
+            (lambda ()
+              (local-set-key "\C-c\M-o" 'org-mime-htmlize)))
+  
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (local-set-key "\C-c\M-o" 'org-mime-org-buffer-htmlize)))
+#+END_SRC
+
+~org-mime~ creates multipart emails of type 'alternative' 
+with a part "text/plain" and a part "text/html".
+
+~message~ defines per default =message-send-mail-with-mailclient= 
+as =message-send-mail-function=. 
+This function uses module ~mailclient~ to create an email with following
+documentation:
+- ~mailclient~ allows to hand over a buffer to be sent off
+  via the system's designated e-mail client.
+- Note that the e-mail client will display the contents of the buffer
+  again for editing.
+- The e-mail client is taken to be 
+  whoever handles a mailto: URL via ~browse-url~.
+- Mailto: URLs are composed according to RFC2368.
+- MIME bodies are not supported - we rather expect the mail client
+  to encode the body and add, for example, a digital signature.
+
+The function to send email is overwritten by message-to-outlook 
+module above: =message-send-mail-with-outlook=.
+
+*** org-mode and ditaa
+Ditaa is fully integrated and distributed with org-mode.
+Even the ditaa tool iteself being a [[file:src/org/contrib/scripts/ditaa.jar][jar-file]] is part of org-mode.
+
+**** ditaa command line
+You need the latest Java runtimes (JRE) to use ditaa. The best anti-aliasing can be achieved using Java 1.5 or higher.
+
+To start from the command line, type (where XXX is the version number):
+
+java -jar ditaaXXX.jar
+
+You will be presented with the command-line options help:
+
+- -A,--no-antialias ::      Turns anti-aliasing off.
+- -d,--debug        ::      Renders the debug grid over the resulting
+                            image.
+- -E,--no-separation ::     Prevents the separation of common edges of
+                            shapes. You can see the difference below:
+
+Before processing 
+
+#+BEGIN_SRC ditaa :file ditaa-separation.png :exports both
++---------+
+| cBLU    |
+|         |
+|    +----+
+|    |cPNK|
+|    |    |
++----+----+
+#+END_SRC			
+
+#+results:
+[[file:ditaa-separation.png]]
+
+Common edge separation (default) 
+
+#+BEGIN_SRC ditaa :file ditaa-no-separation.png :cmdline -E
++---------+
+| cBLU    |
+|         |
+|    +----+
+|    |cPNK|
+|    |    |
++----+----+
+#+END_SRC			
+
+#+results:
+[[file:ditaa-no-separation.png]]
+
+No separation (with the -E option)
+
+
+- -e,--encoding <ENCODING> ::  The encoding of the input file.
+- -h,--html                ::  In this case the input is an HTML file. The
+                            contents of the <pre class="textdiagram"> tags
+                            are rendered as diagrams and saved in the
+                            images directory and a new HTML file is
+                            produced with the appropriate <img> tags.
+                            See the HTML section.
+-    --help                ::  Prints usage help.
+- -o,--overwrite           ::  If the filename of the destination image
+                            already exists, an alternative name is chosen.
+                            If the overwrite option is selected, the image
+                            file is instead overwriten.
+- -r,--round-corners       ::  Causes all corners to be rendered as round
+                            corners.
+- -s,--scale <SCALE>       ::  A natural number that determines the size of
+                            the rendered image. The units are fractions of
+                            the default size (2.5 renders 1.5 times bigger
+                            than the default).
+- -S,--no-shadows          ::  Turns off the drop-shadow effect.
+- -t,--tabs <TABS>         ::  Tabs are normally interpreted as 8 spaces but
+                            it is possible to change that using this
+                            option. It is not advisable to use tabs in
+                            your diagrams.
+- -v,--verbose             ::  Makes ditaa more verbose.
+
+**** ditaa syntax
+***** Round corners
+
+If you use / and \ to connect corners, they are rendered as round corners:
+
+	round corner demo
+
+Before processing 	
+#+BEGIN_SRC ditaa :file ditaa-syntax_round-corner.png :exports both
+  /--+
+  |  |
+  +--/
+#+END_SRC			
+		  
+#+results:
+
+Rendered 
+
+***** Color
+
+Color codes can be used to add color to the diagrams. The syntax of color codes is: ~cXXX~
+
+where ~XXX~ is a hex number. 
+The first digit of the number represents the red compoment of the color, 
+the second digit represents green and the third blue (good ol' RGB). 
+See below for an example of use of color codes:
+
+	color demo
+
+Before processing 	
+#+BEGIN_SRC ditaa :file ditaa-syntax_color.png :exports both
+  /----\ /----\
+  |c33F| |cC02|
+  |    | |    |
+  \----/ \----/
+  
+  /----\ /----\
+  |c1FF| |c1AB|
+  |    | |    |
+  \----/ \----/
+#+END_SRC			
+		  
+#+results:
+
+Rendered
+
+This can become a bit tedious after a while, 
+so there are (only some for now) human readable color codes provided:
+
+Color codes
+
+	color code
+
+Before processing 	
+#+BEGIN_SRC ditaa :file ditaa-syntax_color.png :exports both
+  /-------------+-------------\
+  |cRED RED     |cBLU BLU     |
+  +-------------+-------------+
+  |cGRE GRE     |cPNK PNK     |
+  +-------------+-------------+
+  |cBLK BLK     |cYEL YEL     |
+  \-------------+-------------/
+#+END_SRC			
+		  
+#+results:
+
+Rendered
+
+As you can see above, if a colored shape contains any text, 
+the color of the text is adjusted according to the underlying color. 
+If the undelying color is dark, the text color is changed to white 
+(from the default black).
+
+Note that color codes only apply if they are within closed shapes, and 
+they have no effect anywhere outside.
+
+Supported color names from [[http://ditaa.svn.sourceforge.net/viewvc/ditaa/trunk/src/org/stathissideris/ascii2image/text/TextGrid.java?revision%3D78&view%3Dmarkup][source code]]:
+|-------+-------|
+| Name  | Code  |
+|-------+-------|
+| "GRE" | "9D9" |
+| "BLU" | "55B" |
+| "PNK" | "FAA" |
+| "RED" | "E32" |
+| "YEL" | "FF3" |
+| "BLK" | "000" |
+|-------+-------|
+
+***** Tags
+
+ditaa recognises some tags that change the way a rectangular shape is rendered. All tags are between { and }. See the table below:
+
+Name 	Original 	Rendered 	Comment
+Document 	
+
+#+BEGIN_SRC ditaa :file ditaa-syntax_document.png :exports both
+  +-----+
+  |{d}  |
+  |     |
+  |     |
+  +-----+
+#+END_SRC			
+		  
+#+results:
+		  
+
+		Symbol representing a document.
+Storage 	
+
+#+BEGIN_SRC ditaa :file ditaa-syntax_storage.png :exports both
+  +-----+
+  |{s}  |
+  |     |
+  |     |
+  +-----+
+#+END_SRC			
+		  
+#+results:
+		  
+
+		Symbol representing a form of storage,
+like a database or a hard disk.
+
+Input/Output 	
+
+#+BEGIN_SRC ditaa :file ditaa-syntax_io.png :exports both
+  +-----+
+  |{io} |
+  |     |
+  |     |
+  +-----+
+#+END_SRC			
+		  
+#+results:
+		  
+
+		Symbol representing input/output.
+
+Supported tags from [[http://ditaa.svn.sourceforge.net/viewvc/ditaa/trunk/src/org/stathissideris/ascii2image/text/TextGrid.java?revision%3D78&view%3Dmarkup][source code]]:
+- "d" (document, see above)
+- "s" (storage, see above)
+- "io" (input/output, see above)
+- "c"
+- "mo"
+- "tr"
+- "o"
+
+***** Dashed lines
+
+Any lines that contain either 
+- at least one ~=~ (for horizontal lines) or 
+- at least one ~:~ (for vertical lines) 
+are rendered as dashed lines. 
+Only one of those characters can make a whole line dashed, 
+so this feature "spreads". 
+The rationale behind that is that 
+you only have to change one character to switch from normal to dashed 
+(and vice versa), 
+rather than redrawing the whole line/shape. 
+Special symbols (like document or storage symbols) 
+can also be dashed. See below:
+
+Before processing 	
+#+BEGIN_SRC ditaa :file ditaa-syntax_dashed-demo.png :exports both
+  ----+  /----\  +----+
+      :  |    |  :    |
+      |  |    |  |{s} |
+      v  \-=--+  +----+
+#+END_SRC			
+		  
+#+results:
+[[file:ditaa-syntax_dashed-demo.png]]
+	
+Rendered
+
+***** Point markers
+
+If ~*~ is encountered on a line (but not at the end of the line), 
+it is rendered as a special marker, called the point marker 
+(this feature is still experimental). 
+See below:
+
+	point marker demo
+
+Before processing
+#+BEGIN_SRC ditaa :file ditaa-syntax_piont-marker.png :exports both
+  *----*
+  |    |      /--*
+  *    *      |   
+  |    |  -*--+
+  *----*  
+#+END_SRC			
+		  
+#+results:
+[[file:ditaa-syntax_piont-marker.png]]
+
+Rendered
+
+***** Text handling
+
+(This section is still being written)
+
+If the pattern ~o XXXXX~ is encountered, 
+where ~XXXXX~ is any text, 
+the ~'o'~ is interpreted and rendered as a bullet point. 
+Note that there must be a space before the 'o' as well as after it. 
+See below:
+
+	bullet point demo
+#+BEGIN_SRC ditaa :file ditaa-syntax_piont-bullet.png :exports both
+  /-----------------\
+  | Things to do    |
+  | cGRE            |
+  | o Cut the grass |
+  | o Buy jam       |
+  | o Fix car       |
+  | o Make website  |
+  \-----------------/
+#+END_SRC			
+
+#+results:
+[[file:ditaa-syntax_piont-bullet.png]]
+
+
+Before processing 	Rendered
+
+***** Overview of Character
+Characters for drawing from [[http://ditaa.svn.sourceforge.net/viewvc/ditaa/trunk/src/org/stathissideris/ascii2image/text/TextGrid.java?revision%3D78&view%3Dmarkup][source code]]:
+| Name                   | Char                                           |
+|------------------------+------------------------------------------------|
+| boundaries             | '/', '\\',         '\vert', '-', '*', '=', ':' |
+| undisputableBoundaries | '\vert', '-', '*', '=', ':'                    |
+| horizontalLines        | '-', '='                                       |
+| verticalLines          | '\vert', ':'                                   |
+| arrowHeads             | '<', '>', '^', 'v', 'V'                        |
+| cornerChars            | '\\', '/', '+'                                 |
+| pointMarkers           | '*'                                            |
+| dashedLines            | ':', '~', '='                                  |
+
+**** Example for a ditaa block
+Source: http://doc.norang.ca/org-mode.html#playingwithditaa
+
+#+begin_src ditaa :file ditaa-example.png :cmdline -r -s 0.8 :tangle no
+      +-----------+        +---------+  
+      |    PLC    |        |         |                
+      |  Network  +<------>+   PLC   +<---=---------+ 
+      |    cRED   |        |  c707   |              | 
+      +-----------+        +----+----+              | 
+                                ^                   | 
+                                |                   | 
+                                |  +----------------|-----------------+
+                                |  |                |                 |
+                                v  v                v                 v
+        +----------+       +----+--+--+      +-------+---+      +-----+-----+       Windows clients
+        |          |       |          |      |           |      |           |      +----+      +----+
+        | Database +<----->+  Shared  +<---->+ Executive +<-=-->+ Operator  +<---->|cYEL| . . .|cYEL|
+        |   c707   |       |  Memory  |      |   c707    |      | Server    |      |    |      |    |
+        +--+----+--+       |{d} cGRE  |      +------+----+      |   c707    |      +----+      +----+
+           ^    ^          +----------+             ^           +-------+---+
+           |    |                                   |                        
+           |    +--------=--------------------------+                    
+           v                                                             
+  +--------+--------+                                                         
+  |                 |                                                         
+  | Millwide System |            -------- Data ---------                      
+  | cBLU            |            --=----- Signals ---=--                      
+  +-----------------+                                                         
+#+end_src
+
+#+results:
+[[file:ditaa-example.png]]
+
+*** Publish to Outlook
+Create a dedicated project to publish to outlook.
+Set base directory and refine file names.
+Publishing means transform as well as copy.
+The default transformation is to export Org files as HTML (~org-publish-org-to-html~),
+other available transformation function are ~org-publish-org-to-pdf~ and
+or as 'ascii', 'latin1' or 'utf8' encoded files.
+
+Properties to set accordingly
+- ~:base-directory~
+- ~:include~
+- ~:publishing-function~
+
+The publishing function must accept three arguments: 
+- a property list containing at least a ~:publishing-directory~ property, 
+- the name of the file to be published, and 
+- the path to the publishing directory of the output file.
+
+A property list can be used to set many export options:
+see [[info:org#Publishing%20options][Options for the HTML/LaTeX exporters]].
+
+Following lisp code depends on python code.
+The link to python module [[git:~/.emacs.d/src/outlook.py::tilofix@{2012-06-14}][outlook]] was created by orgmode.
+
+**** Lisp source
+#+BEGIN_SRC emacs-lisp
+  (eval-after-load "pymacs"
+    '(progn (add-to-list 'pymacs-load-path (expand-file-name "~/.emacs.d/src"))
+            (pymacs-load "outlook" "org-")))
+  
+  (defun org-publish-org-to-html-outlook-mail (plist filename pub-dir)
+    "Publish an org file to HTML into an outlook mail item.
+  PLIST is the property list of the given project.
+  FILENAME is the filename of the org file to be published.
+  PUB-DIR is the publishing directory; in our case it is empty (or a link to outlook?)."
+    (require 'pymacs)
+    ;; this function is a rewrite of 'org-publish-org-to'
+    (require 'org)
+    (let ((visiting (find-buffer-visiting filename)))
+      (save-excursion
+        (switch-to-buffer (or visiting (find-file filename)))
+        (let* ((plist (cons :buffer-will-be-killed (cons t plist)))
+               export-buf-or-file)
+          ;; run hooks before exporting
+          (run-hooks 'org-publish-before-export-hook)
+          ;; export the possibly modified buffer
+          (setq export-buf-or-file
+                (funcall (intern "org-export-as-html")
+                         ;; signature of org-export-as functions
+                         ;; (org-export-as-html
+                         ;; ARG &optional : specifies how many levels of
+                         ;;   the outline should become headlines
+                         ;; HIDDEN : is obsolete and does nothing.
+                         ;; EXT-PLIST : is a property list with external
+                         ;;   parameters overriding org-mode's default settings 
+                         ;; TO-BUFFER : When TO-BUFFER is non-nil,
+                         ;;   create a buffer with that name and
+                         ;;   export to that buffer.
+                         ;;   If TO-BUFFER is the symbol `string',
+                         ;;   don't leave any buffer behind but
+                         ;;   just return the resulting HTML as a string.
+                         ;; BODY-ONLY : When BODY-ONLY is set,
+                         ;;   don't produce the file header and footer
+                         ;; PUB-DIR : When PUB-DIR is set,
+                         ;;   use this as the publishing directory.
+                         ;; )
+                         ;; Export the outline as a pretty HTML file.
+                         ;;
+                         (plist-get plist :headline-levels) ;; ARG
+                         nil                                ;; HIDDEN
+                         plist                              ;; EXT-PLIST
+                         nil                                ;; TO-BUFFER
+                         (plist-get plist :body-only)       ;; BODY-ONLY
+                         pub-dir                            ;; PUB-DIR
+                         ))
+          ;; The buffer containing html code is published via
+          ;; pymacs via pywin32 to MS Outlook.
+          (org-publish-html-to-outlook-mail export-buf-or-file)
+          ;; now buffer is going to be killed
+          (when (and (bufferp export-buf-or-file)
+                     (buffer-live-p export-buf-or-file))
+            (set-buffer export-buf-or-file)
+            ;; run hooks after export and save export
+            (progn (run-hooks 'org-publish-after-export-hook)
+                   (if (buffer-modified-p) (save-buffer)))
+            (kill-buffer export-buf-or-file))
+          ;; maybe restore buffer's content
+          ;; removed
+          )
+        ))
+    )
+  
+  (add-to-list
+   'org-publish-project-alist
+   '("outlook"
+     :base-directory "~/Documents/Wiki/org/"
+     :base-extension "org"
+     :exclude ".*\\.org"
+;;     :include ("reports.*\\.org")
+     :include ("outlook_send_email\.org")
+     :publishing-directory "~/public_html/outlook/"
+     :publishing-function org-publish-org-to-html-outlook-mail
+     :section-numbers nil
+     :table-of-contents nil
+     :auto-index t))
+#+END_SRC
+
+#+results:
+| outlook | :base-directory | ~/Documents/Wiki/org/ | :include        | reports.org | :publishing-directory | ~/public_html/outlook/ | :publishing-function | org-publish-org-to-outlook | :section-numbers | nil | :table-of-contents | nil | :auto-index | t                                                                                                             |             |   |
+| org     | :base-directory | ~/Documents/Wiki/org/ | :base-extension | org         | :publishing-directory | ~/public_html/org/     | :publishing-function | org-publish-org-to-html    | :section-numbers | nil | :table-of-contents | nil | :style      | <link rel=stylesheet\n                     href="../other/mystyle.css"\n                     type="text/css"> | :auto-index | t |
+
+**** Install pywin32
+
+Python extensions for Microsoft Windows
+Provides access to much of the Win32 API, the
+ability to create and use COM objects, and the
+Pythonwin environment.
+
+    Author: Mark Hammond (et al)
+    Author_email: mhammond@users.sourceforge.net
+    Description: Python for Window Extensions
+    Name: pywin32
+    Url: http://sourceforge.net/projects/pywin32/
+    Version: 217
+
+Copied pythoncom25.dll to C:\WINDOWS\system32\pythoncom25.dll
+Copied pywintypes25.dll to C:\WINDOWS\system32\pywintypes25.dll
+Registered: Python.Interpreter 
+Registered: Python.Dictionary 
+Registered: Python 
+-> Software\Python\PythonCore\2.5\Help[None]=None
+-> Software\Python\PythonCore\2.5\Help\Pythonwin Reference[None]='C:\\Python25\\Lib\\site-packages\\PyWin32.chm'
+Pythonwin has been registered in context menu
+Creating directory C:\Python25\Lib\site-packages\win32com\gen_py
+Shortcut for Pythonwin created
+Shortcut to documentation created
+The pywin32 extensions were successfully installed.
+
+**** Log of first call
+Skipping unmodified file d:/wt000780/Documents/Wiki/org/reports.org
+Saving file d:/wt000780/Documents/Wiki/org/reports.org...
+Wrote d:/wt000780/Documents/Wiki/org/reports.org
+Publishing file d:/wt000780/Documents/Wiki/org/reports.org using `org-publish-org-to-html-outlook-mail'
+Exporting...
+Loading d:/wt000780/.emacs.d/src/cedet/semantic/semanticdb-file.el (source)...done
+Exporting...
+Saving file d:/wt000780/public_html/outlook/reports.html...
+Wrote d:/wt000780/public_html/outlook/reports.html
+HTML export done, pushed to kill ring and clipboard
+Mark set
+pymacs-report-error: Python: Traceback (most recent call last):
+  File "build\bdist.win32\egg\Pymacs\pymacs.py", line 147, in loop
+    value = eval(text)
+  File "<string>", line 1, in <module>
+  File "d:/wt000780/.emacs.d/src\outlook.py", line 21, in publish_html_to_outlook_mail
+    item.HTMLBody = a_html_buffer
+  File "C:\Python25\lib\site-packages\win32com\client\dynamic.py", line 554, in __setattr__
+    self._oleobj_.Invoke(entry.dispid, 0, invoke_type, 0, value)
+TypeError: Objects of type 'Buffer' can not be converted to a COM VARIANT (but obtaining the buffer() of this object could)
+
+*** Link Adtran-Jira in org-mode
+With help of org-modes' link abbreviation.
+See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
+#+END_SRC
+
+Test Link [[jira:BN-6671]]
+
+** Calendar
+
+*** Emacs Calendar Week Numbers
+http://www.emacswiki.org/emacs/CalendarWeekNumbers
+
+There are two solution for Emacs-22 and Emacs-23.
+
+**** Emacs-22 Calendar Week Number patch
+- patch file created from website.
+- applied to my emacs installation (GNU Emacs 22.3.1 (i386-mingw-nt5.1.2600) of 2008-09-06 on SOFT-MJASON)
+- manually compiled cal-iso.el and calendar.el
+
+#+begin_src diff
+--- lisp/calendar/cal-iso.el
++++ lisp/calendar/cal-iso.el
+@@ -131,6 +131,13 @@
+                        (calendar-absolute-from-iso date)))
+   (or noecho (calendar-print-iso-date)))
+ 
++(defun calendar-iso-week-string (&optional date)
++  "String of ISO week number of Gregorian DATE."
++  (format "W%02d "
++	  (extract-calendar-month
++	   (calendar-iso-from-absolute
++	    (calendar-absolute-from-gregorian date)))))
++
+ (defun diary-iso-date ()
+   "ISO calendar equivalent of date diary entry."
+   (format "ISO date: %s" (calendar-iso-date-string date)))
+
+
+--- lisp/calendar/calendar.el
++++ lisp/calendar/calendar.el
+@@ -1810,6 +1810,10 @@
+ (autoload 'calendar-iso-date-string "cal-iso"
+   "String of ISO date of Gregorian date.")
+ 
++(autoload 'calendar-iso-from-absolute "cal-iso")
++
++(autoload 'calendar-iso-week-string "cal-iso")
++
+ (autoload 'calendar-goto-islamic-date "cal-islam"
+   "Move cursor to Islamic date."
+   t)
+@@ -2141,8 +2145,15 @@
+              (truncate-string-to-width string 2)
+            (substring string 0 2)))
+        " "))
++   (setq indent (- indent 4))
+    (calendar-insert-indented "" 0 t);; Force onto following line
+-   (calendar-insert-indented "" indent);; Go to proper spot
++   (calendar-insert-indented ;; Go to proper spot
++    (calendar-iso-week-string ;; Insert ISO week number.
++     (list
++      month
++      (if (and (= 0 blank-days) (= 0 calendar-week-start-day))
++	  2 ;; Use 2nd day if 1st day of calendar month is Sunday.
++	1) year)) indent)
+    ;; Add blank days before the first of the month
+    (calendar-for-loop i from 1 to blank-days do (insert "   "))
+    ;; Put in the days of the month
+@@ -2155,7 +2166,10 @@
+       (and (zerop (mod (+ i blank-days) 7))
+            (/= i last)
+            (calendar-insert-indented "" 0 t)    ;; Force onto following line
+-           (calendar-insert-indented "" indent)))));; Go to proper spot
++           (calendar-insert-indented            ;; Go to proper spot
++            (calendar-iso-week-string ;; Insert ISO week number.
++             (list month (+ 2 i) year))
++            indent)))))
+ 
+ (defun calendar-insert-indented (string indent &optional newline)
+   "Insert STRING at column INDENT.
+#+end_src
+
+**** QUOTE Emacs-22 Calendar Week Patch Command output
+21K454J[emacs-22.3]$ patch -b -p0 < calendar_week_numbers.patch
+(Stripping trailing CRs from patch.)
+patching file lisp/calendar/cal-iso.el
+(Stripping trailing CRs from patch.)
+patching file lisp/calendar/calendar.el
+Hunk #1 succeeded at 1812 (offset 2 lines).
+Hunk #2 succeeded at 2147 (offset 2 lines).
+Hunk #3 succeeded at 2168 (offset 2 lines).
+
+**** Emacs-23 Calendar Week Numbers customization
+
+#+begin_src emacs-lisp
+  (custom-set-variables
+   '(calendar-intermonth-text 
+     (quote 
+      (propertize 
+       (format "%2d" 
+               (car
+                (calendar-iso-from-absolute 
+                 (calendar-absolute-from-gregorian (list month day year))))) 
+       (quote font-lock-face)
+       (quote font-lock-function-name-face)
+       )))
+   '(calendar-week-start-day 1)
+  )
+#+end_src
+
+
+** Single Space ends Sentence
+sentence-end-double-space is a variable defined in `paragraphs.el'.
+Its value is t
+
+Documentation:
+Non-nil means a single space does not end a sentence.
+This is relevant for filling.  See also `sentence-end-without-period'
+and `colon-double-space'.
+
+This value is used by the function `sentence-end' to construct the
+regexp describing the end of a sentence, when the value of the variable
+`sentence-end' is nil.  See Info node `(elisp)Standard Regexps'.
+
+
+#+BEGIN_SRC emacs-lisp 
+  (custom-set-variables
+   '(sentence-end-double-space nil)
+   )
+#+END_SRC
+
+
+** Emacs Development Environment
+
+Is there any cedet in startkit? No.
+
+[[http://cedet.sourceforge.net/ede.shtml][CEDET Homepage]]
+
+CEDET 1.0 has two automated build processes, one via Make, and the other via starting Emacs, and executing a build command.
+
+*** Prepared starter-kit-cedet file
+Source: https://gist.github.com/zerogravity/emacs-starter-kit/blob/master/starter-kit-cedet.el
+
+OK, I just download cedet-1.0 as I could not manage to get sources via bzr.
+There is no type of URL for http.
+
+#+BEGIN_SRC emacs-lisp
+  (load-file "~/.emacs.d/src/cedet/common/cedet.el")
+  
+  (global-ede-mode t)
+  
+  (semantic-load-enable-excessive-code-helpers)
+  
+  (require 'semantic-ia)
+    
+  (require 'semantic-gcc)
+    
+  (setq projfile (expand-file-name "~/Projects/projects.el"))
+  (if (file-exists-p projfile) (load-file projfile))
+    
+  (defun my-cedet-hook ()
+    (local-set-key [(control return)] 'semantic-ia-complete-symbol)
+    (local-set-key [(control tab)] 'semantic-ia-complete-symbol-menu)
+    (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
+    (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle))
+  (add-hook 'c-mode-common-hook 'my-cedet-hook)
+    
+  ; Maybe not necessary as I start cedet directly without patching 'init.el'
+  ;(provide 'starter-kit-cedet)
+    
+#+END_SRC
+
+*** Proposal to include cedet via git
+Make a git submodule from CVS of cedet with "git cvsimport".
+
+See hint for a local cvs copy at: http://stackoverflow.com/questions/595106/best-practices-for-using-git-with-cvs
+
+#+BEGIN_EXAMPLE
+$ rsync rsync://yourprojecthost.com/cvsroot/yourproject/*  
+$ mkdir myproject.git  
+$ cd myproject.git  
+$ git cvsimport -p x -v -d :local:/path/to/cvsroot/yourproject
+#+END_EXAMPLE
+
+Lest see hwo to use man:git-cvsimport.
+
+-v
+Verbosity: let cvsimport report what it is doing.
+
+-p <options-for-cvsps>
+Additional options for cvsps. The options -u and -A are implicit
+and should not be used here.
+
+If you need to pass multiple options, separate them with a comma.
+
+-d <CVSROOT>
+The root of the CVS archive. May be local (a simple path) or
+remote; currently, only the :local:, :ext: and :pserver: access
+methods are supported. If not given, git cvsimport will try to read
+it from CVS/Root. If no such file exists, it checks for the CVSROOT
+environment variable.
+
+*Finally git is not useful as you need whole CVSROOT directory structure.*
+
+*** Proposal to include cedet via cvs
+
+
+** Lua-mode
+After I recognized RockBox for iPod-2G I found an application implemented in lua: [[file:f:/.rockbox/rocks/games/boomshine.lua::--%255B%255B][boomshine.lua]]
+Now I'd like to install lua-mode for emacs
+
+Lua-mode downloaded from http://luaforge.net/frs/download.php/4814/lua-mode-20110428.zip.
+
+#+BEGIN_SRC emacs-lisp
+  (load-file "~/.emacs.d/src/lua-mode/lua-mode.el")
+  (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
+  (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
+  (add-to-list 'interpreter-mode-alist '("lua" . lua-mode))
+  (setq lua-default-application "C:\\Lua\\5.1\\lua.exe")
+#+END_SRC
+
+*** Usage
+Lua-mode supports c-mode style formatting and sending of
+lines/regions/files to a Lua interpreter. An interpreter (see
+variable `lua-default-application') will be started if you try to
+send some code and none is running. You can use the process-buffer
+(named after the application you chose) as if it were an
+interactive shell. See the documentation for `comint.el' for
+details.
+
+Lua-mode works with Hide Show minor mode (see ``hs-minor-mode``).
+
+
+** Emacs Server
+
+"Sent To" entry: "D:\wt000780\Applications\emacs-22.3\bin\runemacs.exe".
+
+"Dateitypen" Eintrag für Org-Mode Datei über Explorer > Extras > Ordneroptionen
+
+Vorgang: Emacs Client
+Andwendung für diesen Vorgang: "D:\wt000780\Applications\emacs-23.2\bin\emacsclientw.exe"  --alternate-editor " D:\wt000780\Applications\emacs-23.2\bin\runemacs.exe" "%1"
+
+'C-x #' is the way to tell 'emacsclient' that you are finished.
+
+Emacs-Server läßt sich untern Cygwin nicht in jedem Falle starten.
+Der Server-Socket wird durch "server-force-delete" 
+nicht ordentlich abgebaut, wenn Emacs beendet wird.
+Wenn ein Server gestartet wird, steht obige Funktion 
+in der Variable für die Haken: 'kill-emacs-hook', see also [[info:elisp#Killing%2520Emacs][Info Killing Emacs]].
+
+Server-Socket Dateiname:
+- cygwin: ~/tmp/emacs133569/server~
+- windows-nt: ~d:/wt000780/.emacs.d/server/server~
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (let ((server-socket-file-name 
+         (expand-file-name
+          "server"           
+          (format "%s/emacs%d" (or (getenv "TMPDIR") "/tmp") (user-uid)))))
+    (condition-case err
+        (progn
+          (if (file-exists-p server-socket-file-name)
+              (delete-file server-socket-file-name)) 
+          (server-start))
+      ((file-error) 
+  ;;; use ((debug file-error) as condition name, if you want to debug on error
+       (message 
+        "Error: %S, can't delete file %s." 
+        err server-socket-file-name))
+      ))
+#+END_SRC
+
+
+** Mercurial
+According to web site "http://alexott.net/en/writings/emacs-vcs/EmacsMercurial.html".
+
+Copied tar entry mercurial-1.9.2/contrib/mercurial.el to d:/wt000780/.emacs.d/src/mercurial.el
+from ~c:/cygwin/usr/src/mercurial-1.9.2.tar.gz~ 
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'mercurial)
+#+END_SRC
+
+Actually installation is working fine.
+But mercurial package can't access hg-tool.
+It is a python script and no binary, 
+so it seems as it can't be called via cygwin path.
+
+Maybe one chance could be to make a binary out of python script.
+
+Maybe to customize variable to call both pyhton and the script.
+
+#+BEGIN_SRC emacs-lisp :tangle no
+(custom-set-variables
+ '(hg-binary "c:/cygwin/bin/python.exe /bin/hg"))
+#+END_SRC
+
+Das funktioniert leider nicht.
+
+
+** Spell checking
+Link: http://www.emacswiki.org/emacs/InteractiveSpell#toc4
+
+Aspell is a fairly new replacement for much of Ispell's functionality.
+
+Flyspell uses "-l" with ispell for faster region checking. 
+The equivalent aspell command is "list"
+
+The problem with using aspell with flyspell is that in its default mode, it it a lot slower than ispell. 
+Fortunately, you can tell it to speed up, though this reduces somewhat the quality of its suggestions.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+(custom-set-variables
+  '(ispell-program-name "aspell")
+  '(ispell-list-command "list")
+  '(ispell-extra-args '("--sug-mode=ultra")))
+#+END_SRC
+
+
+** BNF mode
+Source: http://stackoverflow.com/questions/1800199/is-there-a-bnf-mode-for-emacs
+
+I looked for it as I stored Python's grammer in org file.
+I assume pybnf means special definition of python's documentation.
+
+#+begin_src emacs-lisp
+  (define-generic-mode 'bnf-mode
+    () ;; comment char: inapplicable because # must be at start of line
+    nil ;; keywords
+    '(
+      ("^#.*" . 'font-lock-comment-face) ;; comments at start of line
+      ("^<.*?>" . 'font-lock-function-name-face) ;; LHS nonterminals
+      ("<.*?>" . 'font-lock-builtin-face) ;; other nonterminals
+      ("::=" . 'font-lock-const-face) ;; "goes-to" symbol
+      ("\|" . 'font-lock-warning-face) ;; "OR" symbol
+      ("\{:\\|:\}" . 'font-lock-keyword-face) ;; special pybnf delimiters
+      )
+    '("\\.bnf\\'" "\\.pybnf\\'") ;; filename suffixes
+    nil ;; extra function hooks
+    "Major mode for BNF highlighting.")
+  
+#+end_src
+
+
+** Windows Shell
+#+BEGIN_SRC emacs-lisp
+  (defun cmd-shell (&optional arg)
+    "Run cmd.exe (WinNT) or command.com shell. A numeric prefix
+  arg switches to the specified session, creating it if necessary."
+    (interactive "P")
+    (let ((buf-name (cond ((numberp arg)
+                           (format "*cmd<%s>*" arg))
+                          (arg 
+                           (generate-new-buffer-name "*cmd*"))
+                          (t
+                           "*cmd*")))
+          (explicit-shell-file-name (or (and 
+                                         (or (eq system-type 'cygwin) (w32-using-nt)) 
+                                         "cmd.exe")
+                                        "command.com")))
+      (shell buf-name)))
+#+END_SRC
+
+
+** Emacs Tramp
+Source: http://www.gnu.org/software/tramp/
+
+Under Windows, tramp is integrated with the PuTTY package, using the ~plink~ program. 
+
+#+BEGIN_SRC emacs-lisp
+  (if (eq system-type 'windows-nt)
+      (progn
+        (setenv "PATH" (concat "C:\\Program Files\\PuTTY;" (getenv "PATH")))
+        ))
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+H:\>
+H:\>"c:\Program Files\PuTTY\plink.exe" -ssh -l wt000780 -i D:\wt000780\.putty\id_rsa.ppk grfl0205
+Using username "wt000780".
+Last login: Thu May 10 11:22:57 2012 from 10.150.226.52
+wt000780@grfl0205:~grfl0205<NO VIEW>~]$
+wt000780@grfl0205:~grfl0205<NO VIEW>~]$ logout
+H:\>
+#+END_EXAMPLE
+
+
+** Coding System
+DIRED displays wrong files created by Windows with Umlaut;
+- UTF-8: ~SoC_Erg?nzung_TS 0373_96 Teil 4_MSAN_CL_V5 _0_20082012.xls~
+- ISO-8859-1: ~SoC_Ergänzung_TS 0373_96 Teil 4_MSAN_CL_V5 _0_20082012.xls~
+
+#+BEGIN_SRC emacs-lisp
+  (prefer-coding-system 'iso-8859-1)
+  
+#+END_SRC
+
+
+** Perforce
+
+http://p4el.sourceforge.net/
+
+
+http://public.perforce.com/wiki/Emacs_VC-P4
+
+#+BEGIN_SRC emacs-lisp
+  ;; Load VC-P4
+  (require 'vc-p4)
+#+END_SRC
+
+
