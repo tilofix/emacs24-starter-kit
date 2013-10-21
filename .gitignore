@@ -19,9 +19,10 @@ image-dired/*
 elim/*
 doc/*
 elpa/*
-src/*
+## src/ subdirectory has got its own .gitignore
 themes/*
 url/*
+server/
 
 ## exported and encrypted files
 *gpg
@@ -31,6 +32,7 @@ url/*
 *tex
 *pdf
 *txt
+*pyc
 
 ## org stuff
 .org-id-locations

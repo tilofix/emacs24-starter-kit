@@ -1,2 +1,4 @@
-*
+!/*.el
 !.gitignore
+!/*.py
+org/

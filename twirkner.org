@@ -32,6 +32,23 @@ Manually copied from backup =.emacs.d_20131011.bak=:
 - pymacs.el
 - vc-p4.el
 
+Disabled modes due to missing support in emacs24-starter-kit:
+- remember-el used by org-remember
+
+Disabled modes to be installed via package-el later:
+- cedet
+- lua
+- mercurial
+
+Add starter kit configuration moved into [[file:starter-kit-misc-recommended.org][starter-kit-misc-recommended]]
+- Starter kit recommended function with tag "visual"
+  #+begin_src emacs-lisp
+  (starter-kit-load "misc-recommended")
+  #+end_src
+- Somehow following lisp code ~(starter-kit-load "misc-recommended" "visual")~
+  ends up with error: ~org-agenda-skip: Wrong type argument: stringp, nil~
+
+
 ** Extend dired-mode with a key to open a file for browsing
 #+begin_src emacs-lisp 
   (add-hook 'dired-mode-hook
