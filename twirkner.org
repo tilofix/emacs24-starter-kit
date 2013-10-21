@@ -2240,6 +2240,21 @@ See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
 
 Test Link [[jira:BN-6671]]
 
+*** Export to TaskJuggler
+Exporter of org-8.x supports ~tj3~.
+
+Information from [[git:~/.emacs.d/src/org/contrib/lisp/ox-taskjuggler.el::org-tilofix-emacs24@{2013-10-21}]]
+
+TaskJuggler exporter looks for a tree that defines the tasks and
+a optionally tree that defines the resources for this project.
+It then creates a TaskJuggler file based on these trees and
+the attributes defined in all the nodes.
+
+#+BEGIN_SRC emacs-lisp
+  (add-to-list 'org-export-backends 'taskjuggler)
+#+END_SRC
+
+
 ** Calendar
 
 *** Emacs Calendar Week Numbers
