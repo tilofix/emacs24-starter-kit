@@ -497,37 +497,36 @@ source: http://www.newartisans.com/2007/08/using-org-mode-as-a-day-planner.html
             (org-agenda-overriding-header "Unscheduled TODO entries: "))))))
 #+end_src
 
-*** Remember-el and org mode
-**** Setting up Remember
-Just found following information on website "http://www.emacswiki.org/emacs/RememberMode":
+*** Org-Capture
+**** Setting up org-capture
+Source: [[http://orgmode.org/manual/Capture.html][Org-Manual Capture]]
 
-#+begin_example
-This excellent feature inspired Capture in OrgMode and that is now
-(Aug2010) recommended for new users, see
-http://orgmode.org/manual/Capture.html#Capture
-#+end_example
+Variable =org-default-notes-file= is set above.
 
-Mmh, maybe for the moment I will go with remember.
-Oops, not nessary to have remember-el explicitely installed.
-Indeed org-remember seems to do the job.
-
-**** Setting up org-remember
-Source: [[info:org-6.06b:Setting%20Remember][info:org-6.06b:Setting Remember]]
-
-#+begin_src emacs-lisp :tangle no
-  (org-remember-insinuate)
-  (define-key global-map "\C-cr" 'org-remember)
+#+begin_src emacs-lisp
+  (define-key global-map "\C-cc" 'org-capture)
 #+end_src
 
-**** Setting up Remember templates
+**** Setting up Capture templates
 
-#+begin_src emacs-lisp :tangle no
-  (setq org-remember-templates
-        '(("Note" ?n "* %?\n"  "~/Documents/Wiki/org/notes.org" "Notes")
-          ("Todo" ?t "* TODO %?\n %u"  "~/Documents/Wiki/org/TODO.org" "Tasks")
-          ("Journal" ?j "* %U %?\n\n %i\n  %a" "~/Documents/Wiki/org/JOURNAL.org" "Journal")
-          ("Idea" ?i "* %^{Title}\n %i\n  %a" "~/Documents/Wiki/org/JOURNAL.org" "New Ideas")
-          ("Bug" ?b "* BUG %?\n %i\n %a" "~/Documents/Wiki/org/BUGS.org" "Bugs" (emacs-lisp-mode))))
+#+begin_src emacs-lisp
+    (setq org-capture-templates
+          '(("n" "Note" entry
+             (file+headline "~/Documents/Wiki/org/notes.org" "Notes")
+             "* %?\n")
+            ("t" "Todo" entry
+             (file+headline "~/Documents/Wiki/org/TODO.org" "Tasks")
+             "* TODO %?\n %u")
+            ("j" "Journal" entry
+             (file+headline "~/Documents/Wiki/org/JOURNAL.org" "Journal")
+             "* %U %?\n\n %i\n  %a")
+            ("i" "Idea" entry
+             (file+headline "~/Documents/Wiki/org/JOURNAL.org" "New Ideas")
+             "* %^{Title}\n %i\n  %a")
+            ("b" "Bug" entry
+             (file+headline "~/Documents/Wiki/org/BUGS.org" "Bugs")
+             "* BUG %?\n %i\n %a"))
+          )
 #+end_src
 
 *** Project to Publish
