@@ -552,7 +552,7 @@ Variable =org-default-notes-file= is set above.
 
 *** org-mode plain lists starting with alphanumeric
 #+begin_src emacs-lisp
-  (setq org-alphabetical-lists t) 
+  (setq org-list-allow-alphabetical t) 
 #+end_src
 
 *** Link to man page in org-mode
