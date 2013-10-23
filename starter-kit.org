@@ -337,7 +337,6 @@ interested in the actual code implementing the starter kit.
                              body))))))))
                partial-file)
            file)
-         t ;; COMPILE the tangled Emacs Lisp file to byte-code before it is loaded.
          )))
   #+end_src
 
@@ -435,9 +434,9 @@ After we've loaded all the Starter Kit defaults, lets load the User's stuff.
                   (plain         (concat path ".el"))
                   (encrypted-el  (concat path ".el.gpg")))
              (cond
-              ((file-exists-p encrypted-org) (org-babel-load-file encrypted-org t))
+              ((file-exists-p encrypted-org) (org-babel-load-file encrypted-org))
               ((file-exists-p encrypted-el)  (load encrypted-el))
-              ((file-exists-p literate)      (org-babel-load-file literate t))
+              ((file-exists-p literate)      (org-babel-load-file literate))
               ((file-exists-p plain)         (load plain)))))
          (remove-extension (name)
            (string-match "\\(.*?\\)\.\\(org\\(\\.el\\)?\\|el\\)\\(\\.gpg\\)?$" name)
