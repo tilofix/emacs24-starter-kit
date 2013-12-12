@@ -112,7 +112,7 @@ One of the two must not be tangled.
 
 #+begin_src emacs-lisp 
   (custom-set-variables
-   '(Info-additional-directory-list (quote ("~/share/info" "c:/cygwin/usr/share/info")))
+   '(Info-additional-directory-list (quote ("~/share/info" "c:/cygwin/usr/share/info" "~/.emacs.d/src/org/doc")))
    '(ange-ftp-ftp-program-name "c:/cygwin/bin/ftp.exe")
    '(ange-ftp-gateway-ftp-program-name "c:/cygwin/bin/ftp.exe")
    )
@@ -246,11 +246,23 @@ environment due to cygwin intergration above
 So change to Python2.5.
 
 #+begin_src emacs-lisp
+  ; Set python-interpreter to be used.
   (if (eq system-type 'windows-nt)
-    (custom-set-variables
-     '(python-python-command "c:/Python25/python.exe" t)
-     '(py-python-command "c:/Python25/python.exe" t))
+      (custom-set-variables
+       ; For python-mode.el
+       '(python-python-command "c:/Python25/python.exe" t)
+       ; Don't know any more, maybe pymacs?
+       '(py-python-command "c:/Python25/python.exe" t)
+       ; For python.el
+       '(python-shell-interpreter "c:/Python25/python.exe" t)
+       )
     )
+  ; Enable python as a org-babel language.
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t))
+   )
+  
 #+end_src
 
 Now it is working with Python-2.5
@@ -289,7 +301,6 @@ VERSION
 
 >>> 
 #+end_example
-
 
 *** Enable Pymacs support
 Quickstart: http://wiki.python.de/Pymacs
@@ -1524,7 +1535,13 @@ where special character "=" is used to highlight code and
 where special character "~" is used to highlight text exported verbatim.
 Both are exported into html with tags "<code>" and "</code>" respectivily.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+Not needed any longer in org-8,
+because exporter was changed to only escape underscore in case of latex.
+Html exporter takes backslash as serious character underscore as subscript.
+Add org-option ~^:{}~ to tell latex exporter to use a_{b} for subscript and
+a^{b} for superscript.
+
+#+BEGIN_SRC emacs-lisp :tangle no
 (add-hook 'org-mode-hook
   (function (lambda ()
     (local-set-key "_"
@@ -2251,6 +2268,32 @@ the attributes defined in all the nodes.
 
 #+BEGIN_SRC emacs-lisp
   (add-to-list 'org-export-backends 'taskjuggler)
+#+END_SRC
+
+*** Export to Jira
+ox-confluence.el - Confluence Wiki Back-End for Org Export Engine
+Written by Sebastien Delafond.
+Link to raw file (http://orgmode.org/w/?p=org-mode.git;a=blob_plain;f=contrib/lisp/ox-confluence.el;hb=HEAD).
+
+Confluence is from Atlassien does it use same Wiki-Markup?
+- https://jira.atlassian.com/secure/WikiRendererHelpAction.jspa?section=all
+- https://confluence.atlassian.com/display/DOC/Confluence+Wiki+Markup
+
+I assume, yes.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-confluence)
+
+  (org-export-define-derived-backend 'jira 'confluence
+    :menu-entry
+    '(?i "Export to JIRA"
+       ((?I "As JIRA buffer" org-confluence-export-as-confluence)
+	(?i "As JIRA file" org-confluence-export-as-confluence)
+	(?o "As JIRA file and open"
+	    (lambda (a s v b)
+	      (if a (org-confluence-export-as-confluence t s v b)
+		(org-open-file (org-confluence-export-as-confluence nil s v b))))))))
+  
 #+END_SRC
 
 
