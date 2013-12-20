@@ -2110,8 +2110,10 @@ see [[info:org#Publishing%20options][Options for the HTML/LaTeX exporters]].
 Following lisp code depends on python code.
 The link to python module [[git:~/.emacs.d/src/outlook.py::tilofix@{2012-06-14}][outlook]] was created by orgmode.
 
+Some in last time emacs became slow and consumes a lot of memory,
+up tp 200 MByte. Just switch off loading pymacs for outlook.
 **** Lisp source
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (eval-after-load "pymacs"
     '(progn (add-to-list 'pymacs-load-path (expand-file-name "~/.emacs.d/src"))
             (pymacs-load "outlook" "org-")))
@@ -2296,6 +2298,15 @@ I assume, yes.
   
 #+END_SRC
 
+*** Org-babel language
+#+BEGIN_SRC emacs-lisp
+  ;; active Org-babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '(;; other Babel languages
+     (sh . t)))
+  
+#+END_SRC
 
 ** Calendar
 
