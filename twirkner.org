@@ -543,19 +543,42 @@ Variable =org-default-notes-file= is set above.
 *** Project to Publish
 
 #+begin_src emacs-lisp
-  (setq org-publish-project-alist
-        '(("org"
-           :base-directory "~/Documents/Wiki/org/"
-           :base-extension "org"
-           :publishing-directory "~/public_html/org/"
-           :publishing-function org-publish-org-to-html
-           :section-numbers nil
-           :table-of-contents nil
-           :style "<link rel=stylesheet
+  (require 'ox-publish)
+  (require 'ox-html)
+  (add-to-list
+   'org-publish-project-alist
+   '("org"
+      :base-directory "~/Documents/Wiki/org/"
+      :base-extension "org"
+      :publishing-directory "~/public_html/org/"
+      :publishing-function org-html-publish-to-html
+      :section-numbers nil
+      :table-of-contents nil
+      :style "<link rel=stylesheet
                        href=\"../other/mystyle.css\"
                        type=\"text/css\">"
-           :auto-index t)))
+      :auto-index t))
 #+end_src
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-publish)
+  (require 'ox-html)
+  (add-to-list
+   'org-publish-project-alist
+   '("proj"
+      :base-directory "~/Documents/Wiki/org/"
+      :base-extension "org"
+      :exclude ".*\\.org"
+      :include ("project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
+      :publishing-directory "~/public_html/projects/"
+      :publishing-function org-html-publish-to-html
+      :section-numbers nil
+      :table-of-contents nil
+      :auto-index t))
+#+END_SRC
+
+#+RESULTS:
+| (proj :base-directory ~/Documents/Wiki/org/ :base-extension org :exclude .*\.org :include (project_psi11.org project_psi10.org) :publishing-directory ~/public_html/projects/ :publishing-function org-publish-org-to-html :section-numbers nil :table-of-contents nil :auto-index t) |
 
 *** org-mode export filter mediawiki from release_7.5/EXPERIMENTAL
 ; maybe replaced by org-export-generic.el with wikipedia as example
@@ -2114,85 +2137,85 @@ Some in last time emacs became slow and consumes a lot of memory,
 up tp 200 MByte. Just switch off loading pymacs for outlook.
 **** Lisp source
 #+BEGIN_SRC emacs-lisp :tangle no
-  (eval-after-load "pymacs"
-    '(progn (add-to-list 'pymacs-load-path (expand-file-name "~/.emacs.d/src"))
-            (pymacs-load "outlook" "org-")))
-  
-  (defun org-publish-org-to-html-outlook-mail (plist filename pub-dir)
-    "Publish an org file to HTML into an outlook mail item.
-  PLIST is the property list of the given project.
-  FILENAME is the filename of the org file to be published.
-  PUB-DIR is the publishing directory; in our case it is empty (or a link to outlook?)."
-    (require 'pymacs)
-    ;; this function is a rewrite of 'org-publish-org-to'
-    (require 'org)
-    (let ((visiting (find-buffer-visiting filename)))
-      (save-excursion
-        (switch-to-buffer (or visiting (find-file filename)))
-        (let* ((plist (cons :buffer-will-be-killed (cons t plist)))
-               export-buf-or-file)
-          ;; run hooks before exporting
-          (run-hooks 'org-publish-before-export-hook)
-          ;; export the possibly modified buffer
-          (setq export-buf-or-file
-                (funcall (intern "org-export-as-html")
-                         ;; signature of org-export-as functions
-                         ;; (org-export-as-html
-                         ;; ARG &optional : specifies how many levels of
-                         ;;   the outline should become headlines
-                         ;; HIDDEN : is obsolete and does nothing.
-                         ;; EXT-PLIST : is a property list with external
-                         ;;   parameters overriding org-mode's default settings 
-                         ;; TO-BUFFER : When TO-BUFFER is non-nil,
-                         ;;   create a buffer with that name and
-                         ;;   export to that buffer.
-                         ;;   If TO-BUFFER is the symbol `string',
-                         ;;   don't leave any buffer behind but
-                         ;;   just return the resulting HTML as a string.
-                         ;; BODY-ONLY : When BODY-ONLY is set,
-                         ;;   don't produce the file header and footer
-                         ;; PUB-DIR : When PUB-DIR is set,
-                         ;;   use this as the publishing directory.
-                         ;; )
-                         ;; Export the outline as a pretty HTML file.
-                         ;;
-                         (plist-get plist :headline-levels) ;; ARG
-                         nil                                ;; HIDDEN
-                         plist                              ;; EXT-PLIST
-                         nil                                ;; TO-BUFFER
-                         (plist-get plist :body-only)       ;; BODY-ONLY
-                         pub-dir                            ;; PUB-DIR
-                         ))
-          ;; The buffer containing html code is published via
-          ;; pymacs via pywin32 to MS Outlook.
-          (org-publish-html-to-outlook-mail export-buf-or-file)
-          ;; now buffer is going to be killed
-          (when (and (bufferp export-buf-or-file)
-                     (buffer-live-p export-buf-or-file))
-            (set-buffer export-buf-or-file)
-            ;; run hooks after export and save export
-            (progn (run-hooks 'org-publish-after-export-hook)
-                   (if (buffer-modified-p) (save-buffer)))
-            (kill-buffer export-buf-or-file))
-          ;; maybe restore buffer's content
-          ;; removed
-          )
-        ))
-    )
-  
-  (add-to-list
-   'org-publish-project-alist
-   '("outlook"
-     :base-directory "~/Documents/Wiki/org/"
-     :base-extension "org"
-     :exclude ".*\\.org"
-;;     :include ("reports.*\\.org")
-     :include ("outlook_send_email\.org")
-     :publishing-directory "~/public_html/outlook/"
-     :publishing-function org-publish-org-to-html-outlook-mail
-     :section-numbers nil
-     :table-of-contents nil
-     :auto-index t))
+    (eval-after-load "pymacs"
+      '(progn (add-to-list 'pymacs-load-path (expand-file-name "~/.emacs.d/src"))
+              (pymacs-load "outlook" "org-")))
+    
+    (defun org-publish-org-to-html-outlook-mail (plist filename pub-dir)
+      "Publish an org file to HTML into an outlook mail item.
+    PLIST is the property list of the given project.
+    FILENAME is the filename of the org file to be published.
+    PUB-DIR is the publishing directory; in our case it is empty (or a link to outlook?)."
+      (require 'pymacs)
+      ;; this function is a rewrite of 'org-publish-org-to'
+      (require 'org)
+      (let ((visiting (find-buffer-visiting filename)))
+        (save-excursion
+          (switch-to-buffer (or visiting (find-file filename)))
+          (let* ((plist (cons :buffer-will-be-killed (cons t plist)))
+                 export-buf-or-file)
+            ;; run hooks before exporting
+            (run-hooks 'org-publish-before-export-hook)
+            ;; export the possibly modified buffer
+            (setq export-buf-or-file
+                  (funcall (intern "org-export-as-html")
+                           ;; signature of org-export-as functions
+                           ;; (org-export-as-html
+                           ;; ARG &optional : specifies how many levels of
+                           ;;   the outline should become headlines
+                           ;; HIDDEN : is obsolete and does nothing.
+                           ;; EXT-PLIST : is a property list with external
+                           ;;   parameters overriding org-mode's default settings 
+                           ;; TO-BUFFER : When TO-BUFFER is non-nil,
+                           ;;   create a buffer with that name and
+                           ;;   export to that buffer.
+                           ;;   If TO-BUFFER is the symbol `string',
+                           ;;   don't leave any buffer behind but
+                           ;;   just return the resulting HTML as a string.
+                           ;; BODY-ONLY : When BODY-ONLY is set,
+                           ;;   don't produce the file header and footer
+                           ;; PUB-DIR : When PUB-DIR is set,
+                           ;;   use this as the publishing directory.
+                           ;; )
+                           ;; Export the outline as a pretty HTML file.
+                           ;;
+                           (plist-get plist :headline-levels) ;; ARG
+                           nil                                ;; HIDDEN
+                           plist                              ;; EXT-PLIST
+                           nil                                ;; TO-BUFFER
+                           (plist-get plist :body-only)       ;; BODY-ONLY
+                           pub-dir                            ;; PUB-DIR
+                           ))
+            ;; The buffer containing html code is published via
+            ;; pymacs via pywin32 to MS Outlook.
+            (org-publish-html-to-outlook-mail export-buf-or-file)
+            ;; now buffer is going to be killed
+            (when (and (bufferp export-buf-or-file)
+                       (buffer-live-p export-buf-or-file))
+              (set-buffer export-buf-or-file)
+              ;; run hooks after export and save export
+              (progn (run-hooks 'org-publish-after-export-hook)
+                     (if (buffer-modified-p) (save-buffer)))
+              (kill-buffer export-buf-or-file))
+            ;; maybe restore buffer's content
+            ;; removed
+            )
+          ))
+      )
+    
+    (add-to-list
+     'org-publish-project-alist
+     '("outlook"
+       :base-directory "~/Documents/Wiki/org/"
+       :base-extension "org"
+       :exclude ".*\\.org"
+  ;;     :include ("reports.*\\.org")
+       :include ("outlook_send_email\.org")
+       :publishing-directory "~/public_html/outlook/"
+       :publishing-function org-publish-org-to-html-outlook-mail
+       :section-numbers nil
+       :table-of-contents nil
+       :auto-index t))
 #+END_SRC
 
 #+results:
@@ -2307,6 +2330,7 @@ I assume, yes.
      (sh . t)))
   
 #+END_SRC
+
 
 ** Calendar
 
