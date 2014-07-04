@@ -569,16 +569,14 @@ Variable =org-default-notes-file= is set above.
       :base-directory "~/Documents/Wiki/org/"
       :base-extension "org"
       :exclude ".*\\.org"
-      :include ("project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
+      :include ("project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
       :publishing-directory "~/public_html/projects/"
       :publishing-function org-html-publish-to-html
-      :section-numbers nil
-      :table-of-contents nil
-      :auto-index t))
+      :section-numbers t
+      :table-of-contents t
+      :auto-index t
+      :org-confirm-babel-evaluate nil))
 #+END_SRC
-
-#+RESULTS:
-| (proj :base-directory ~/Documents/Wiki/org/ :base-extension org :exclude .*\.org :include (project_psi11.org project_psi10.org) :publishing-directory ~/public_html/projects/ :publishing-function org-publish-org-to-html :section-numbers nil :table-of-contents nil :auto-index t) |
 
 *** org-mode export filter mediawiki from release_7.5/EXPERIMENTAL
 ; maybe replaced by org-export-generic.el with wikipedia as example
@@ -2331,6 +2329,29 @@ I assume, yes.
   
 #+END_SRC
 
+*** Export to S5
+~S5~ [[http://orgmode.org/worg/org-tutorials/non-beamer-presentations.html][is part of a list]] of lighter-weight simpler options 
+for generating high-quality presentations from Org-mode documents.
+
+~S5~ is a "Simple Standards-Based Slide Show System" implemented 
+using HTML, CSS and Javascript. 
+The browser is used as the presentation engine, and 
+a slightly altered form of Org-mode's HTML export 
+serves as the base of the presentation. 
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-s5)
+#+END_SRC
+
+*** Export to Markdown
+Doxygen supports as of version 1.8.0 to process 
+markdown formatted files with extensions '*.md' or '*.markdown'.
+http://www.stack.nl/~dimitri/doxygen/manual/markdown.html
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-md)
+#+END_SRC
+
 
 ** Calendar
 
@@ -2736,7 +2757,9 @@ http://p4el.sourceforge.net/
 
 http://public.perforce.com/wiki/Emacs_VC-P4
 
-#+BEGIN_SRC emacs-lisp
+So far, after switching labtop to 56S8TZ1, perforce is not installed.
+Change tangle to no.
+#+BEGIN_SRC emacs-lisp :tangle no
   ;; Load VC-P4
   (require 'vc-p4)
 #+END_SRC
