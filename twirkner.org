@@ -2352,6 +2352,67 @@ http://www.stack.nl/~dimitri/doxygen/manual/markdown.html
   (require 'ox-md)
 #+END_SRC
 
+*** Convert Region into Block
+#+BEGIN_SRC emacs-lisp
+  (defun org-block_example-convert-region (beg0 end0 &optional mode)
+    "Convert region to a block.
+  The region goes from BEG0 to END0.
+  
+  MODE specifies the type of block."
+    (interactive "r\nP")
+    (let* ((beg beg0)
+           (end end0))
+      (goto-char end)
+      (insert "#+END_EXAMPLE")
+      (newline)
+      (goto-char beg)
+      (insert-before-markers "#+BEGIN_EXAMPLE")
+      (newline)
+      ))
+#+END_SRC
+
+*** Project IPV6 to Publish
+I'm not sure if following configuration is considered by publisher:
+- org-confirm-babel-evaluate
+- with-footnotes
+
+I found ~select-tags~ working only when there is at least 
+one entry having the tags in question. 
+If no entry carrying the tag all entries will be exported.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-publish)
+  (require 'ox-md)
+  (defun org-md-publish-to-markdown (plist filename pub-dir)
+    "Publish an org file to MARKDOWN.
+  
+    FILENAME is the filename of the Org file to be published.  PLIST
+    is the property list for the given project.  PUB-DIR is the
+    publishing directory.
+  
+    Return output file name."
+    (org-publish-org-to 'md filename
+                        (concat "." (or (plist-get plist :md-extension)
+                                        "md"))
+                        plist pub-dir))
+  (add-to-list
+   'org-publish-project-alist
+   '("hixipv6"
+     :base-directory "~/Documents/Wiki/org/"
+     :base-extension "org"
+     :exclude ".*\\.org"
+     :include ("project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org")
+  ;   :include ("project_psi09.org")
+     :publishing-directory "~/public_html/hixipv6/"
+     :publishing-function org-md-publish-to-markdown
+     :section-numbers t
+     :table-of-contents t
+     :auto-index t
+     :org-confirm-babel-evaluate nil
+     :select-tags ("IPV6")
+     :with-footnotes nil))
+#+END_SRC
+
 
 ** Calendar
 
