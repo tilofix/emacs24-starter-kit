@@ -570,10 +570,11 @@ Variable =org-default-notes-file= is set above.
       :base-extension "org"
       :exclude ".*\\.org"
       :include ("project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
+   ;   :include ("project_psi09.org")
       :publishing-directory "~/public_html/projects/"
       :publishing-function org-html-publish-to-html
       :section-numbers t
-      :table-of-contents t
+      :with-toc nil
       :auto-index t
       :org-confirm-babel-evaluate nil))
 #+END_SRC
@@ -2405,12 +2406,12 @@ If no entry carrying the tag all entries will be exported.
   ;   :include ("project_psi09.org")
      :publishing-directory "~/public_html/hixipv6/"
      :publishing-function org-md-publish-to-markdown
-     :section-numbers t
-     :table-of-contents t
-     :auto-index t
+     :section-numbers nil
+     :with-toc nil
      :org-confirm-babel-evaluate nil
      :select-tags ("IPV6")
-     :with-footnotes nil))
+     :with-footnotes nil
+     :auto-sitemap nil))
 #+END_SRC
 
 
