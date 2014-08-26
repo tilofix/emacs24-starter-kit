@@ -1763,6 +1763,14 @@ module above: =message-send-mail-with-outlook=.
 Ditaa is fully integrated and distributed with org-mode.
 Even the ditaa tool iteself being a [[file:src/org/contrib/scripts/ditaa.jar][jar-file]] is part of org-mode.
 
+**** Enable ob-ditaa
+After I changed to org-8, ditaa needs to be required.
+
+#+BEGIN_SRC emacs-lisp
+  (require 'ob-ditaa)
+  
+#+END_SRC
+
 **** ditaa command line
 You need the latest Java runtimes (JRE) to use ditaa. The best anti-aliasing can be achieved using Java 1.5 or higher.
 
