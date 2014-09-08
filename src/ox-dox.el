@@ -110,7 +110,7 @@ a communication channel."
                        (replace-regexp-in-string "^" "    " contents)))))
        ;; Use "Setext" style.
        ((eq org-dox-headline-style 'setext)
-        (concat heading tags "\n"
+        (concat heading tags " " header-id "\n"
                 (make-string (length heading) (if (= level 1) ?= ?-))
                 "\n\n"
                 contents))
