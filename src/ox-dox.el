@@ -36,7 +36,7 @@ This variable can be set to either `atx' or `setext'."
 
 ;;; Define Back-End
 (org-export-define-derived-backend 'dox 'md
-  :export-block '("DOX")
+  :export-block '("MD")
   :menu-entry
   '(?y "Export to Doxygen Documents with Markdown"
        ((?Y "To temporary buffer"
@@ -129,12 +129,17 @@ as a communication channel."
   (concat
 
    ;; Opening document
-   "/*!\n"
+
+   ;; Document title.
+   (let ((title (plist-get info :title))
+         (infile (plist-get info :input-file)))
+     (if title (format "\\page %s %s\n" 
+                       (file-name-base infile)
+                       (org-export-data title info))))
 
    contents
 
    ;; Closing document.
-   "\n*/\n"
    )
 )
 
