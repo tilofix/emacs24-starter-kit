@@ -2421,7 +2421,7 @@ So far do not load Markdown exporter.
     Return output file name."
     (org-publish-org-to 'dox filename
                         (concat "." (or (plist-get plist :dox-extension)
-                                        "dox"))
+                                        "md"))
                         plist pub-dir))
   (add-to-list
    'org-publish-project-alist
@@ -2434,12 +2434,13 @@ So far do not load Markdown exporter.
      :publishing-directory "~/public_html/hixipv6/"
      :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
-     :with-toc nil
+     :with-toc 3
      :org-confirm-babel-evaluate nil
      :select-tags ("IPV6")
      :with-footnotes nil
      :auto-sitemap nil))
 #+END_SRC
+
 
 ** Calendar
 
