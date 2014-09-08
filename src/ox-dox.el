@@ -90,7 +90,8 @@ a communication channel."
                                   (concat "sec-" section-number)
                                   (org-element-property :ID headline))))
            (preferred-id (car ids))
-           (header-id (format "{#%s}" preferred-id))
+           (prefix-section (file-name-base (plist-get info :input-file)))
+           (header-id (format "{#%s_%s}" prefix-section preferred-id))
            )
       (cond
        ;; Cannot create a headline.  Fall-back to a list.
@@ -131,11 +132,6 @@ as a communication channel."
    ;; Opening document
 
    ;; Document title.
-   (let ((title (plist-get info :title))
-         (infile (plist-get info :input-file)))
-     (if title (format "\\page %s %s\n" 
-                       (file-name-base infile)
-                       (org-export-data title info))))
 
    contents
 
