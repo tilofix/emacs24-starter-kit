@@ -2408,20 +2408,20 @@ If no entry carrying the tag all entries will be exported.
 I plan to replace ~ox-md~ by ~ox-dox~, 
 which is a derived back end with some doxygen document extensions.
 So far do not load Markdown exporter.
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'ox-publish)
-  (require 'ox-md)
-  (defun org-md-publish-to-markdown (plist filename pub-dir)
-    "Publish an org file to MARKDOWN.
+  (require 'ox-dox)
+  (defun org-dox-publish-to-doxydoc (plist filename pub-dir)
+    "Publish an org file to DOXYDOC.
   
     FILENAME is the filename of the Org file to be published.  PLIST
     is the property list for the given project.  PUB-DIR is the
     publishing directory.
   
     Return output file name."
-    (org-publish-org-to 'md filename
-                        (concat "." (or (plist-get plist :md-extension)
-                                        "md"))
+    (org-publish-org-to 'dox filename
+                        (concat "." (or (plist-get plist :dox-extension)
+                                        "dox"))
                         plist pub-dir))
   (add-to-list
    'org-publish-project-alist
@@ -2432,7 +2432,7 @@ So far do not load Markdown exporter.
      :include ("project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org")
   ;   :include ("project_psi09.org")
      :publishing-directory "~/public_html/hixipv6/"
-     :publishing-function org-md-publish-to-markdown
+     :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
      :with-toc nil
      :org-confirm-babel-evaluate nil
@@ -2440,7 +2440,6 @@ So far do not load Markdown exporter.
      :with-footnotes nil
      :auto-sitemap nil))
 #+END_SRC
-
 
 ** Calendar
 
