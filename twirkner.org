@@ -576,7 +576,8 @@ Variable =org-default-notes-file= is set above.
       :section-numbers t
       :with-toc nil
       :auto-index t
-      :org-confirm-babel-evaluate nil))
+      :org-confirm-babel-evaluate nil
+      :select-tags ("IPV6")))
 #+END_SRC
 
 *** org-mode export filter mediawiki from release_7.5/EXPERIMENTAL
@@ -2357,8 +2358,23 @@ Doxygen supports as of version 1.8.0 to process
 markdown formatted files with extensions '*.md' or '*.markdown'.
 http://www.stack.nl/~dimitri/doxygen/manual/markdown.html
 
-#+BEGIN_SRC emacs-lisp
+I plan to replace ~ox-md~ by ~ox-dox~, 
+which is a derived back end with some doxygen document extensions.
+So far do not load Markdown exporter.
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'ox-md)
+#+END_SRC
+
+*** Export to Doxygen Documentation
+Doxygen supports as of version 1.8.0 to process 
+markdown formatted files with extensions '*.md' or '*.markdown'.
+http://www.stack.nl/~dimitri/doxygen/manual/markdown.html
+
+I'd like to use one of doxygen's extension for markdown:
+~PHP Markdown Extra~ adds labels to headers based on
+supporting header level 1 to 4 only. 
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'ox-dox)
 #+END_SRC
 
 *** Convert Region into Block
@@ -2389,7 +2405,10 @@ I found ~select-tags~ working only when there is at least
 one entry having the tags in question. 
 If no entry carrying the tag all entries will be exported.
 
-#+BEGIN_SRC emacs-lisp
+I plan to replace ~ox-md~ by ~ox-dox~, 
+which is a derived back end with some doxygen document extensions.
+So far do not load Markdown exporter.
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'ox-publish)
   (require 'ox-md)
   (defun org-md-publish-to-markdown (plist filename pub-dir)
