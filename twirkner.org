@@ -245,16 +245,19 @@ environment due to cygwin intergration above
 =C:/cygwin/bin/python.exe= is started.
 So change to Python2.5.
 
-#+begin_src emacs-lisp
+As long as there is no separate python installation, 
+don't set these variables.
+Have a look below for environment variable =PYMACS_PYTHON=.
+#+begin_src emacs-lisp :tangle yes
   ; Set python-interpreter to be used.
   (if (eq system-type 'windows-nt)
       (custom-set-variables
        ; For python-mode.el
-       '(python-python-command "c:/Python25/python.exe" t)
+       '(python-python-command "python2.7" t)
        ; Don't know any more, maybe pymacs?
-       '(py-python-command "c:/Python25/python.exe" t)
+       '(py-python-command "python2.7" t)
        ; For python.el
-       '(python-shell-interpreter "c:/Python25/python.exe" t)
+       '(python-shell-interpreter "python2.7" t)
        )
     )
   ; Enable python as a org-babel language.
@@ -348,7 +351,6 @@ Writing C:\Python25\Lib\site-packages\Pymacs-0.25-py2.5.egg-info
 D:\twirkner\src\pinard-Pymacs-5989046>
 #+end_example
 
-
 **** Install pymacs-el
 File could be copied from Pymacs module into lisp path. 
 =21K454J[Projects]$ cp Pymacs/pymacs.el ../share/emacs/site-lisp/=
@@ -397,7 +399,11 @@ installed.
 
 ***** Solution: set variable =PYMACS_PYTHON=
 
-#+begin_src emacs-lisp
+As long as variable ~python-python-command~ is not set in 
+[[*Python%20interpreter%20to%20be%20started][Python interpreter to be started]], 
+don#t use it.
+
+#+begin_src emacs-lisp :tangle no
   (if (eq system-type 'windows-nt)
       (setenv "PYMACS_PYTHON" python-python-command)
     )
@@ -576,7 +582,7 @@ Variable =org-default-notes-file= is set above.
       :section-numbers t
       :with-toc nil
       :auto-index t
-      :org-confirm-babel-evaluate nil
+   ;   :org-confirm-babel-evaluate nil
       :select-tags ("IPV6")))
 #+END_SRC
 
@@ -1470,7 +1476,7 @@ from http://plantuml.sourceforge.net/download.html.
   (add-to-list 'auto-mode-alist '("\\.puml$" . plantuml-mode))
         
   (require 'plantuml-mode)
-  
+  (require 'image-mode)
 #+END_SRC
 
 **** Example for a block
@@ -2429,18 +2435,38 @@ So far do not load Markdown exporter.
      :base-directory "~/Documents/Wiki/org/"
      :base-extension "org"
      :exclude ".*\\.org"
-     :include ("project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org")
+     :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org")
   ;   :include ("project_psi09.org")
      :publishing-directory "~/public_html/hixipv6/"
      :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
      :with-toc 3
-     :org-confirm-babel-evaluate nil
+  ;   :org-confirm-babel-evaluate nil
      :select-tags ("IPV6")
      :with-footnotes nil
      :auto-sitemap nil))
 #+END_SRC
 
+*** Project Vectoring to Publish
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'ox-publish)
+  (add-to-list
+   'org-publish-project-alist
+   '("hixvectoring"
+     :base-directory "~/Documents/Wiki/org/"
+     :base-extension "org"
+     :exclude ".*\\.org"
+     :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
+     :publishing-directory "~/public_html/hixvectoring/"
+     :publishing-function org-html-publish-to-html
+     :section-numbers nil
+     :with-toc 3
+  ;   :org-confirm-babel-evaluate nil
+     :select-tags ("GVECTOR")
+     :with-footnotes nil
+     :auto-sitemap nil))
+#+END_SRC
 
 ** Calendar
 
