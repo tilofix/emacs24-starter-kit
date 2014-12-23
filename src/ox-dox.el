@@ -50,9 +50,9 @@ This variable can be set to either `atx' or `setext'."
                      (headline . org-dox-headline)
                      (template . org-dox-template)
                      (inner-template . org-dox-inner-template)
-                     (table . org-dox-table)
-                     (table-cell . org-html-table-cell)
-                     (table-row . org-html-table-row)
+                     (table . org-dox-identity)
+                     (table-cell . org-dox-identity)
+                     (table-row . org-dox-identity)
                      )
 )
 
@@ -165,77 +165,14 @@ holding export options."
 
 ;;;; Table
 
-(defun org-dox-table-first-row-data-cells (table info)
-  "Transcode the first row of TABLE.
-INFO is a plist used as a communication channel."
-  (let ((table-row
-	 (org-element-map table 'table-row
-	   (lambda (row)
-	     (unless (eq (org-element-property :type row) 'rule) row))
-	   info 'first-match))
-	(special-column-p (org-export-table-has-special-column-p table)))
-    (if (not special-column-p) (org-element-contents table-row)
-      (cdr (org-element-contents table-row)))))
-
-(defun org-dox-table (table contents info)
-  "Transcode a TABLE element from Org to HTML.
-CONTENTS is the contents of the table.  INFO is a plist holding
-contextual information."
-  (case (org-element-property :type table)
-    ;; Case 1: table.el table.  Convert it using appropriate tools.
-    (table.el (message "%s" "Case 1: table.el table is not supported."))
-    ;; Case 2: Standard table.
-    (t
-     (let* ((label (org-element-property :name table))
-	    (caption (org-export-get-caption table))
-	    (number (org-export-get-ordinal
-		     table info nil 'org-html--has-caption-p))
-	    (attributes
-	     (org-html--make-attribute-string
-	      (org-combine-plists
-	       (and label (list :id (org-export-solidify-link-text label)))
-	       (and (not (org-html-html5-p info))
-		    (plist-get info :html-table-attributes))
-	       (org-export-read-attribute :attr_html table))))
-	    (alignspec
-	     (if (and (boundp 'org-html-format-table-no-css)
-		      org-html-format-table-no-css)
-		 "align=\"%s\"" "class=\"%s\""))
-	    (table-column-specs
-	     (function
-	      (lambda (table info)
-		(mapconcat
-		 (lambda (table-cell)
-		   (let ((alignment (org-export-table-cell-alignment
-				     table-cell info)))
-		     (concat
-		      ;; Begin a colgroup?
-		      (when (org-export-table-cell-starts-colgroup-p
-			     table-cell info)
-			"\n<colgroup>")
-		      ;; Add a column.  Also specify it's alignment.
-		      (format "\n%s"
-			      (org-html-close-tag
-			       "col" (concat " " (format alignspec alignment)) info))
-		      ;; End a colgroup?
-		      (when (org-export-table-cell-ends-colgroup-p
-			     table-cell info)
-			"\n</colgroup>"))))
-		 (org-dox-table-first-row-data-cells table info) "\n")))))
-       (format "<table%s>\n%s\n%s\n%s</table>"
-	       (if (equal attributes "") "" (concat " " attributes))
-	       (if (not caption) ""
-		 (format (if org-html-table-caption-above
-			     "<caption align=\"above\">%s</caption>"
-			   "<caption align=\"bottom\">%s</caption>")
-			 (concat
-			  "<span class=\"table-number\">"
-                          (format (org-html--translate "Table %d:" info) number)
-			  "</span> " (org-export-data caption info))))
-	       (funcall table-column-specs table info)
-	       contents)))))
-
-
+(defun org-dox-identity (blob contents info)
+  "Transcode BLOB element or object back into Org syntax.
+CONTENTS is its contents, as a string or nil.  INFO is ignored."
+  ;; TILO, copied from function "org-org-identity" from "ox-org"
+  ;; MD syntax for a table is similar to that of org-mode
+  ;; https://michelf.ca/projects/php-markdown/extra/#table
+  ;; but why there are new-lines in the output?
+  (org-export-expand blob contents t))
 
 
 ;;; Tables of Contents
