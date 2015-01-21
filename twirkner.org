@@ -2459,7 +2459,7 @@ So far do not load Markdown exporter.
      :exclude ".*\\.org"
      :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
      :publishing-directory "~/public_html/hixvectoring/"
-     :publishing-function org-html-publish-to-html
+     :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
      :with-toc 3
   ;   :org-confirm-babel-evaluate nil
