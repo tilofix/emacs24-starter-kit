@@ -50,11 +50,11 @@ This variable can be set to either `atx' or `setext'."
                      (headline . org-dox-headline)
                      (template . org-dox-template)
                      (inner-template . org-dox-inner-template)
-                     (table . org-dox-identity)
-                     (table-cell . org-dox-identity)
-                     (table-row . org-dox-identity)
+                     (table . org-dox-table)
+                     (table-cell . org-dox-table-cell)
+                     (table-row . org-dox-table-row)
                      )
-)
+  )
 
 
 ;;; Transcode Functions
@@ -163,7 +163,31 @@ holding export options."
    )
 )
 
+;;;; Table Cell
+
+(defun org-dox-table-cell  (table-cell contents info)
+  ;; TILO: code from org-confluence-table-cell.
+  (let ((table-row (org-export-get-parent table-cell)))
+    (concat
+     (when (org-export-table-row-starts-header-p table-row info)
+       "|")
+     contents "|")))
+
+;;;; Table Row
+
+(defun org-dox-table-row  (table-row contents info)
+  ;; TILO: code from org-confluence-table-row.
+  (concat
+   (if (org-string-nw-p contents) (format "|%s" contents)
+     "")
+   (when (org-export-table-row-ends-header-p table-row info)
+     "|")))
+
 ;;;; Table
+
+(defun org-dox-table (table contents info)
+  ;; TILO: code from org-confluence-table.
+  contents)
 
 (defun org-dox-identity (blob contents info)
   "Transcode BLOB element or object back into Org syntax.
