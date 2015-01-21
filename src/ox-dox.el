@@ -169,10 +169,10 @@ holding export options."
   "Transcode BLOB element or object back into Org syntax.
 CONTENTS is its contents, as a string or nil.  INFO is ignored."
   ;; TILO, copied from function "org-org-identity" from "ox-org"
-  ;; MD syntax for a table is similar to that of org-mode
+  ;; PHP-MD-Extra syntax for a table is similar to that of org-mode
   ;; https://michelf.ca/projects/php-markdown/extra/#table
   ;; but why there are new-lines in the output?
-  (org-export-expand blob contents t))
+  (org-export-expand blob contents nil))
 
 
 ;;; Tables of Contents
@@ -192,7 +192,8 @@ contents as a string, or nil if it is empty."
 ;;; Interactive function
 
 ;;;###autoload
-(defun org-dox-export-as-doxydoc (&optional async subtreep visible-only)
+(defun org-dox-export-as-doxydoc
+    (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer to a Doxygen Document Markdown buffer.
 
 If narrowing is active in the current buffer, only export its
@@ -216,11 +217,12 @@ be displayed when `org-export-show-temporary-export-buffer' is
 non-nil."
   (interactive)
   (org-export-to-buffer 'dox "*Org DOXYDOC Export*"
-    async subtreep visible-only nil nil (lambda () (text-mode)))
+    async subtreep visible-only body-only ext-plist (lambda () (fundamental-mode)))
 )
 
 ;;;###autoload
-(defun org-dox-export-to-doxydoc (&optional async subtreep visible-only)
+(defun org-dox-export-to-doxydoc
+    (&optional async subtreep visible-only body-only ext-plist)
   "Export current buffer to a Doxygen Document Markdown file.
 
 If narrowing is active in the current buffer, only export its
@@ -242,7 +244,8 @@ contents of hidden elements.
 Return output file's name."
   (interactive)
   (let ((outfile (org-export-output-file-name ".dox" subtreep)))
-    (org-export-to-file 'dox outfile async subtreep visible-only))
+    (org-export-to-file 'dox outfile
+      async subtreep visible-only body-only ext-plist))
 )
 
 (provide 'ox-dox)
