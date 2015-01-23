@@ -35,7 +35,9 @@ This variable can be set to either `atx' or `setext'."
 
 
 ;;; Define Back-End
-(org-export-define-derived-backend 'dox 'md
+;; TILO: derive directly from another backend than ox-md,
+;; to overcome issue of empty lines in output of a transcoded table.
+(org-export-define-derived-backend 'dox 'ascii
   :export-block '("MD")
   :menu-entry
   '(?y "Export to Doxygen Documents with Markdown"
@@ -47,17 +49,55 @@ This variable can be set to either `atx' or `setext'."
               (if a (org-dox-export-to-doxydoc t s v)
                 (org-open-file (org-dox-export-to-doxydoc nil s v)))))))
   :translate-alist '(
+                     ;; TILO: just take transcoder functions from ox-md
+		     (bold . org-md-bold)
+		     (code . org-md-verbatim)
+		     (comment . (lambda (&rest args) ""))
+		     (comment-block . (lambda (&rest args) ""))
+		     (example-block . org-md-example-block)
+		     (fixed-width . org-md-example-block)
+		     (footnote-definition . ignore)
+		     (footnote-reference . ignore)
+		     (horizontal-rule . org-md-horizontal-rule)
+		     (inline-src-block . org-md-verbatim)
+		     (italic . org-md-italic)
+		     (item . org-md-item)
+		     (line-break . org-md-line-break)
+		     (link . org-md-link)
+		     (paragraph . org-md-paragraph)
+		     (plain-list . org-md-plain-list)
+		     (plain-text . org-md-plain-text)
+		     (quote-block . org-md-quote-block)
+		     (quote-section . org-md-example-block)
+		     (section . org-md-section)
+		     (src-block . org-md-example-block)
+		     (verbatim . org-md-verbatim)
+                     ;; TILO: add ox-dox' own transcoder functions
                      (headline . org-dox-headline)
                      (template . org-dox-template)
                      (inner-template . org-dox-inner-template)
                      (table . org-dox-table)
                      (table-cell . org-dox-table-cell)
                      (table-row . org-dox-table-row)
+                     (strike-through . org-dox-strike-through)
                      )
   )
 
 
 ;;; Transcode Functions
+
+;;;; Strike-through
+(defun org-dox-strike-through (strike-through contents info)
+  "Transcode STRIKE-THROUGH object into Markdown format.
+CONTENTS is the text within strike-through markup.  INFO is a plist used as
+a communication channel."
+  ;; TILO: upps, "~~%s~~" it's not working but "<s>%s</s>" should, 
+  ;; accroding to http://sourceforge.net/p/doxygen/wiki/markdown_syntax/.
+  ;; TILO: did not work, lets try "<strike>%s</strike>", 
+  ;; accoding to http://stackoverflow.com/questions/27827966/how-can-i-use-strikethrough-in-the-doxygens-markdown.
+  ;; TILO: that's bad no strike-through in doxygen.
+  (format "<del>%s</del>" contents)
+  )
 
 ;;;; Headline
 
@@ -167,21 +207,44 @@ holding export options."
 
 (defun org-dox-table-cell  (table-cell contents info)
   ;; TILO: code from org-confluence-table-cell.
-  (let ((table-row (org-export-get-parent table-cell)))
-    (concat
-     (when (org-export-table-row-starts-header-p table-row info)
-       "|")
-     contents "|")))
+  (concat
+   " " contents " |")
+  )
 
 ;;;; Table Row
+(defun org-dox--table-row-build-sep (table-row info)
+  ""
+  ;; TILO: code from org-ascii-table-row.
+  (concat
+   "|"
+   (apply
+    'concat
+    (org-element-map table-row 'table-cell
+      (lambda (cell)
+        (let ((width (length (org-export-data
+                              (org-element-contents cell)
+                              info))))
+          (concat
+           ;; add 2 because of leading and trailing space.
+           (make-string (+ 2 width) (string-to-char "-"))
+           "|"
+           )))
+      info))
+   "\n")
+  )
 
 (defun org-dox-table-row  (table-row contents info)
-  ;; TILO: code from org-confluence-table-row.
-  (concat
-   (if (org-string-nw-p contents) (format "|%s" contents)
-     "")
-   (when (org-export-table-row-ends-header-p table-row info)
-     "|")))
+  (when (eq (org-element-property :type table-row) 'standard)
+    (concat
+     ;; formats the leftmost char in a row.
+     (format "|%s" contents)
+     (when (org-export-table-row-ends-header-p table-row info)
+       (concat
+        "\n"
+        (org-dox--table-row-build-sep table-row info)
+        ))
+    ))
+  )
 
 ;;;; Table
 
