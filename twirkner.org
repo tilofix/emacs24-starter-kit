@@ -2435,13 +2435,13 @@ So far do not load Markdown exporter.
      :base-directory "~/Documents/Wiki/org/"
      :base-extension "org"
      :exclude ".*\\.org"
-     :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org")
-  ;   :include ("project_psi09.org")
+     :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixipv6.org")
      :publishing-directory "~/public_html/hixipv6/"
      :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
      :with-toc 3
   ;   :org-confirm-babel-evaluate nil
+  ; use (customize-variable 'org-confirm-babel-evaluate)
      :select-tags ("IPV6")
      :with-footnotes nil
      :auto-sitemap nil))
@@ -2463,10 +2463,12 @@ So far do not load Markdown exporter.
      :section-numbers nil
      :with-toc 3
   ;   :org-confirm-babel-evaluate nil
+  ; use (customize-variable 'org-confirm-babel-evaluate)
      :select-tags ("GVECTOR")
      :with-footnotes nil
      :auto-sitemap nil))
 #+END_SRC
+
 
 ** Calendar
 
