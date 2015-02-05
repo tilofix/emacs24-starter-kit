@@ -1479,6 +1479,44 @@ from http://plantuml.sourceforge.net/download.html.
   (require 'image-mode)
 #+END_SRC
 
+[2015-01-30 Fr] When emacs version 
+~GNU Emacs 24.4.1 (i686-pc-cygwin, GTK+ Version 3.10.9) of 2014-11-14 on desktop-new~
+starts it creates error when executing statement: ~(require 'plantuml-mode)~
+with following error messages:
+#+BEGIN_EXAMPLE
+Unable to access jarfile /cygdrive/d/twirkner/lib/plantuml.jar
+let: Search failed: ";"
+#+END_EXAMPLE
+
+Processing of this 'custom-file' stops here and 
+no further functions will be executed.
+
+There is no issue with emacs version
+~GNU Emacs 24.4.1 (i686-pc-mingw32) of 2014-10-24 on LEG570~.
+There has been a cygwin-based emacs version 
+~GNU Emacs 24.4.1 (i686-pc-cygwin) of 2014-11-14 on desktop-new~ 
+since availability of Emacs-24.4 I assume. 
+But also this version ~emacs-w32~ shows same issue.
+
+No final solution, but start-up issue solved with following change
+#+BEGIN_EXAMPLE
+diff --git a/src/plantuml-mode.el b/src/plantuml-mode.el
+index 20733e1..a768153 100755
+--- a/src/plantuml-mode.el
++++ b/src/plantuml-mode.el
+@@ -74,7 +74,7 @@
+                            (shell-quote-argument plantuml-jar-path)
+                            " -language") (current-buffer))
+     (goto-char (point-min))
+-    (let ((found (search-forward ";" nil nil))
++    (let ((found (search-forward ";" nil t))
+           (word "")
+           (count 0)
+           (pos 0))
+#+END_EXAMPLE
+
+
+
 **** Example for a block
 #+BEGIN_SRC plantuml :file plantuml-example.png  :exports both :tangle no
   Alice -> Bob: synchronous call
@@ -2435,7 +2473,7 @@ So far do not load Markdown exporter.
      :base-directory "~/Documents/Wiki/org/"
      :base-extension "org"
      :exclude ".*\\.org"
-     :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixipv6.org")
+     :include ("project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixipv6.org")
      :publishing-directory "~/public_html/hixipv6/"
      :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
@@ -2457,7 +2495,7 @@ So far do not load Markdown exporter.
      :base-directory "~/Documents/Wiki/org/"
      :base-extension "org"
      :exclude ".*\\.org"
-     :include ("project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
+     :include ("project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
      :publishing-directory "~/public_html/hixvectoring/"
      :publishing-function org-dox-publish-to-doxydoc
      :section-numbers nil
@@ -2469,6 +2507,15 @@ So far do not load Markdown exporter.
      :auto-sitemap nil))
 #+END_SRC
 
+*** Cygwin Packages Necessary for ORG-Babel-Export to PDF (via Latex)
+- texlive
+- texlive-collection-basic
+- texlive-collection-fontsrecommended
+- texlive-collection-genericrecommended
+- texlive-collection-latex
+- texlive-collection-latexextra
+- texlive-collection-latexrecommended
+- texlive-collection-pictures
 
 ** Calendar
 
