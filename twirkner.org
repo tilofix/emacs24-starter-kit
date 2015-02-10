@@ -116,34 +116,42 @@ One of the two must not be tangled.
    '(ange-ftp-ftp-program-name "c:/cygwin/bin/ftp.exe")
    '(ange-ftp-gateway-ftp-program-name "c:/cygwin/bin/ftp.exe")
    )
-  
-  (if (eq system-type 'windows-nt)
-      (progn
-        ;; From http://www.cygwin.com/faq/faq_3.html#SEC63
-        ;; This assumes that Cygwin is installed in C:\cygwin (the
-        ;; default) and that C:\cygwin\bin is not already in your
-        ;; Windows Path (it generally should not be).
-        ;;
-        (setq exec-path (cons "C:/cygwin/bin" exec-path))
-        (setenv "PATH" (concat "C:\\cygwin\\bin;" (getenv "PATH")))
-        ;;
-        ;; NT-emacs assumes a Windows command shell, which you change
-        ;; here.
-        ;;
-        (setq process-coding-system-alist '(("bash" . undecided-unix)))
-        (setq shell-file-name "bash")
-        (setenv "SHELL" shell-file-name) 
-        (setq explicit-shell-file-name shell-file-name) 
-        (setq shell-command-switch "-c")      ; SHOULD IT BE (setq shell-command-switch "-ic")?
-  
-        ;; From http://www.emacswiki.org/elisp/index.html
-        ;; use cygwin-style filenames
-        (require 'cygwin-mount)
-        (cygwin-mount-activate)
-  
-        (setenv "CYGWIN" (concat "nodosfilewarning" (getenv "CYGWIN")))
-        ))
-  
+    
+  (cond 
+   ((eq system-type 'windows-nt)
+    (progn
+      ;; From http://www.cygwin.com/faq/faq_3.html#SEC63
+      ;; This assumes that Cygwin is installed in C:\cygwin (the
+      ;; default) and that C:\cygwin\bin is not already in your
+      ;; Windows Path (it generally should not be).
+      ;;
+      (setq exec-path (cons "C:/cygwin/bin" exec-path))
+      (setenv "PATH" (concat "C:\\cygwin\\bin;" (getenv "PATH")))
+      ;;
+      ;; NT-emacs assumes a Windows command shell, which you change
+      ;; here.
+      ;;
+      (setq process-coding-system-alist '(("bash" . undecided-unix)))
+      (setq shell-file-name "bash")
+      (setenv "SHELL" shell-file-name) 
+      (setq explicit-shell-file-name shell-file-name) 
+      (setq shell-command-switch "-c")      ; SHOULD IT BE (setq shell-command-switch "-ic")?
+    
+      ;; From http://www.emacswiki.org/elisp/index.html
+      ;; use cygwin-style filenames
+      (require 'cygwin-mount)
+      (cygwin-mount-activate)
+    
+      (setenv "CYGWIN" (concat "nodosfilewarning" (getenv "CYGWIN")))
+      ))
+   ((eq system-type 'cygwin)
+    (progn
+      (setq exec-path (cons "/usr/bin" exec-path))
+      (setq exec-path (cons "/usr/local/bin" exec-path))
+      (setenv "PATH" (concat "/bin:/usr/local/bin:" (getenv "PATH")))
+      ))
+   )
+
   (setenv "MANPATH" (concat "~/share/man:/usr/share/man" (getenv "MANPATH")))
 #+end_src
 
@@ -2516,6 +2524,7 @@ So far do not load Markdown exporter.
 - texlive-collection-latexextra
 - texlive-collection-latexrecommended
 - texlive-collection-pictures
+
 
 ** Calendar
 
