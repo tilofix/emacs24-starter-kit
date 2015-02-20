@@ -53,3 +53,4 @@ secret.org
 .emacs.desktop*
 .*~
 agent/*
+*.bak
