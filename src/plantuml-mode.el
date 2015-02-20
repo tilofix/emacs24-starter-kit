@@ -69,9 +69,19 @@
   "Initialize the keywords or builtins from the cmdline language output"
   (unless (file-exists-p plantuml-jar-path)
     (error "Could not find plantuml.jar at %s" plantuml-jar-path))
+  ;; TILO: Added variable "plantuml-jar-path-sys-type"
+  ;; As a private workaround to run Emacs-W32 with cygwin.
+  ;; Cygwin has no native java runtime supporting cygpath.
+  (setq plantuml-jar-path-sys-type
+        (if (eq system-type 'cygwin)
+            (with-temp-buffer
+              (call-process-shell-command "cygpath" nil t nil "-wp" 
+                                          plantuml-jar-path)
+              (buffer-substring 1 (buffer-size)))
+          plantuml-jar-path))
   (with-temp-buffer
     (shell-command (concat "java -jar "
-                           (shell-quote-argument plantuml-jar-path)
+                           (shell-quote-argument plantuml-jar-path-sys-type)
                            " -language") (current-buffer))
     (goto-char (point-min))
     (let ((found (search-forward ";" nil t))
