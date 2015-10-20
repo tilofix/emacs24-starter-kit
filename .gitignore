@@ -33,6 +33,7 @@ server/
 *pdf
 *txt
 *pyc
+*png
 
 ## org stuff
 .org-id-locations
