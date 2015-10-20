@@ -1480,7 +1480,7 @@ from http://plantuml.sourceforge.net/download.html.
    '(;; other Babel languages
      (plantuml . t)))
   (setq org-plantuml-jar-path
-        (expand-file-name "~/lib/plantuml.jar"))
+        (expand-file-name "~/lib/plantuml.8030.jar"))
   (add-to-list 'auto-mode-alist '("\\.puml$" . plantuml-mode))
         
   (require 'plantuml-mode)
