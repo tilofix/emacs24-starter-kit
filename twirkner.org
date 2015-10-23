@@ -2993,3 +2993,210 @@ Change tangle to no.
 #+END_SRC
 
 
+
+** restclient-el
+Source https://github.com/pashky/restclient.el
+
+*** Usage
+
+You can easily install ~restclient~ using ~package.el~ 
+from [MELPA](http://melpa.org/).
+
+Alternatively, deploy ~restclient.el~ into your site-lisp as usual,
+then add ~(require 'restclient)~ to your Emacs start-up file.
+
+Once installed, you can prepare a text file with queries.
+
+~restclient-mode~ is a major mode which does a bit of highlighting
+and supports a few additional keypresses:
+- ~C-c C-c~: runs the query under the cursor, 
+  tries to pretty-print the response (if possible)
+- ~C-c C-r~: same, but doesn't do anything with the response, 
+  just shows the buffer
+- ~C-c C-v~: same as ~C-c C-c~, but doesn't switch focus to other window
+- ~C-c C-p~: jump to the previous query
+- ~C-c C-n~: jump to the next query
+- ~C-c C-.~: mark the query under the cursor
+- ~C-c C-u~: copy query under the cursor as a curl command
+
+*** Installed via package-el
+- Install package `restclient-20150818.807'? y
+- Contacting host: melpa.milkbox.net:80 [2 times]
+- Making version-control local to restclient-autoloads.el while let-bound!
+- Generating autoloads for restclient.el...done
+- Saving file /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807/restclient-autoloads.el...
+- Wrote /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807/restclient-autoloads.el
+- Checking /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807... [2 times]
+- Compiling /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807/restclient-pkg.el...done
+- Wrote /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807/restclient-pkg.elc
+- Checking /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807...
+- Compiling /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807/restclient.el...done
+- Wrote /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807/restclient.elc
+- Checking /cygdrive/d/twirkner/.emacs.d/elpa/restclient-20150818.807...
+- Done (Total of 2 files compiled, 1 skipped)
+
+*** Examples
+Query file example from repository's homepage ~README.md~. 
+
+#+BEGIN_SRC restclient
+  #
+  # Gets user timeline, formats JSON, shows response status and headers underneath
+  #
+  GET http://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitterapi&count=2
+  #
+  # XML is supported - highlight, pretty-print
+  #
+  GET http://www.redmine.org/issues.xml?limit=10
+
+  #
+  # It can even show an image!
+  #
+  GET http://upload.wikimedia.org/wikipedia/commons/6/63/Wikipedia-logo.png
+  #
+  # A bit of json GET, you can pass headers too
+  #
+  GET http://jira.atlassian.com/rest/api/latest/issue/JRA-9
+  User-Agent: Emacs24
+  Accept-Encoding: compress, gzip
+
+  #
+  # Post works too, entity just goes after an empty line. Same is for PUT.
+  #
+  POST https://jira.atlassian.com/rest/api/2/search
+  Content-Type: application/json
+
+  {
+          "jql": "project = HSP",
+          "startAt": 0,
+          "maxResults": 15,
+          "fields": [
+                  "summary",
+                  "status",
+                  "assignee"
+          ]
+  }
+  #
+  # And delete, will return not-found error...
+  #
+  DELETE https://jira.atlassian.com/rest/api/2/version/20
+#+END_SRC
+
+Example file from repository file ~examples/httpbin~.
+
+#+BEGIN_SRC restclient
+  # Emacs restclient examples for httpbin.org
+  # http://httpbin.org/: HTTP Request & Response Service
+
+  # Returns Origin IP.
+  GET http://httpbin.org/ip
+
+  # Returns user-agent.
+  GET http://httpbin.org/user-agent
+  User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:31.0) Gecko/20100101 Firefox/31.0
+
+  # Returns header dict.
+  GET http://httpbin.org/headers
+
+  # Returns GET data.
+  GET http://httpbin.org/get?some=example&params=for&testing=restclient
+
+  # Returns POST data.
+  POST http://httpbin.org/post
+  Content-Type: application/json
+
+  {
+      "jql": "project = HSP",
+      "startAt": 0,
+      "maxResults": 15,
+      "fields": [
+          "summary",
+          "status",
+          "assignee"
+      ]
+  }
+
+  # Content type is loosely matched, could be application/vnd.whatever+json
+  GET http://httpbin.org/response-headers?Content-Type=application/vnd.whatever%2Bjson;%20charset=UTF-8
+
+  # Content type is loosely matched, could be application/vnd.whatever+json
+  GET http://httpbin.org/response-headers?Content-Type=application/something%2Bjson
+
+  # Returns PUT data.
+  PUT http://httpbin.org/put
+  Content-Type: application/json
+
+  {
+      "name": "emacs",
+      "awesomness": 9042
+  }
+
+  # Returns PATCH data.
+  PATCH http://httpbin.org/patch
+  Content-Type: application/xml
+
+  [
+      {
+          "replace": "/awesomness",
+          "value": 9043
+      }
+  ]
+
+  # Returns DELETE data
+  DELETE http://httpbin.org/delete
+  If-Match: "*"
+
+  # HTTP Status codes
+  # 404
+  GET http://httpbin.org/status/404
+  # 200
+  GET http://httpbin.org/status/200
+
+  # Returns given response headers.
+  GET http://httpbin.org/response-headers?key=val
+
+  # cookie data.
+  GET http://httpbin.org/cookies
+  Cookie: name=restclient
+
+  # HTTPBasic Auth.
+  :example-auth := (format "Basic %s" (base64-encode-string (format "%s:%s" "user" "password")))
+  GET http://httpbin.org/basic-auth/user/password
+  Authorization: :example-auth
+
+  # Returns some XML
+  GET http://httpbin.org/xml
+
+  # Test for unicode
+  PUT http://httpbin.org/put
+  Content-Type: application/json
+
+  {
+      "text": "\u2018a"
+  }
+
+  # Localhost bug test
+  GET http://localhost:3000
+
+  # Magic mode matching test
+  GET http://httpbin.org/response-headers?Content-Type=whatever/braindamage
+
+  # UTF-8 encoding test
+  PUT http://httpbin.org/put
+  Content-Type: application/json
+
+  {
+      "text": "привет",
+      "text2": "João Sá",
+      "text3": "João"
+  }
+  #
+  POST http://httpbin.org/post
+
+  pwd=1234
+  #
+  :foo = foo\bar
+  POST http://httpbin.org/post
+
+  :foo
+
+#+END_SRC
