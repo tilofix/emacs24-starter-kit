@@ -1744,7 +1744,7 @@ A specific blob (file) can be specified by a suffix clolon (:) followed by a pat
 
 **** Load org-git
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'org-git-link)
 #+END_SRC
 
@@ -1780,7 +1780,7 @@ Next you need to tell ~org-mime~ which Emacs mail agent you use.
      including the resulting HTML content as an embedded mime section. 
 
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'org-mime)
   (setq org-mime-library 'mml)
   (add-hook 'message-mode-hook
@@ -2366,7 +2366,7 @@ Confluence is from Atlassien does it use same Wiki-Markup?
 
 I assume, yes.
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'ox-confluence)
 
   (org-export-define-derived-backend 'jira 'confluence
@@ -2456,7 +2456,7 @@ The browser is used as the presentation engine, and
 a slightly altered form of Org-mode's HTML export 
 serves as the base of the presentation. 
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'ox-s5)
 #+END_SRC
 
