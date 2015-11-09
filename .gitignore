@@ -9,6 +9,9 @@ places
 .svn
 .DS_Store
 tramp
+.smex-items
+ac-comphist.dat
+ido.last
 
 ## directories
 backups/*
@@ -55,3 +58,7 @@ secret.org
 .*~
 agent/*
 *.bak
+## package directory
+!literate-starter-kit-pkg.el
+literate-starter-kit/
+literate-starter-kit.tar

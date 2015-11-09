@@ -11,9 +11,9 @@ Things that don't fit anywhere else.
 Determine whether required packages are installed. If not, use ELPA to
 install them. Other dependencies are provided by Emacs 24.
 #+begin_src emacs-lisp
-  (dolist (package '(magit))
-    (unless (package-installed-p package)
-      (package-install package)))
+  (starter-kit-install-if-needed 'magit)
+  (global-set-key (kbd "C-x g") 'magit-status)
+  (global-set-key (kbd "C-x M-g") 'magit-dispatch-popup)
 #+end_src
 
 ** Color Themes
@@ -92,13 +92,15 @@ ido-mode is like magic pixie dust!
   (set-default 'indent-tabs-mode nil)
   (set-default 'indicate-empty-lines t)
   (set-default 'imenu-auto-rescan t)
-  
+
   (add-hook 'text-mode-hook 'turn-on-auto-fill)
-  (add-hook 'text-mode-hook 'turn-off-flyspell)
-  
+  (eval-after-load "ispell"
+    '(when (executable-find ispell-program-name)
+       (add-hook 'text-mode-hook 'turn-off-flyspell)))
+
   (defvar starter-kit-coding-hook nil
     "Hook that gets run on activation of any programming mode.")
-  
+
   (defalias 'yes-or-no-p 'y-or-n-p)
   ;; Seed the random-number generator
   (random t)
@@ -166,10 +168,5 @@ let them live in the =backups/= directory inside of the starter kit.
   '(progn
      (set-face-foreground 'diff-added "green4")
      (set-face-foreground 'diff-removed "red3")))
-
-(eval-after-load 'magit
-  '(progn
-     (set-face-foreground 'magit-diff-add "green3")
-     (set-face-foreground 'magit-diff-del "red3")))
 #+end_src
 
