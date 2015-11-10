@@ -3200,3 +3200,21 @@ Example file from repository file ~examples/httpbin~.
   :foo
 
 #+END_SRC
+
+** Controlling the Display
+
+According to [[info:emacs#Optional%20Mode%20Line][Emacs Info]] column-number computation can be slow 
+in case of long lines. Therefore display of line numbers limited 
+with help of a customizeable variable: ~line-number-display-limit-width~. 
+
+Default value of Line Number Display Limit Width is 200. 
+
+When investigating large log-files I often run into this limit. 
+Lets increase it to meet requirements of DSM-CTRL and PPT.
+
+#+BEGIN_SRC emacs-lisp 
+  (custom-set-variables
+   '(line-number-display-limit-width 600)
+   )
+#+END_SRC
+
