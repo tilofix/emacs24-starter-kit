@@ -49,6 +49,22 @@ Add starter kit configuration moved into [[file:starter-kit-misc-recommended.org
   ends up with error: ~org-agenda-skip: Wrong type argument: stringp, nil~
 
 
+** Include org/contrib
+For setting up org-Mode some modules are required from org/contrib
+- org-mime
+- ox-confluence
+- ox-s5
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (when (getenv "ORG_HOME")
+    (let (
+          (org-contrib-lisp-dir
+           (expand-file-name "contrib/lisp" (getenv "ORG_HOME"))))
+      (when (file-directory-p org-contrib-lisp-dir)
+        (add-to-list 'load-path org-contrib-lisp-dir))))
+#+END_SRC
+
+
 ** Extend dired-mode with a key to open a file for browsing
 #+begin_src emacs-lisp 
   (add-hook 'dired-mode-hook
@@ -2366,7 +2382,7 @@ Confluence is from Atlassien does it use same Wiki-Markup?
 
 I assume, yes.
 
-#+BEGIN_SRC emacs-lisp :tangle no
+#+BEGIN_SRC emacs-lisp :tangle yes
   (require 'ox-confluence)
 
   (org-export-define-derived-backend 'jira 'confluence
@@ -2579,6 +2595,36 @@ So far do not load Markdown exporter.
 - texlive-collection-latexextra
 - texlive-collection-latexrecommended
 - texlive-collection-pictures
+
+*** Org-plot
+
+*** Export to reStructuredText
+Install package ~ox-rst~:
+- Status: Installed from melpa -- Install
+- Archive: melpa
+- Version: 20151114.2343
+- Requires: emacs-24.4, org-8.2.4
+- Summary: Export reStructuredText using org-mode.
+- Homepage: https://github.com/masayuko/ox-rst
+- Keywords: org rst rest restructuredtext 
+- Other versions: 20151114.2343 (installed).
+
+~ox-rst~ library implements an reStructuredText back-end for
+Org generic exporter.
+
+Upps, org-rst installed complete org-mode package in 
+=~/.emacs.d/elpa/org-20151123/=.
+Maybe due to requiring org-8.2.4? 
+
+Starter-Kit is run by 
+=Org-mode version 8.3.2 (release_8.3.2-15-g45b189.dirty 
+@ /cygdrive/d/twirkner/.emacs.d/elpa/org-20151123/)=. 
+
+Upps, org-mode installed from elpa displays its own path ... 
+Lets remove both ~ox-rst~ and ~org-20151123~. ... 
+OK, now Starter-Kit is run by same version but displays right path: 
+=Org-mode version 8.3.2 (release_8.3.2-15-g45b189.dirty 
+@ /cygdrive/d/twirkner/src/orgmode/lisp/)=. 
 
 
 ** Calendar
@@ -3201,6 +3247,7 @@ Example file from repository file ~examples/httpbin~.
 
 #+END_SRC
 
+
 ** Controlling the Display
 
 According to [[info:emacs#Optional%20Mode%20Line][Emacs Info]] column-number computation can be slow 
@@ -3218,3 +3265,15 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
    )
 #+END_SRC
 
+
+* Tilo's Favourit Key Combinations
+
+- Edebug
+- Prefix Argument
+- Rectangle
+  - C-x r k
+  - C-x r y
+- Org-mode
+  - C-c C-x M-w 
+  - C-c C-e C-s h h
+  - C-c C-e C-v h h
