@@ -2353,6 +2353,7 @@ See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
+(add-to-list 'org-link-abbrev-alist '("rfc" . "https://tools.ietf.org/html/%s"))
 #+END_SRC
 
 Test Link [[jira:BN-6671]]
@@ -2385,6 +2386,20 @@ I assume, yes.
 #+BEGIN_SRC emacs-lisp :tangle yes
   (require 'ox-confluence)
 
+  (defgroup org-export-jira nil
+    "Options for exporting Org mode files to ASCII."
+    :tag "Org Export ASCII"
+    :group 'org-export)
+
+  (defcustom org-jira-text-width 256
+    "Maximum width of exported text.
+  This number includes margin size, as set in
+  `org-ascii-global-margin'."
+    :group 'org-export-jira
+    :version "24.4"
+    :package-version '(Org . "8.0")
+    :type 'integer)
+
   (org-export-define-derived-backend 'jira 'confluence
     :export-block '("JIRA")
     :menu-entry
@@ -2399,6 +2414,9 @@ I assume, yes.
                        (code . org-jira-verbatim)
                        (verbatim . org-jira-verbatim)
                        )
+    :options-alist '(
+                     (:ascii-text-width nil nil org-jira-text-width)
+                     )
     )
 
   ;;;; Code and Verbatim
@@ -2552,10 +2570,10 @@ So far do not load Markdown exporter.
      :base-directory "~/Documents/Wiki/org/"
      :base-extension "org"
      :exclude ".*\\.org"
-     :include ("project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixipv6.org")
+     :include ("project_psi20.org" "project_psi19.org" "project_psi18.org" "project_psi17.org" "project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixipv6.org")
      :publishing-directory "~/public_html/hixipv6/"
      :publishing-function org-dox-publish-to-doxydoc
-     :section-numbers nil
+     :section-numbers 8
      :with-toc 3
   ;   :org-confirm-babel-evaluate nil
   ; use (customize-variable 'org-confirm-babel-evaluate)
@@ -2563,6 +2581,13 @@ So far do not load Markdown exporter.
      :with-footnotes nil
      :auto-sitemap nil))
 #+END_SRC
+
+After updating orgmode from version ~release_8.2.4~ to ~release_8.3.2~ 
+function to publish to doxydoc did not add section numbers 
+to generate TOC in doxygen. 
+Function ~org-export-numbered-headline-p~ returns nil 
+when export property ~:section-numbers~ is not set
+(hint from [[file:~/src/orgmode/testing/lisp/test-ox.el::(ert-deftest%20test-org-export/numbered-headline-p][test function of org-export]]). 
 
 *** Project Vectoring to Publish
 
@@ -2574,9 +2599,10 @@ So far do not load Markdown exporter.
      :base-directory "~/Documents/Wiki/org/"
      :base-extension "org"
      :exclude ".*\\.org"
-     :include ("project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
+     :include ("project_psi20.org" "project_psi19.org" "project_psi18.org" "project_psi17.org" "project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
      :publishing-directory "~/public_html/hixvectoring/"
-     :publishing-function org-dox-publish-to-doxydoc
+  ;   :publishing-function org-dox-publish-to-doxydoc
+     :publishing-function org-html-publish-to-html
      :section-numbers nil
      :with-toc 3
   ;   :org-confirm-babel-evaluate nil
@@ -2625,6 +2651,17 @@ Lets remove both ~ox-rst~ and ~org-20151123~. ...
 OK, now Starter-Kit is run by same version but displays right path: 
 =Org-mode version 8.3.2 (release_8.3.2-15-g45b189.dirty 
 @ /cygdrive/d/twirkner/src/orgmode/lisp/)=. 
+
+*** Org-ID
+According to information in [[info:org#Handling%20links][info]] I need to load that module 
+to make links work to custom_id?
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (require 'org-id)
+#+END_SRC
+
+#+RESULTS:
+: org-id
 
 
 ** Calendar
@@ -3269,11 +3306,64 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
 * Tilo's Favourit Key Combinations
 
 - Edebug
+  - C-u C-M-x
 - Prefix Argument
 - Rectangle
   - C-x r k
+  - C-x r M-w
   - C-x r y
 - Org-mode
   - C-c C-x M-w 
   - C-c C-e C-s h h
   - C-c C-e C-v h h
+- Forward-page separated by '^L', navigating among pages 
+  - C-x ]
+  - C-s C-q C-l
+
+
+* Tilo's Favourit Functions
+- Unicode Characters
+  - Entering (inserting) Unicode characters:
+    - insert-char
+  - prefer-coding-system
+- Org-Export
+  - (customize-variable 'org-confirm-babel-evaluate)
+
+
+* Tilo's Notes on Testing Org Functions
+
+Emacs-Lisp Testing
+- Overview on unit testing of emacs-lisp scripts: 
+  [[http://www.emacswiki.org/emacs/UnitTesting][Unit Testing in we]].
+- Built-in emacs test framwork [[http://www.emacswiki.org/emacs/ErtTestLibrary][ERT]] on the web and as [[info:ert][ERT]] info documentation.
+- Interesting chapter of unit testing page is "Without a framework"
+  - Control testing with help 
+    variable ~run-my-tests~ and 
+    macro ~[[help:eval-when-compile][eval-when-compile]]~. 
+  - How to create
+    - Tests
+    - Test suite 
+    - Mock function 
+  - Contains a link to [[https://travis-ci.org/][Travis CI]] being a continuous integration service 
+    which can be used for automated testing of an Emacs Lisp library 
+    hosted on github.
+
+Org-mode Testing
+- [[http://orgmode.org/worg/org-tests/index.html][Testing Org]] has got its own worg page. 
+- Org-mode's own test suite is located in [[file:~/Projects/org-mode/testing/README][directory testing]], can be executed by 
+  loading ~org-test~, 
+  disable ~org-confirm-babel-evaluate~ and 
+  run test suite by evaluating function ~[[file:~/Projects/org-mode/testing/org-test.el::(defun%20org-test-run-all-tests%20()][org-test-run-all-tests]]~. 
+- See [[file:~/Projects/org-mode/testing/README::*Interactive%20testing%20from%20within%20Emacs][Interactive testing from within Emacs]]
+- Step 3 "run the test suite" finished with error 
+  ~Symbol's value as variable is void: test-line~. 
+- Evaluating the ERT demo example and 
+  do "M-x ert RET test-org/org-link-escape-ascii-character-demo-of-fail RET" 
+  was successful. 
+
+
+
+
+
+
+

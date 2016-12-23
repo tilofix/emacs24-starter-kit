@@ -126,8 +126,10 @@ a communication channel."
            (heading (concat todo priority title))
            ;; Headline ID based on section number from org-html-headline.
            (section-number (mapconcat 'number-to-string
-                                      (org-export-get-headline-number
-                                       headline info) "-"))
+                                      (cdr
+                                       (assoc headline
+                                              (plist-get info :headline-numbering)))
+                                       "-"))
            (ids (remove 'nil
                             (list (org-element-property :CUSTOM_ID headline)
                                   (concat "sec-" section-number)
