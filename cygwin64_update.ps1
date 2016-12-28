@@ -35,16 +35,24 @@ else {
 }
 
 $RootInstallDirectory = "C:\cygwin64"
-$LocalDirectory = "D:\zip\cygwin-x86_64"
+$LocalDirectory = "C:\Users\Public\Downloads\cygwin-x86_64"
 $SetupExe = "setup-x86_64.exe"
 $PathToSetupExe = Join-Path -Path $LocalDirectory -ChildPath $SetupExe 
 $Site1Url = "http://gd.tuwien.ac.at/gnu/cygwin/"
 $Site2Url = "http://gd.tuwien.ac.at/gnu/sourceware/cygwinports/"
 $Site2Key = "http://cygwinports.org/ports.gpg"
-$PackagesTxt = "cygwin_packages.pkg"
-$PathToPackagesTxt = Join-Path -Path $LocalDirectory -ChildPath $PackagesTxt 
-$InstallPackages = Get-Content -Path $PathToPackagesTxt | ForEach-Object {Write-Output "$_ "}
-$SetupExeArgumentList = "--upgrade-also --quiet-mode --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $Site1Url --site $Site2Url --pubkey $Site2Key --packages $InstallPackages"
+$PackagesTxt = "cygwin64_packages.pkg"
+# http://stackoverflow.com/questions/1183183/path-of-currently-executing-powershell-script#1183197
+$PathToThisScript = Split-Path $SCRIPT:MyInvocation.MyCommand.Path -parent
+$PathToPackagesTxt = Join-Path -Path $PathToThisScript -ChildPath $PackagesTxt 
+$InstallPackages = Get-Content -Path $PathToPackagesTxt | ForEach-Object {Write-Output "--packages $_"}
+$SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $Site1Url --site $Site2Url --pubkey $Site2Key $InstallPackages"
+
+# http://stackoverflow.com/questions/16906170/create-directory-if-it-does-not-exist#16911470
+$isLocalDirectory = Test-Path -PathType Container $LocalDirectory
+if (! $isLocalDirectory ) {
+    New-Item -ItemType Directory -Path $LocalDirectory
+}
 
 Write-Host "ArgumentList used for Setup.exe: $SetupExeArgumentList"
 
