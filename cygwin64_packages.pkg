@@ -2,3 +2,7 @@ xinit
 emacs-w32
 gcc-g++
 git
+texlive-collection-latexrecommended
+texlive-collection-fontsrecommended
+texlive-collection-langgerman
+texmaker

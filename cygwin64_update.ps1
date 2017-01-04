@@ -34,6 +34,8 @@ else {
    exit
 }
 
+# Run your code that needs to be elevated here
+
 $RootInstallDirectory = "C:\cygwin64"
 $LocalDirectory = "C:\Users\Public\Downloads\cygwin-x86_64"
 $SetupExe = "setup-x86_64.exe"
@@ -56,14 +58,23 @@ if (! $isLocalDirectory ) {
 
 Write-Host "ArgumentList used for Setup.exe: $SetupExeArgumentList"
 
-# Run your code that needs to be elevated here
-(new-object System.Net.WebClient).DownloadFile('http://cygwin.com/setup-x86_64.exe', $PathToSetupExe)
+function Download-CygwinSetupExe ($a_PathToSetupExe) {
+    (new-object System.Net.WebClient).DownloadFile('http://cygwin.com/setup-x86_64.exe', $a_PathToSetupExe)
 
-if (!$?) {
-   Write-Host "Something wrong happened when downloading the Cygwin installer."
-   Write-Host -NoNewLine "Press any key to continue..."
-   $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
-   exit
+    if (!$?) {
+        Write-Host "Something wrong happened when downloading the Cygwin installer."
+        Write-Host -NoNewLine "Press any key to continue..."
+        $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+        exit
+    }
+}
+
+$isPathToSetupExe = Test-Path -PathType Leaf $PathToSetupExe
+if (! $isPathToSetupExe ) {
+    Write-Host "Download CygwinSetupExe into file: $PathToSetupExe"
+    Download-CygwinSetupExe($PathToSetupExe)
+} else {
+    Write-Host "Local CygwinSetupExe in file: $PathToSetupExe"
 }
 
 # When you use the PassThru parameter, Start-Process generates a System.Diagnostics.Process. 
@@ -73,7 +84,7 @@ if ($p.ExitCode -ne 0) {
    Write-Host "Cygwin setup failed with an error!"
 }
 
-Remove-Item $PathToSetupExe
+# Remove-Item $PathToSetupExe
 
 Write-Host -NoNewLine "Press any key to continue..."
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
