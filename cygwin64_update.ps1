@@ -36,19 +36,24 @@ else {
 
 # Run your code that needs to be elevated here
 
-$RootInstallDirectory = "C:\cygwin64"
-$LocalDirectory = "C:\Users\Public\Downloads\cygwin-x86_64"
-$SetupExe = "setup-x86_64.exe"
-$PathToSetupExe = Join-Path -Path $LocalDirectory -ChildPath $SetupExe 
-$Site1Url = "http://gd.tuwien.ac.at/gnu/cygwin/"
-$Site2Url = "http://gd.tuwien.ac.at/gnu/sourceware/cygwinports/"
-$Site2Key = "http://cygwinports.org/ports.gpg"
-$PackagesTxt = "cygwin64_packages.pkg"
-# http://stackoverflow.com/questions/1183183/path-of-currently-executing-powershell-script#1183197
 $PathToThisScript = Split-Path $SCRIPT:MyInvocation.MyCommand.Path -parent
+
+$PathToSettingsXml = Join-Path -Path $PathToThisScript "cygwin64_settings.xml"
+# http://exchangeserverpro.com/using-xml-settings-file-powershell-scripts/
+[xml]$SettingsFile = Get-Content $PathToSettingsXml 
+
+$RootInstallDirectory = $SettingsFile.Settings.Setup.RootInstallDir
+$LocalDirectory = $SettingsFile.Settings.Setup.LocalDir.Trim()
+$SetupExe = $SettingsFile.Settings.Setup.SetupExe.Trim()
+$PathToSetupExe = Join-Path -Path $LocalDirectory -ChildPath $SetupExe 
+$CygwinSiteUrl = $SettingsFile.Settings.Setup.CygwinSiteUrl.Trim()
+$CygwinPortsSiteUrl = $SettingsFile.Settings.Setup.CygwinPortsSiteUrl.Trim()
+$CygwinPortsKeyUrl = $SettingsFile.Settings.Setup.CygwinPortsKeyUrl.Trim()
+$PackagesTxt = $SettingsFile.Settings.Other.PackageFile.Trim()
+# http://stackoverflow.com/questions/1183183/path-of-currently-executing-powershell-script#1183197
 $PathToPackagesTxt = Join-Path -Path $PathToThisScript -ChildPath $PackagesTxt 
 $InstallPackages = Get-Content -Path $PathToPackagesTxt | ForEach-Object {Write-Output "--packages $_"}
-$SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $Site1Url --site $Site2Url --pubkey $Site2Key $InstallPackages"
+$SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl --site $CygwinPortsSiteUrl --pubkey $CygwinPortsKeyUrl $InstallPackages"
 
 # http://stackoverflow.com/questions/16906170/create-directory-if-it-does-not-exist#16911470
 $isLocalDirectory = Test-Path -PathType Container $LocalDirectory
@@ -58,9 +63,8 @@ if (! $isLocalDirectory ) {
 
 Write-Host "ArgumentList used for Setup.exe: $SetupExeArgumentList"
 
-function Download-CygwinSetupExe ($a_PathToSetupExe) {
-    (new-object System.Net.WebClient).DownloadFile('http://cygwin.com/setup-x86_64.exe', $a_PathToSetupExe)
-
+function Download-CygwinSetupExe {
+    (new-object System.Net.WebClient).DownloadFile("http://cygwin.com/$SetupExe", $PathToSetupExe)
     if (!$?) {
         Write-Host "Something wrong happened when downloading the Cygwin installer."
         Write-Host -NoNewLine "Press any key to continue..."

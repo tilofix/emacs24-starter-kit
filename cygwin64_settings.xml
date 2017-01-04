@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Settings>
+  <Setup>
+    <RootInstallDir>C:\cygwin64</RootInstallDir>
+    <LocalDir>C:\Users\Public\Downloads\cygwin-x86_64</LocalDir>
+    <SetupExe>setup-x86_64.exe</SetupExe>
+    <CygwinSiteUrl>http://gd.tuwien.ac.at/gnu/cygwin/</CygwinSiteUrl>
+    <CygwinPortsSiteUrl>
+      http://gd.tuwien.ac.at/gnu/sourceware/cygwinports/
+    </CygwinPortsSiteUrl>
+    <CygwinPortsKeyUrl>http://cygwinports.org/ports.gpg</CygwinPortsKeyUrl>
+  </Setup>
+  <Other>
+    <PackageFile>cygwin64_packages.pkg</PackageFile>
+  </Other>
+</Settings>
