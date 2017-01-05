@@ -38,7 +38,8 @@ else {
 
 $PathToThisScript = Split-Path $SCRIPT:MyInvocation.MyCommand.Path -parent
 
-$PathToSettingsXml = Join-Path -Path $PathToThisScript "cygwin64_settings.xml"
+$SettingsXml = "cygwin64_settings_$($ENV:computername).xml"
+$PathToSettingsXml = Join-Path -Path $PathToThisScript $SettingsXml
 # http://exchangeserverpro.com/using-xml-settings-file-powershell-scripts/
 [xml]$SettingsFile = Get-Content $PathToSettingsXml 
 
