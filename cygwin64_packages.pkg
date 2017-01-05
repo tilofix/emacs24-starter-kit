@@ -6,3 +6,5 @@ texlive-collection-latexrecommended
 texlive-collection-fontsrecommended
 texlive-collection-langgerman
 texmaker
+make
+texinfo
