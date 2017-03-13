@@ -2426,11 +2426,10 @@ I assume, yes.
   CONTENTS is nil.  
   INFO is a plist used as a communication channel."
     (let ((value (org-element-property :value verbatim)))
-      (format (cond ((not (string-match "`" value)) "{{%s}}")
-                    ((or (string-match "\\``" value)
-                         (string-match "`\\'" value))
-                     "`` %s ``")
-                    (t "``%s``"))
+      (format (cond ((or (string-match "^-" value)
+                         (string-match "^+" value))
+                     "{{\\%s}}")
+                    (t "{{%s}}"))
               value)))
 
   ;;; Interactive function
