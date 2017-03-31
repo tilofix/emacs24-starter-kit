@@ -48,13 +48,19 @@ $LocalDirectory = $SettingsFile.Settings.Setup.LocalDir.Trim()
 $SetupExe = $SettingsFile.Settings.Setup.SetupExe.Trim()
 $PathToSetupExe = Join-Path -Path $LocalDirectory -ChildPath $SetupExe 
 $CygwinSiteUrl = $SettingsFile.Settings.Setup.CygwinSiteUrl.Trim()
-$CygwinPortsSiteUrl = $SettingsFile.Settings.Setup.CygwinPortsSiteUrl.Trim()
-$CygwinPortsKeyUrl = $SettingsFile.Settings.Setup.CygwinPortsKeyUrl.Trim()
+
+# CygwinPorts has been closed down: 
+# Post in mail list "cygwin-ports-general"
+# Project Update:  Yaakov Selkowitz Tue, 21 Mar 2017 02:26:13 -0700 
+# "... the external Cygwin Ports repository previously hosted on cygwinports.org 
+# has been removed, with the focus of the project 
+# shifting solely on maintaining the Cygwin distribution." 
+
 $PackagesTxt = $SettingsFile.Settings.Other.PackageFile.Trim()
 # http://stackoverflow.com/questions/1183183/path-of-currently-executing-powershell-script#1183197
 $PathToPackagesTxt = Join-Path -Path $PathToThisScript -ChildPath $PackagesTxt 
 $InstallPackages = Get-Content -Path $PathToPackagesTxt | ForEach-Object {Write-Output "--packages $_"}
-$SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl --site $CygwinPortsSiteUrl --pubkey $CygwinPortsKeyUrl $InstallPackages"
+$SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl $InstallPackages"
 
 # http://stackoverflow.com/questions/16906170/create-directory-if-it-does-not-exist#16911470
 $isLocalDirectory = Test-Path -PathType Container $LocalDirectory
