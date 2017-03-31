@@ -1,0 +1,97 @@
+#+title:    My Library of Babel
+#+author:     Tilo Wirkner 
+#+STARTUP:  hideblocks
+
+* Introduction
+
+The Library of Babel is an extensible collection of ready-made and
+easily-shortcut-callable source-code blocks for handling common tasks.
+
+* Parse SNMP-Trap 
+
+This library-of-babel function requires following cygwin packages installed
+- ~python-pip~, 
+- ~python-devel~ and 
+- ~net-snmp-utils~ 
+and following pip packages installed
+- ~pysnmp~. 
+
+SNMP PDU parsed from Example PPT Testcase
+
+#+NAME: mlob-parse-snmp-trap-pdu 
+#+BEGIN_SRC python :results output :var pdu_to_parse="307e0201 01040670 75626c69 63a77102 0406747c 48020100 02010030 63300f06 082b0601 02010103 00430309 1b7a301e 060a2b06 01060301 01040100 06102b06 01040181 67070102 02013e01 02043018 06132b06 01040181 67070102 02013e02 03010104 01020102 30160610 2b060104 01816707 01020201 020a0100 42025fd1"
+  from pyasn1.codec.ber import encoder, decoder
+  from pysnmp.proto import api
+
+  import binascii
+
+  pMod = api.protoModules[api.protoVersion2c]
+
+  msg_to_parse = "".join(pdu_to_parse.split())
+
+  wholeMsg = binascii.unhexlify(msg_to_parse)
+
+  while wholeMsg:
+      rspMsg, wholeMsg = decoder.decode(wholeMsg, asn1Spec=pMod.Message())
+      rspPDU = pMod.apiMessage.getPDU(rspMsg)
+      # Check for SNMP errors reported
+      errorStatus = pMod.apiPDU.getErrorStatus(rspPDU)
+      if errorStatus:
+          print(errorStatus.prettyPrint())
+      else:
+          for oid, val in pMod.apiPDU.getVarBinds(rspPDU):
+              print('%s = %s' % (oid.prettyPrint(), val.prettyPrint()))
+#+END_SRC
+
+#+RESULTS: mlob-parse-snmp-trap-pdu
+: 1.3.6.1.2.1.1.3.0 = 596858
+: 1.3.6.1.6.3.1.1.4.1.0 = 1.3.6.1.4.1.231.7.1.2.2.1.62.1.2.4
+: 1.3.6.1.4.1.231.7.1.2.2.1.62.2.3.1.1.4.1 = 2
+: 1.3.6.1.4.1.231.7.1.2.2.1.2.10.1.0 = 24529
+
+
+snmpTrapOID of SNMP PDU parsed from Example PPT Testcase
+
+#+NAME: mlob-get-snmp-trap-oid 
+#+BEGIN_SRC python :results output :var pdu_to_parse="307e0201 01040670 75626c69 63a77102 0406747c 48020100 02010030 63300f06 082b0601 02010103 00430309 1b7a301e 060a2b06 01060301 01040100 06102b06 01040181 67070102 02013e01 02043018 06132b06 01040181 67070102 02013e02 03010104 01020102 30160610 2b060104 01816707 01020201 020a0100 42025fd1"
+  from pyasn1.codec.ber import encoder, decoder
+  from pysnmp.proto import api
+
+  import binascii
+
+  pMod = api.protoModules[api.protoVersion2c]
+
+  msg_to_parse = "".join(pdu_to_parse.split())
+
+  wholeMsg = binascii.unhexlify(msg_to_parse)
+  snmpTrapOID = ".".join(("1.3.6.1.6.3.1.1.4.1","0"))
+  snmpTrapOID_value = ""
+
+  while wholeMsg:
+      rspMsg, wholeMsg = decoder.decode(wholeMsg, asn1Spec=pMod.Message())
+      rspPDU = pMod.apiMessage.getPDU(rspMsg)
+      # Check for SNMP errors reported
+      errorStatus = pMod.apiPDU.getErrorStatus(rspPDU)
+      if errorStatus:
+          print(errorStatus.prettyPrint())
+      else:
+          for oid, val in pMod.apiPDU.getVarBinds(rspPDU):
+              if oid.prettyPrint() == snmpTrapOID: 
+                  snmpTrapOID_value = val.prettyPrint() 
+
+  print snmpTrapOID_value
+#+END_SRC
+
+#+RESULTS: mlob-get-snmp-trap-oid
+: 1.3.6.1.4.1.231.7.1.2.2.1.62.1.2.4
+
+
+Result OID from TRAP-PDU resolved 
+
+#+NAME: mlob-translate-oid-to-text
+#+BEGIN_SRC sh :results: output :export both :var oid="1.3.6.1.4.1.231.7.1.2.2.1.4.1.5.2" mib="MIB561" 
+  snmptranslate.exe -M ~/Documents/hiXIPv6/mibs/$mib/ -m 'ALL' -Ln -Tt $oid 
+#+END_SRC
+
+#+RESULTS: mlob-translate-oid-to-text
+: SHE-BRIDGE-MIB::sheBridgePortCreated

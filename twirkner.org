@@ -2662,6 +2662,16 @@ to make links work to custom_id?
 #+RESULTS:
 : org-id
 
+*** My "Library of Babel" 
+
+My [[info:org#Library%20of%20Babel][library of babel]] is stored in [[file:my-library-of-babel.org][startkit directory]]. 
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (let ((my-org-babel-lob-file
+         (expand-file-name "~/.emacs.d/my-library-of-babel.org")))
+    (org-babel-lob-ingest my-org-babel-lob-file) )
+#+END_SRC
+
 
 ** Calendar
 
