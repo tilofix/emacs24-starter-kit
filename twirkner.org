@@ -1,4 +1,4 @@
-#-*- coding: utf-8-unix -*-
+# -*- coding: utf-8-unix -*-
 #+TITLE: Tilo's Starter Kit Config
 #+OPTIONS: num:nil ^:nil
 
@@ -2354,9 +2354,17 @@ See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
 (add-to-list 'org-link-abbrev-alist '("rfc" . "https://tools.ietf.org/html/%s"))
+(add-to-list 'org-link-abbrev-alist '("dwb" . "http://www.woerterbuchnetz.de/DWB?lemma=%s"))
 #+END_SRC
 
+#+RESULTS:
+: ((dwb . http://www.woerterbuchnetz.de/DWB?lemma=%s) (rfc . https://tools.ietf.org/html/%s) (jira . http://jira.adtran.com/browse/%s))
+
 Test Link [[jira:BN-6671]]
+
+DWB = Deutsches Wörterbuch von Jacob und Wilhelm Grimm. 16 Bde. in 32 Teilbänden. Leipzig 1854-1961.
+
+Test Link [[dwb:sollen]]
 
 *** Export to TaskJuggler
 Exporter of org-8.x supports ~tj3~.
@@ -2671,6 +2679,49 @@ My [[info:org#Library%20of%20Babel][library of babel]] is stored in [[file:my-li
          (expand-file-name "~/.emacs.d/my-library-of-babel.org")))
     (org-babel-lob-ingest my-org-babel-lob-file) )
 #+END_SRC
+
+*** Projects to Publish 
+Customize [[elisp:(customize-variable%20'org-confirm-babel-evaluate)][variable org-confirm-babel-evaluate]] to avoid 
+being ask each time the publishing process encounters a block. 
+
+~(setq org-confirm-babel-evaluate t)~
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+    (require 'ox-publish)
+    (let* (
+          (pub-dir "~/Documents/Wiki/org")
+          (pub-files (directory-files pub-dir nil "^project_.*\\.org$"))
+          (pub-proj-plist (list 
+            :base-directory pub-dir
+            :base-extension ".org"
+            :exclude ".*\\.org"
+            :include pub-files
+            :publishing-directory (concat pub-dir "/docs")
+            :publishing-function 'org-html-publish-to-html
+            :section-numbers nil
+            :with-toc 3
+            :with-footnotes nil
+            :auto-sitemap nil
+  ;          :preparation-function 
+  ;;;          Function to be called before publishing this project. 
+  ;;;          This may also be a list of functions.
+  ;          :completion-function 
+  ;;;          Function to be called after publishing this project. 
+  ;;;          This may also be a list of functions.
+            :makeindex t
+            ))
+          )
+      (add-to-list
+       'org-publish-project-alist
+       (append '("proj2github") pub-proj-plist)))
+#+END_SRC
+
+#+RESULTS:
+| proj2github  | :base-directory | ~/Documents/Wiki/org  | :base-extension | .org | :exclude              | .*\.org            | :include             | (project_agile.org project_cxu-g11.org project_hixipv6.org project_hixvectoring.org project_psi04.org project_psi05.org project_psi06.org project_psi07.org project_psi08.org project_psi09.org project_psi10.org project_psi11.org project_psi12.org project_psi13.org project_psi14.org project_psi15.org project_psi16.org project_psi17.org project_psi18.org project_psi19.org project_psi20.org project_psi21.org project_psi22.org project_psi23.org project_psi24.org project_psi25.org project_psi26.org project_psi27.org project_r28.org project_r37m.org) | :publishing-directory | ~/Documents/Wiki/org/docs   | :publishing-function | org-html-publish-to-html   | :section-numbers | nil                  | :with-toc |   3 | :with-footnotes | nil       | :auto-sitemap   | nil    | :makeindex    | t   |
+| hixvectoring | :base-directory | ~/Documents/Wiki/org/ | :base-extension | org  | :exclude              | .*\.org            | :include             | (project_psi20.org project_psi19.org project_psi18.org project_psi17.org project_psi16.org project_psi15.org project_psi14.org project_psi13.org project_psi12.org project_psi11.org project_psi10.org project_psi09.org project_hixvectoring.org)                                                                                                                                                                                                                                                                                                                    | :publishing-directory | ~/public_html/hixvectoring/ | :publishing-function | org-html-publish-to-html   | :section-numbers | nil                  | :with-toc |   3 | :select-tags    | (GVECTOR) | :with-footnotes | nil    | :auto-sitemap | nil |
+| hixipv6      | :base-directory | ~/Documents/Wiki/org/ | :base-extension | org  | :exclude              | .*\.org            | :include             | (project_psi20.org project_psi19.org project_psi18.org project_psi17.org project_psi16.org project_psi15.org project_psi14.org project_psi13.org project_psi12.org project_psi11.org project_psi10.org project_psi09.org project_hixipv6.org)                                                                                                                                                                                                                                                                                                                         | :publishing-directory | ~/public_html/hixipv6/      | :publishing-function | org-dox-publish-to-doxydoc | :section-numbers | 8                    | :with-toc |   3 | :select-tags    | (IPV6)    | :with-footnotes | nil    | :auto-sitemap | nil |
+| proj         | :base-directory | ~/Documents/Wiki/org/ | :base-extension | org  | :exclude              | .*\.org            | :include             | (project_psi14.org project_psi13.org project_psi12.org project_psi11.org project_hixipv6.org project_psi10.org project_psi09.org project_hixvectoring.org)                                                                                                                                                                                                                                                                                                                                                                                                            | :publishing-directory | ~/public_html/projects/     | :publishing-function | org-html-publish-to-html   | :section-numbers | t                    | :with-toc | nil | :auto-index     | t         | :select-tags    | (IPV6) |               |     |
+| org          | :base-directory | ~/Documents/Wiki/org/ | :base-extension | org  | :publishing-directory | ~/public_html/org/ | :publishing-function | org-html-publish-to-html                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | :section-numbers      | nil                         | :table-of-contents   | nil                        | :style           | <link rel=stylesheet |           |     |                 |           |                 |        |               |     |
 
 
 ** Calendar
