@@ -7,9 +7,9 @@
     <CygwinSiteUrl>http://gd.tuwien.ac.at/gnu/cygwin/</CygwinSiteUrl>
   </Setup>
   <Other>
-    <!--
     <PackageFile>cygwin64_packages_devel.pkg</PackageFile>
-        -->
+    <!--
     <PackageFile>cygwin64_packages.pkg</PackageFile>
+        -->
   </Other>
 </Settings>
