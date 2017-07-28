@@ -95,3 +95,49 @@ Result OID from TRAP-PDU resolved
 
 #+RESULTS: mlob-translate-oid-to-text
 : SHE-BRIDGE-MIB::sheBridgePortCreated
+* Generate MIB-Changes out of MIB-Announce E-Mail
+
+Nick or now Norbert sends out an e-mail with a new MIB release and 
+a table of mib tasks which is base for the python script to generate 
+a list of MIB changes. 
+
+The table requires following columns 
+
+| Impacted MIB Item | Task ID | Revision Text | JIRA | Jira Title | Task Originator | Release |
+
+#+NAME: create-list-of-mib-changes 
+#+BEGIN_SRC python :results output :var mib_content=mib_hix_5503_content
+  # -*- coding: utf-8 -*-
+  """
+  Python script to reformat tabular MIB changes into org-mode lists.
+  """
+  
+  # There is no need to export table "mib_546_content" into a CSV file.
+  # Org-Babel hands over org-mode table as python list in header arguments.
+  
+  # Remove first head lines from list.
+  head_line = mib_content.pop(0)
+  
+  # Find changed MIB modules and remove doublicates.
+  changed_mibs = list()
+  for changed_mib in mib_content :
+      changed_mibs.append(changed_mib[0])
+  mib_changes = set(changed_mibs)
+  
+  # List all changes in order of MIB modules.
+  for item in mib_changes :
+     for mib_change in mib_content :
+              if item in mib_change :
+                  print '- %s' % item
+                  ImpactedMib, TaskId, ReleaseNote, ChangeId, ChangeIdTitle, Stakeholder, PlannedRelease = mib_change
+  #                  print '  - Impacted MIB: %s' % ImpactedMib
+                  print '  - Task ID: %s' % TaskId
+                  print '  - Release Note: %s' % ReleaseNote
+                  print '  - Change ID: %s %s' % (ChangeId, ChangeIdTitle)
+  #                print '  - Change ID: %s' % ChangeId
+  #                print '  - ACI Effort: %s' % AciEffort
+                  print '  - Stakeholder: %s' % Stakeholder
+                  print '  - Planned Release: %s' % PlannedRelease
+  
+#+END_SRC
+
