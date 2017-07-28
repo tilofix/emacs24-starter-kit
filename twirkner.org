@@ -2701,7 +2701,7 @@ being ask each time the publishing process encounters a block.
             :section-numbers nil
             :with-toc 3
             :with-footnotes nil
-            :auto-sitemap nil
+            :auto-sitemap t
   ;          :preparation-function 
   ;;;          Function to be called before publishing this project. 
   ;;;          This may also be a list of functions.
@@ -3379,7 +3379,8 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
 - Forward-page separated by '^L', navigating among pages 
   - C-x ]
   - C-s C-q C-l
-
+- Interactive Emacs Lisp Interpreter
+  - M-x ielm 
 
 * Tilo's Favourit Functions
 - Unicode Characters
