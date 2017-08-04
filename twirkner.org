@@ -3389,7 +3389,15 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
   - prefer-coding-system
 - Org-Export
   - (customize-variable 'org-confirm-babel-evaluate)
-
+- REPL (Inferior Emacs Lisp Mode) 
+  - M-x ielm
+- Profiler 
+  - M-x profiler-start
+  - Execute code in question
+  - M-x profiler-report
+  - M-x profiler-stop
+- Find-Function 
+  - M-x find-function 
 
 * Tilo's Notes on Testing Org Functions
 
