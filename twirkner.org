@@ -2435,15 +2435,12 @@ I assume, yes.
     "Transcode a TEXT string from Org to JIRA format.
   TEXT is the string to transcode.  INFO is a plist holding
   contextual information."
-    (let ((output text))
-      ;; Protect single brackets as they meta character for links in JIRA.
-      ;; plain-text seems to be never called for a link, always only one '['.
-      (setq output (replace-regexp-in-string
-                    "\\[\\([ -:[:alnum:]]+\\)\\]"
-                    "\\\\[\\1\\\\]" 
-                    output))
-      ;; Return value.
-      output))
+      ;; Protect single brackets as they are meta character for links in JIRA.
+      ;; plain-text seems to be never called for a link including two opening brackets.
+      (replace-regexp-in-string
+      "\\[\\([ -:[:alnum:]]+\\)\\]"
+      "\\\\[\\1\\\\]" 
+      text) )
 
   ;;;; Timestamp
 
@@ -2452,8 +2449,7 @@ I assume, yes.
   CONTENTS is nil.  INFO is a plist holding contextual
   information."
     (org-jira-plain-text 
-     (org-timestamp-translate timestamp) info)
-    )
+     (org-timestamp-translate timestamp) info) )
 
   ;;;; Code and Verbatim
 
