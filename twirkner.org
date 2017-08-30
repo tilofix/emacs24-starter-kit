@@ -2420,11 +2420,39 @@ I assume, yes.
                 (org-open-file (org-confluence-export-as-confluence nil s v b)))))))
     :translate-alist '(
                        (code . org-jira-verbatim)
+                       (plain-text . org-jira-plain-text)
+                       (timestamp . org-jira-timestamp)
                        (verbatim . org-jira-verbatim)
                        )
     :options-alist '(
                      (:ascii-text-width nil nil org-jira-text-width)
                      )
+    )
+
+  ;;; Plain Text
+
+  (defun org-jira-plain-text (text info)
+    "Transcode a TEXT string from Org to JIRA format.
+  TEXT is the string to transcode.  INFO is a plist holding
+  contextual information."
+    (let ((output text))
+      ;; Protect single brackets as they meta character for links in JIRA.
+      ;; plain-text seems to be never called for a link, always only one '['.
+      (setq output (replace-regexp-in-string
+                    "\\[\\([ -:[:alnum:]]+\\)\\]"
+                    "\\\\[\\1\\\\]" 
+                    output))
+      ;; Return value.
+      output))
+
+  ;;;; Timestamp
+
+  (defun org-jira-timestamp (timestamp contents info)
+    "Transcode a TIMESTAMP object from Org to JIRA format.
+  CONTENTS is nil.  INFO is a plist holding contextual
+  information."
+    (org-jira-plain-text 
+     (org-timestamp-translate timestamp) info)
     )
 
   ;;;; Code and Verbatim
@@ -3412,8 +3440,11 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
   - Execute code in question
   - M-x profiler-report
   - M-x profiler-stop
-- Find-Function 
+- Find-Function - Find the definition of the FUNCTION near point.
   - M-x find-function 
+- Occur - Show all lines in the current buffer containing a match for REGEXP.
+  - M-s o
+  - M-x occur 
 
 * Tilo's Notes on Testing Org Functions
 
