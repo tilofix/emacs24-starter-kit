@@ -3441,6 +3441,8 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
 - Occur - Show all lines in the current buffer containing a match for REGEXP.
   - M-s o
   - M-x occur 
+- Regex-Builder to check a RE during contruction for a buffer
+  - M-x re-builder
 
 * Tilo's Notes on Testing Org Functions
 
