@@ -54,6 +54,7 @@ For setting up org-Mode some modules are required from org/contrib
 - org-mime
 - ox-confluence
 - ox-s5
+- org-eww 
 
 #+BEGIN_SRC emacs-lisp :tangle yes
   (when (getenv "ORG_HOME")
@@ -98,7 +99,7 @@ Don't know if following code snippets found in old
 
 *** ConfigSpec mode ;* ClCa Config Spec mode
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp tangle:no
   (define-generic-mode 'config_spec-mode
     ;; COMMENT-LIST
     '(?#)
@@ -504,7 +505,7 @@ when org-babel reads and tangles this file.
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
   (global-set-key "\C-cp" 'org-publish-current-file)
-  (setq org-directory (expand-file-name "~/Documents/Wiki/org/"))
+  (setq org-directory (expand-file-name "~/Documents/Wiki/worg/"))
   (setq org-default-notes-file (concat org-directory "notes.org"))
   (setq org-agenda-ndays 7)
   ;; always start with TODAY
@@ -553,19 +554,19 @@ Variable =org-default-notes-file= is set above.
 #+begin_src emacs-lisp
     (setq org-capture-templates
           '(("n" "Note" entry
-             (file+headline "~/Documents/Wiki/org/notes.org" "Notes")
+             (file+headline "~/Documents/Wiki/worg/notes.org" "Notes")
              "* %?\n")
             ("t" "Todo" entry
-             (file+headline "~/Documents/Wiki/org/TODO.org" "Tasks")
+             (file+headline "~/Documents/Wiki/worg/TODO.org" "Tasks")
              "* TODO %?\n %u")
             ("j" "Journal" entry
-             (file+headline "~/Documents/Wiki/org/JOURNAL.org" "Journal")
+             (file+headline "~/Documents/Wiki/worg/JOURNAL.org" "Journal")
              "* %U %?\n\n %i\n  %a")
             ("i" "Idea" entry
-             (file+headline "~/Documents/Wiki/org/JOURNAL.org" "New Ideas")
+             (file+headline "~/Documents/Wiki/worg/JOURNAL.org" "New Ideas")
              "* %^{Title}\n %i\n  %a")
             ("b" "Bug" entry
-             (file+headline "~/Documents/Wiki/org/BUGS.org" "Bugs")
+             (file+headline "~/Documents/Wiki/worg/BUGS.org" "Bugs")
              "* BUG %?\n %i\n %a"))
           )
 #+end_src
@@ -578,9 +579,9 @@ Variable =org-default-notes-file= is set above.
   (add-to-list
    'org-publish-project-alist
    '("org"
-      :base-directory "~/Documents/Wiki/org/"
+      :base-directory "~/Documents/Wiki/worg/"
       :base-extension "org"
-      :publishing-directory "~/public_html/org/"
+      :publishing-directory "~/public_html/worg/"
       :publishing-function org-html-publish-to-html
       :section-numbers nil
       :table-of-contents nil
@@ -596,7 +597,7 @@ Variable =org-default-notes-file= is set above.
   (add-to-list
    'org-publish-project-alist
    '("proj"
-      :base-directory "~/Documents/Wiki/org/"
+      :base-directory "~/Documents/Wiki/worg/"
       :base-extension "org"
       :exclude ".*\\.org"
       :include ("project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_hixipv6.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
@@ -2282,7 +2283,7 @@ up tp 200 MByte. Just switch off loading pymacs for outlook.
     (add-to-list
      'org-publish-project-alist
      '("outlook"
-       :base-directory "~/Documents/Wiki/org/"
+       :base-directory "~/Documents/Wiki/worg/"
        :base-extension "org"
        :exclude ".*\\.org"
   ;;     :include ("reports.*\\.org")
@@ -2391,7 +2392,9 @@ Confluence is from Atlassien does it use same Wiki-Markup?
 
 I assume, yes.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+(set to 'no' as long as I have no solution 
+for modules from =$ORG_HOME/contrib/lisp= directory)
+#+BEGIN_SRC emacs-lisp :tangle no
   (require 'ox-confluence)
 
   (defgroup org-export-jira nil
@@ -2598,7 +2601,7 @@ So far do not load Markdown exporter.
   (add-to-list
    'org-publish-project-alist
    '("hixipv6"
-     :base-directory "~/Documents/Wiki/org/"
+     :base-directory "~/Documents/Wiki/worg/"
      :base-extension "org"
      :exclude ".*\\.org"
      :include ("project_psi20.org" "project_psi19.org" "project_psi18.org" "project_psi17.org" "project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixipv6.org")
@@ -2627,7 +2630,7 @@ when export property ~:section-numbers~ is not set
   (add-to-list
    'org-publish-project-alist
    '("hixvectoring"
-     :base-directory "~/Documents/Wiki/org/"
+     :base-directory "~/Documents/Wiki/worg/"
      :base-extension "org"
      :exclude ".*\\.org"
      :include ("project_psi20.org" "project_psi19.org" "project_psi18.org" "project_psi17.org" "project_psi16.org" "project_psi15.org" "project_psi14.org" "project_psi13.org" "project_psi12.org" "project_psi11.org" "project_psi10.org" "project_psi09.org" "project_hixvectoring.org")
@@ -2713,7 +2716,7 @@ being ask each time the publishing process encounters a block.
 #+BEGIN_SRC emacs-lisp :tangle yes
     (require 'ox-publish)
     (let* (
-          (pub-dir "~/Documents/Wiki/org")
+          (pub-dir "~/Documents/Wiki/worg")
           (pub-files (directory-files pub-dir nil "^project_.*\\.org$"))
           (pub-proj-plist (list 
             :base-directory pub-dir
@@ -2756,7 +2759,9 @@ There is org-eww to
 
 Make sure org-mode's ~contrib/~ directory is in load path. 
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+(set to 'no' as long as I have no solution 
+for modules from =$ORG_HOME/contrib/lisp= directory)
+#+BEGIN_SRC emacs-lisp :tangle no 
   (require 'org-eww)
 #+END_SRC
 
@@ -3481,3 +3486,34 @@ Org-mode Testing
 
 
 
+* Notes on running starter-kit branch tilofix-emacs24 on Fedora
+- issue with ~ox-confluence~ and path to =$ORG_HOME/contrib/lisp= directory 
+- issue with missing directory =~/Documents/Wiki/org= 
+- issue with ~org-eww~ and missing packages? 
+  - Here is list of installed emacs packages on host ~56S8TZ1~ 
+#+BEGIN_EXAMPLE
+  elnode             0.9.9.8.8     installed             The Emacs webserver.
+  gist               0.5           installed             Emacs integration for gist.github.com
+  gnuplot            20141231.1337 installed             drive gnuplot from within emacs
+  helm               20160814.522  installed             Helm is an Emacs incremental and narrowing framework
+  icicles            20170811.1012 installed             Minibuffer input completion and cycling.
+  idle-highlight     1.0           installed             highlight the word the point is on
+  inf-ruby           2.1           installed             Run a ruby process in a buffer
+  js2-mode           20090814      installed             Improved JavaScript editing mode
+  json-mode          20160601.356  installed             Major mode for editing JSON files
+  magit              20131008.1206 installed             control Git from Emacs [github]
+  markdown-mode      2.0           installed             Emacs Major mode for Markdown-formatted text files
+  paredit            22            installed             minor mode for editing parentheses
+  powershell         20161103.2354 installed             Mode for editing Powershell scripts
+  restclient         20150818.807  installed             An interactive HTTP client for Emacs
+  rust-mode          20160726.720  installed             A major emacs mode for editing Rust source code
+  sublimity          20131111.2311 installed             smooth-scrolling and minimap, like sublime editor
+  yaml-mode          20130311.1301 installed             Major mode for editing YAML files [github]
+  yang-mode          20170323.1104 installed             major mode for editing YANG files
+  yasnippet          20131010.2    installed             Yet another snippet extension for Emacs. [github]
+#+END_EXAMPLE
+  - And the list of current host ~quallentiwi~ 
+#+BEGIN_EXAMPLE
+  magit              20171018.628  installed             A Git porcelain inside Emacs
+  yang-mode          20170323.1104 installed             major mode for editing YANG files
+#+END_EXAMPLE
