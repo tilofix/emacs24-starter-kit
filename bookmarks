@@ -8,7 +8,7 @@
  (rear-context-string)
  (position . 1))
 ("proj_psi29"
- (filename . "~/Documents/Wiki/org/project_psi29.org")
+ (filename . "~/Documents/Wiki/worg/project_psi29.org")
  (front-context-string . "* PSI#29 Prepara")
  (rear-context-string . "[Prev-PSI]] | \n\n")
  (position . 352))
@@ -28,27 +28,27 @@
  (rear-context-string . "1  4. Jul 00:09 ")
  (position . 306))
 ("proj_psi28"
- (filename . "~/Documents/Wiki/org/project_psi28.org")
+ (filename . "~/Documents/Wiki/worg/project_psi28.org")
  (front-context-string . "* PSI#28 Prepara")
  (rear-context-string . "rg][Next-PSI]]\n\n")
  (position . 378))
 ("proj_psi27"
- (filename . "~/Documents/Wiki/org/project_psi27.org")
+ (filename . "~/Documents/Wiki/worg/project_psi27.org")
  (front-context-string . "* PSI#27 Prepara")
  (rear-context-string . "rg][Next-PSI]]\n\n")
  (position . 378))
 ("proj_psi26"
- (filename . "~/Documents/Wiki/org/project_psi26.org")
+ (filename . "~/Documents/Wiki/worg/project_psi26.org")
  (front-context-string . "\n[[file:project_")
  (rear-context-string . " Project PSI#26\n")
  (position . 300))
 ("proj_psi25"
- (filename . "~/Documents/Wiki/org/project_psi25.org")
+ (filename . "~/Documents/Wiki/worg/project_psi25.org")
  (front-context-string . "\n* PSI#25 Prepar")
  (rear-context-string . "org][Next-PSI]]\n")
  (position . 378))
 ("proj_psi24"
- (filename . "~/Documents/Wiki/org/project_psi24.org")
+ (filename . "~/Documents/Wiki/worg/project_psi24.org")
  (front-context-string . "\n* PSI#24 Prepar")
  (rear-context-string . "org][Next-PSI]]\n")
  (position . 378))
@@ -58,7 +58,7 @@
  (rear-context-string . "0  3. Aug 11:36 ")
  (position . 424))
 ("proj_psi23"
- (filename . "~/Documents/Wiki/org/project_psi23.org")
+ (filename . "~/Documents/Wiki/worg/project_psi23.org")
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
@@ -78,7 +78,7 @@
  (rear-context-string . "0  5. Apr 14:51 ")
  (position . 237))
 ("proj_psi22"
- (filename . "~/Documents/Wiki/org/project_psi22.org")
+ (filename . "~/Documents/Wiki/worg/project_psi22.org")
  (front-context-string)
  (rear-context-string . "016-07-18 Mo>\n\n\n")
  (position . 1))
@@ -88,7 +88,7 @@
  (rear-context-string . "0  6. Okt 08:07 ")
  (position . 248))
 ("proj_psi21"
- (filename . "~/Documents/Wiki/org/project_psi21.org")
+ (filename . "~/Documents/Wiki/worg/project_psi21.org")
  (front-context-string . "#+TITLE: Project")
  (rear-context-string . "ew:info toc:nil\n")
  (position . 277))
@@ -103,22 +103,22 @@
  (rear-context-string . "0  5. Jun 2015  ")
  (position . 423))
 ("proj_psi20"
- (filename . "~/Documents/Wiki/org/project_psi20.org")
+ (filename . "~/Documents/Wiki/worg/project_psi20.org")
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
 ("proj_psi19"
- (filename . "~/Documents/Wiki/org/project_psi19.org")
+ (filename . "~/Documents/Wiki/worg/project_psi19.org")
  (front-context-string . "* PSI#19 Prepara")
  (rear-context-string . "rg][Next-PSI]]\n\n")
  (position . 379))
 ("proj_psi18"
- (filename . "~/Documents/Wiki/org/project_psi18.org")
+ (filename . "~/Documents/Wiki/worg/project_psi18.org")
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
 ("proj_psi17"
- (filename . "~/Documents/Wiki/org/project_psi17.org")
+ (filename . "~/Documents/Wiki/worg/project_psi17.org")
  (front-context-string . "* PSI#17 Prepara")
  (rear-context-string . "Project PSI#17\n\n")
  (position . 302))
@@ -133,42 +133,42 @@
  (rear-context-string . "7 28. Jun 2013  ")
  (position . 276))
 ("proj_psi16"
- (filename . "~/Documents/Wiki/org/project_psi16.org")
+ (filename . "~/Documents/Wiki/worg/project_psi16.org")
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
 ("proj_psi12"
- (filename . "~/Documents/Wiki/org/project_psi12.org")
+ (filename . "~/Documents/Wiki/worg/project_psi12.org")
  (front-context-string . "* PSI#12 Backlog")
  (rear-context-string . "ne by TR129)?\n\n\n")
  (position . 1936879))
 ("proj_psi09"
- (filename . "~/Documents/Wiki/org/project_psi09.org")
+ (filename . "~/Documents/Wiki/worg/project_psi09.org")
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
 ("proj_psi14"
- (filename . "~/Documents/Wiki/org/project_psi14.org")
+ (filename . "~/Documents/Wiki/worg/project_psi14.org")
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
 ("proj_psi15"
- (filename . "~/Documents/Wiki/org/project_psi15.org")
+ (filename . "~/Documents/Wiki/worg/project_psi15.org")
  (front-context-string)
  (rear-context-string . "2015-01-19 Mo>\n\n")
  (position . 1))
 ("proj_psi13"
- (filename . "~/Documents/Wiki/org/project_psi13.org")
+ (filename . "~/Documents/Wiki/worg/project_psi13.org")
  (front-context-string . "* PSI13 Preparat")
  (rear-context-string . " Project PSI13\n\n")
  (position . 282))
 ("proj_psi11"
- (filename . "~/Documents/Wiki/org/project_psi11.org")
+ (filename . "~/Documents/Wiki/worg/project_psi11.org")
  (front-context-string)
  (rear-context-string . " Project PSI11\n\n")
  (position . 281))
 ("proj_psi10"
- (filename . "~/Documents/Wiki/org/project_psi10.org")
+ (filename . "~/Documents/Wiki/worg/project_psi10.org")
  (front-context-string . "#-*- coding: utf")
  (rear-context-string)
  (position . 1))
@@ -178,12 +178,12 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/org/TODO.org")
+ (filename . "~/Documents/Wiki/worg/TODO.org")
  (front-context-string . "** TODO 2018 R&D")
  (rear-context-string . "[2017-11-02 Do]\n")
  (position . 9291313))
 ("proj_hiXIPv6"
- (filename . "~/Documents/Wiki/org/project_hixipv6.org")
+ (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
  (rear-context-string . "LE: Project hiX ")
  (position . 268))
@@ -208,7 +208,7 @@
  (rear-context-string . "  0 11-23 16:55 ")
  (position . 1958))
 ("proj_cxu-g11"
- (filename . "~/Documents/Wiki/org/project_cxu-g11.org")
+ (filename . "~/Documents/Wiki/worg/project_cxu-g11.org")
  (front-context-string . "# -*- coding: is")
  (rear-context-string)
  (position . 1))
@@ -223,7 +223,7 @@
  (rear-context-string)
  (position . 1))
 ("proj_r28.org"
- (filename . "~/Documents/Wiki/org/project_r28.org")
+ (filename . "~/Documents/Wiki/worg/project_r28.org")
  (front-context-string . "\n\n\n* Project R2.")
  (rear-context-string)
  (position . 1))
@@ -233,7 +233,7 @@
  (rear-context-string . "340 08-23 11:57 ")
  (position . 272))
 ("proj_hiXVectoring"
- (filename . "~/Documents/Wiki/org/project_hixvectoring.org")
+ (filename . "~/Documents/Wiki/worg/project_hixvectoring.org")
  (front-context-string . "#-*- coding: utf")
  (rear-context-string)
  (position . 1))
@@ -323,12 +323,12 @@
   (rear-context-string)
   (position . 1)))
 ("reports"
- ((filename . "~/Documents/Wiki/org/reports.org")
+ ((filename . "~/Documents/Wiki/worg/reports.org")
   (front-context-string . "#+OPTIONS:   H:4")
   (rear-context-string)
   (position . 1)))
 ("org-remember-last-stored"
- (filename . "~/Documents/Wiki/org/TODO.org")
+ (filename . "~/Documents/Wiki/worg/TODO.org")
  (front-context-string . "** TODO Sprint R")
  (rear-context-string . "U-B21, CXU-C2).\n")
  (position . 1815702))
@@ -338,16 +338,16 @@
   (rear-context-string . "  0 01-28 08:11 ")
   (position . 332)))
 ("notes.org"
- ((filename . "~/Documents/Wiki/org/notes.org")
+ ((filename . "~/Documents/Wiki/worg/notes.org")
   (front-context-string . "\n* Notes\n** QUOT")
   (rear-context-string)
   (position . 1)))
 ("TODO.org"
- ((filename . "~/Documents/Wiki/org/TODO.org")
+ ((filename . "~/Documents/Wiki/worg/TODO.org")
   (rear-context-string)
   (position . 228)))
 ("JOURNAL.org"
- ((filename . "~/Documents/Wiki/org/JOURNAL.org")
+ ((filename . "~/Documents/Wiki/worg/JOURNAL.org")
   (front-context-string . "* Journal\n** [20")
   (rear-context-string)
   (position . 2)))
