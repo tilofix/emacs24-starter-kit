@@ -2392,52 +2392,51 @@ Confluence is from Atlassien does it use same Wiki-Markup?
 
 I assume, yes.
 
-(set to 'no' as long as I have no solution 
-for modules from =$ORG_HOME/contrib/lisp= directory)
-#+BEGIN_SRC emacs-lisp :tangle no
-  (require 'ox-confluence)
+Change back to yes and check of module =ox-confluence= is available.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (when (require 'ox-confluence nil t)
+  
+    (defgroup org-export-jira nil
+      "Options for exporting Org mode files to ASCII."
+      :tag "Org Export ASCII"
+      :group 'org-export)
 
-  (defgroup org-export-jira nil
-    "Options for exporting Org mode files to ASCII."
-    :tag "Org Export ASCII"
-    :group 'org-export)
+    (defcustom org-jira-text-width 256
+      "Maximum width of exported text.
+      This number includes margin size, as set in
+      `org-ascii-global-margin'."
+      :group 'org-export-jira
+      :version "24.4"
+      :package-version '(Org . "8.0")
+      :type 'integer)
 
-  (defcustom org-jira-text-width 256
-    "Maximum width of exported text.
-  This number includes margin size, as set in
-  `org-ascii-global-margin'."
-    :group 'org-export-jira
-    :version "24.4"
-    :package-version '(Org . "8.0")
-    :type 'integer)
-
-  (org-export-define-derived-backend 'jira 'confluence
-    :export-block '("JIRA")
-    :menu-entry
-    '(?i "Export to JIRA"
-       ((?I "As JIRA buffer" org-jira-export-as-jira-buffer)
-        (?i "As JIRA file" org-confluence-export-as-confluence)
-        (?o "As JIRA file and open"
-            (lambda (a s v b)
-              (if a (org-confluence-export-as-confluence t s v b)
-                (org-open-file (org-confluence-export-as-confluence nil s v b)))))))
-    :translate-alist '(
-                       (code . org-jira-verbatim)
-                       (plain-text . org-jira-plain-text)
-                       (timestamp . org-jira-timestamp)
-                       (verbatim . org-jira-verbatim)
+    (org-export-define-derived-backend 'jira 'confluence
+      :export-block '("JIRA")
+      :menu-entry
+      '(?i "Export to JIRA"
+           ((?I "As JIRA buffer" org-jira-export-as-jira-buffer)
+            (?i "As JIRA file" org-confluence-export-as-confluence)
+            (?o "As JIRA file and open"
+                (lambda (a s v b)
+                  (if a (org-confluence-export-as-confluence t s v b)
+                    (org-open-file (org-confluence-export-as-confluence nil s v b)))))))
+      :translate-alist '(
+                         (code . org-jira-verbatim)
+                         (plain-text . org-jira-plain-text)
+                         (timestamp . org-jira-timestamp)
+                         (verbatim . org-jira-verbatim)
+                         )
+      :options-alist '(
+                       (:ascii-text-width nil nil org-jira-text-width)
                        )
-    :options-alist '(
-                     (:ascii-text-width nil nil org-jira-text-width)
-                     )
-    )
+      )
 
   ;;; Plain Text
 
-  (defun org-jira-plain-text (text info)
-    "Transcode a TEXT string from Org to JIRA format.
-  TEXT is the string to transcode.  INFO is a plist holding
-  contextual information."
+    (defun org-jira-plain-text (text info)
+      "Transcode a TEXT string from Org to JIRA format.
+      TEXT is the string to transcode.  INFO is a plist holding
+      contextual information."
       ;; Protect single brackets as they are meta character for links in JIRA.
       ;; plain-text seems to be never called for a link including two opening brackets.
       (replace-regexp-in-string
@@ -2447,32 +2446,32 @@ for modules from =$ORG_HOME/contrib/lisp= directory)
 
   ;;;; Timestamp
 
-  (defun org-jira-timestamp (timestamp contents info)
-    "Transcode a TIMESTAMP object from Org to JIRA format.
-  CONTENTS is nil.  INFO is a plist holding contextual
-  information."
-    (org-jira-plain-text 
-     (org-timestamp-translate timestamp) info) )
+    (defun org-jira-timestamp (timestamp contents info)
+      "Transcode a TIMESTAMP object from Org to JIRA format.
+      CONTENTS is nil.  INFO is a plist holding contextual
+      information."
+      (org-jira-plain-text 
+       (org-timestamp-translate timestamp) info) )
 
   ;;;; Code and Verbatim
 
-  (defun org-jira-verbatim (verbatim contents info)
-    "Transcode VERBATIM object into JIRA format.
-  CONTENTS is nil.  
-  INFO is a plist used as a communication channel."
-    (let ((value (org-element-property :value verbatim)))
-      (format (cond ((or (string-match "^-" value)
-                         (string-match "^+" value))
-                     "{{\\%s}}")
-                    (t "{{%s}}"))
-              value)))
+    (defun org-jira-verbatim (verbatim contents info)
+      "Transcode VERBATIM object into JIRA format.
+      CONTENTS is nil.  
+      INFO is a plist used as a communication channel."
+      (let ((value (org-element-property :value verbatim)))
+        (format (cond ((or (string-match "^-" value)
+                           (string-match "^+" value))
+                       "{{\\%s}}")
+                      (t "{{%s}}"))
+                value)))
 
   ;;; Interactive function
 
   ;;;###autoload
-  (defun org-jira-export-as-jira-buffer
-      (&optional async subtreep visible-only body-only ext-plist)
-    "Export current buffer to a JIRA Document Confluence buffer.
+    (defun org-jira-export-as-jira-buffer
+        (&optional async subtreep visible-only body-only ext-plist)
+      "Export current buffer to a JIRA Document Confluence buffer.
 
   If narrowing is active in the current buffer, only export its
   narrowed part.
@@ -2493,12 +2492,13 @@ for modules from =$ORG_HOME/contrib/lisp= directory)
   Export is done in a buffer named \"*Org JIRA Export*\", which will
   be displayed when `org-export-show-temporary-export-buffer' is
   non-nil."
-    (interactive)
-    (org-export-to-buffer 'jira "*Org JIRA Export*"
-      async subtreep visible-only body-only ext-plist (lambda () (fundamental-mode)))
-  )
+      (interactive)
+      (org-export-to-buffer 'jira "*Org JIRA Export*"
+        async subtreep visible-only body-only ext-plist (lambda () (fundamental-mode)))
+      )
 
-  (provide 'ox-jira)
+    (provide 'ox-jira)
+    )
 #+END_SRC
 
 #+RESULTS:
@@ -2761,8 +2761,9 @@ Make sure org-mode's ~contrib/~ directory is in load path.
 
 (set to 'no' as long as I have no solution 
 for modules from =$ORG_HOME/contrib/lisp= directory)
-#+BEGIN_SRC emacs-lisp :tangle no 
-  (require 'org-eww)
+#+BEGIN_SRC emacs-lisp :tangle yes 
+  (when
+      (require 'org-eww nil t))
 #+END_SRC
 
 #+RESULTS:
