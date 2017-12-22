@@ -2,7 +2,17 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("gxweb56-snmp-aci.log"
+(("proj_psi30"
+ (filename . "~/Documents/Wiki/worg/project_psi30.org")
+ (front-context-string . "* PSI#30 Prepara")
+ (rear-context-string . "][Prev-PSI]] |\n\n")
+ (position . 351))
+("dir_dpu5XXVG"
+ (filename . "~/Documents/DPU_5XXVG/")
+ (front-context-string . "adtran-ancp01.ya")
+ (rear-context-string . "3 15. Dez 10:11 ")
+ (position . 262))
+("gxweb56-snmp-aci.log"
  (filename . "/cygdrive/c/ProgramData/Adtran/AccessIntegrator/gxweb56/log/gxweb56-snmp-aci.log")
  (front-context-string . "SNMP Message (20")
  (rear-context-string)
@@ -179,9 +189,9 @@
  (position . 133))
 ("org-capture-last-stored"
  (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO 2018 R&D")
- (rear-context-string . "[2017-11-02 Do]\n")
- (position . 9291313))
+ (front-context-string . "** TODO SR5.6-SA")
+ (rear-context-string . "ched for years \n")
+ (position . 9294370))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
