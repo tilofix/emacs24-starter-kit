@@ -141,3 +141,45 @@ The table requires following columns
   
 #+END_SRC
 
+* Generate MIB-Changes out of JIRA-Query 
+
+Nick or now Norbert sends out an e-mail with a new MIB release and 
+maintain a [[http://confluence.adtran.com/display/SysEng/TARDIS+-+Broadband+Solutions+Dashboard][confluence dashboard]] a table of mib tasks assigned 
+to a mib release which is an epic in JIRA. 
+
+Unfortunately by chaning from SharePoint to JIRA we loose 
+information of affected MIB-Module.
+
+| Key | Summary | Description | Epic Link |
+
+#+NAME: create-list-of-jira-mib-changes 
+#+BEGIN_SRC python :results output :var mib_content=mib_hix_5604_content
+  # -*- coding: utf-8 -*-
+  """
+  Python script to reformat tabular MIB changes into org-mode lists.
+  """
+  
+  # There is no need to export table "mib_546_content" into a CSV file.
+  # Org-Babel hands over org-mode table as python list in header arguments.
+  
+  # Remove first head lines from list.
+  head_line = mib_content.pop(0)
+  
+  # Find changed MIB modules and remove doublicates.
+  changed_mibs = list()
+  for changed_mib in mib_content :
+      changed_mibs.append(changed_mib[0])
+  mib_changes = set(changed_mibs)
+  
+  # List all changes in order of MIB modules.
+  for item in mib_changes :
+     for mib_change in mib_content :
+              if item in mib_change :
+                  print '- Task ID: %s' % item
+                  TaskId, Summary, Description, EpicLink = mib_change
+                  print '  - Summary: %s' % Summary
+                  print '  - Description: %s' % Description
+                  print '  - MIB-Release: %s' % EpicLink
+  
+#+END_SRC
+
