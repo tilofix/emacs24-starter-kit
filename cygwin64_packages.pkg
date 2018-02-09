@@ -8,7 +8,10 @@ texlive-collection-langgerman
 texlive-collection-latexextra
 texmaker
 texinfo
-python-pip
-python-devel
+python2-pip
+python2-devel
 net-snmp-utils
 perl-net-snmp
+curl
+libcurl-devel
+openssl-devel
