@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("gxweb56-snmp-aci.log"
+(("dir_Worg"
+ (filename . "~/Documents/Wiki/worg/")
+ (front-context-string . "docs\n  -rwxrwxr-")
+ (rear-context-string . "96 Nov 20 09:53 ")
+ (position . 260))
+("gxweb56-snmp-aci.log"
  (filename . "/cygdrive/c/ProgramData/Adtran/AccessIntegrator/gxweb56/log/gxweb56-snmp-aci.log")
  (front-context-string . "SNMP Message (20")
  (rear-context-string)
@@ -179,9 +184,9 @@
  (position . 133))
 ("org-capture-last-stored"
  (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO 2018 R&D")
- (rear-context-string . "[2017-11-02 Do]\n")
- (position . 9291313))
+ (front-context-string . "** TODO AD-89738")
+ (rear-context-string . "urück gesetzt. \n")
+ (position . 9310678))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
