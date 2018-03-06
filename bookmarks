@@ -17,7 +17,7 @@
  (front-context-string . "adtran-ancp01.ya")
  (rear-context-string . "3 15. Dez 10:11 ")
  (position . 262))
-(("dir_Worg"
+("dir_Worg"
  (filename . "~/Documents/Wiki/worg/")
  (front-context-string . "docs\n  -rwxrwxr-")
  (rear-context-string . "96 Nov 20 09:53 ")
