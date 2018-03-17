@@ -33,3 +33,7 @@ libgc-devel
 libltdl-devel
 libtool-devel
 calm
+mercurial
+autoconf
+binutils
+gcc

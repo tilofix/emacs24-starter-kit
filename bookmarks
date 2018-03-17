@@ -1,0 +1,454 @@
+;;;; Emacs Bookmark Format Version 1 ;;;;
+;;; This format is meant to be slightly human-readable;
+;;; nevertheless, you probably don't want to edit it.
+;;; -*- End Of Bookmark File Format Version Stamp -*-
+(("proj_pi04"
+ (filename . "~/Documents/Wiki/worg/project_pi04.org")
+ (front-context-string . "* PI#04 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 385))
+("proj_psi30"
+ (filename . "~/Documents/Wiki/worg/project_psi30.org")
+ (front-context-string . "* PSI#30 Prepara")
+ (rear-context-string . "][Prev-PSI]] |\n\n")
+ (position . 351))
+("dir_dpu5XXVG"
+ (filename . "~/Documents/DPU_5XXVG/")
+ (front-context-string . "adtran-ancp01.ya")
+ (rear-context-string . "3 15. Dez 10:11 ")
+ (position . 262))
+("dir_Worg"
+ (filename . "~/Documents/Wiki/worg/")
+ (front-context-string . "docs\n  -rwxrwxr-")
+ (rear-context-string . "96 Nov 20 09:53 ")
+ (position . 260))
+("gxweb56-snmp-aci.log"
+ (filename . "/cygdrive/c/ProgramData/Adtran/AccessIntegrator/gxweb56/log/gxweb56-snmp-aci.log")
+ (front-context-string . "SNMP Message (20")
+ (rear-context-string)
+ (position . 1))
+("proj_psi29"
+ (filename . "~/Documents/Wiki/worg/project_psi29.org")
+ (front-context-string . "* PSI#29 Prepara")
+ (rear-context-string . "[Prev-PSI]] | \n\n")
+ (position . 352))
+("ppt_135_head_nightly"
+ (filename . "/ssh:grfl0504.adtran.com:/vol2/jenkins/jobs/Team-G2-shelf135-head-ppt-nightly/builds/")
+ (front-context-string . "238\n  drwxr-xr-x")
+ (rear-context-string . "35 Jun  2  2016 ")
+ (position . 266))
+("ppt_152_head_nightly"
+ (filename . "/ssh:grfl0504.adtran.com:/vol2/jenkins/jobs/Team-G2-shelf152-head-ppt-nightly/builds/")
+ (front-context-string . "710\n  drwxr-xr-x")
+ (rear-context-string . "35 Aug 11 23:25 ")
+ (position . 266))
+("dir_cliCurrent"
+ (filename . "/cygdrive/c/Users/twirkner/Downloads/cli_cudoc_she_head_cxu-g1_o.g2_171542_4936/cli_cudoc_she_head/html/")
+ (front-context-string . "all.html\n  drwx-")
+ (rear-context-string . "1  4. Jul 00:09 ")
+ (position . 306))
+("proj_psi28"
+ (filename . "~/Documents/Wiki/worg/project_psi28.org")
+ (front-context-string . "* PSI#28 Prepara")
+ (rear-context-string . "rg][Next-PSI]]\n\n")
+ (position . 378))
+("proj_psi27"
+ (filename . "~/Documents/Wiki/worg/project_psi27.org")
+ (front-context-string . "* PSI#27 Prepara")
+ (rear-context-string . "rg][Next-PSI]]\n\n")
+ (position . 378))
+("proj_psi26"
+ (filename . "~/Documents/Wiki/worg/project_psi26.org")
+ (front-context-string . "\n[[file:project_")
+ (rear-context-string . " Project PSI#26\n")
+ (position . 300))
+("proj_psi25"
+ (filename . "~/Documents/Wiki/worg/project_psi25.org")
+ (front-context-string . "\n* PSI#25 Prepar")
+ (rear-context-string . "org][Next-PSI]]\n")
+ (position . 378))
+("proj_psi24"
+ (filename . "~/Documents/Wiki/worg/project_psi24.org")
+ (front-context-string . "\n* PSI#24 Prepar")
+ (rear-context-string . "org][Next-PSI]]\n")
+ (position . 378))
+("dir_perforceDpu"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_dpu_main-work/")
+ (front-context-string . "oss\n  drwxrwx---")
+ (rear-context-string . "0  3. Aug 11:36 ")
+ (position . 424))
+("proj_psi23"
+ (filename . "~/Documents/Wiki/worg/project_psi23.org")
+ (front-context-string . "# -*- coding: ut")
+ (rear-context-string)
+ (position . 1))
+("dir_OsaNe"
+ (filename . "~/Documents/OSA_NE/")
+ (front-context-string . "APS_NV8424.docx\n")
+ (rear-context-string . "7  4. Mrz 14:53 ")
+ (position . 266))
+("dir_perforceL2sIgmp"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_osane_48x10g_igmp/")
+ (front-context-string . "3rd\n  drwxrwx---")
+ (rear-context-string . "0 14. Jun 08:43 ")
+ (position . 237))
+("dir_perforcePma"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pma_main_virt/")
+ (front-context-string . "oss\n  drwxrwx---")
+ (rear-context-string . "0  5. Apr 14:51 ")
+ (position . 237))
+("proj_psi22"
+ (filename . "~/Documents/Wiki/worg/project_psi22.org")
+ (front-context-string)
+ (rear-context-string . "016-07-18 Mo>\n\n\n")
+ (position . 1))
+("dir_Desktop"
+ (filename . "/cygdrive/c/Users/twirkner/Desktop/")
+ (front-context-string . "Alte Firefox-Dat")
+ (rear-context-string . "0  6. Okt 08:07 ")
+ (position . 248))
+("proj_psi21"
+ (filename . "~/Documents/Wiki/worg/project_psi21.org")
+ (front-context-string . "#+TITLE: Project")
+ (rear-context-string . "ew:info toc:nil\n")
+ (position . 277))
+("dir_perforceMain"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_hix_main/")
+ (front-context-string . "*grep*.html\n  dr")
+ (rear-context-string . "1 19. Nov 09:01 ")
+ (position . 124))
+("dir_Music"
+ (filename . "/cygdrive/c/Users/twirkner/Music/")
+ (front-context-string . "ByteFM\n  -rwxrwx")
+ (rear-context-string . "0  5. Jun 2015  ")
+ (position . 423))
+("proj_psi20"
+ (filename . "~/Documents/Wiki/worg/project_psi20.org")
+ (front-context-string . "# -*- coding: ut")
+ (rear-context-string)
+ (position . 1))
+("proj_psi19"
+ (filename . "~/Documents/Wiki/worg/project_psi19.org")
+ (front-context-string . "* PSI#19 Prepara")
+ (rear-context-string . "rg][Next-PSI]]\n\n")
+ (position . 379))
+("proj_psi18"
+ (filename . "~/Documents/Wiki/worg/project_psi18.org")
+ (front-context-string . "# -*- coding: ut")
+ (rear-context-string)
+ (position . 1))
+("proj_psi17"
+ (filename . "~/Documents/Wiki/worg/project_psi17.org")
+ (front-context-string . "* PSI#17 Prepara")
+ (rear-context-string . "Project PSI#17\n\n")
+ (position . 302))
+("dir_perforcePpt"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_hix_ppt_virt/")
+ (front-context-string . "clobber_issues.t")
+ (rear-context-string . "4  5. Nov 08:14 ")
+ (position . 374))
+("dir_currMIB"
+ (filename . "~/Documents/hiXIPv6/mibs/MIB593/")
+ (front-context-string . "adsl-tc-mib.mib\n")
+ (rear-context-string . "7 28. Jun 2013  ")
+ (position . 276))
+("proj_psi16"
+ (filename . "~/Documents/Wiki/worg/project_psi16.org")
+ (front-context-string . "# -*- coding: ut")
+ (rear-context-string)
+ (position . 1))
+("proj_psi12"
+ (filename . "~/Documents/Wiki/worg/project_psi12.org")
+ (front-context-string . "* PSI#12 Backlog")
+ (rear-context-string . "ne by TR129)?\n\n\n")
+ (position . 1936879))
+("proj_psi09"
+ (filename . "~/Documents/Wiki/worg/project_psi09.org")
+ (front-context-string . "# -*- coding: ut")
+ (rear-context-string)
+ (position . 1))
+("proj_psi14"
+ (filename . "~/Documents/Wiki/worg/project_psi14.org")
+ (front-context-string . "# -*- coding: ut")
+ (rear-context-string)
+ (position . 1))
+("proj_psi15"
+ (filename . "~/Documents/Wiki/worg/project_psi15.org")
+ (front-context-string)
+ (rear-context-string . "2015-01-19 Mo>\n\n")
+ (position . 1))
+("proj_psi13"
+ (filename . "~/Documents/Wiki/worg/project_psi13.org")
+ (front-context-string . "* PSI13 Preparat")
+ (rear-context-string . " Project PSI13\n\n")
+ (position . 282))
+("proj_psi11"
+ (filename . "~/Documents/Wiki/worg/project_psi11.org")
+ (front-context-string)
+ (rear-context-string . " Project PSI11\n\n")
+ (position . 281))
+("proj_psi10"
+ (filename . "~/Documents/Wiki/worg/project_psi10.org")
+ (front-context-string . "#-*- coding: utf")
+ (rear-context-string)
+ (position . 1))
+("dir_Projects"
+ (filename . "~/Projects/")
+ (front-context-string . ".\n  drwxrwxrwx  ")
+ (rear-context-string . "096 2012-07-04  ")
+ (position . 133))
+("org-capture-last-stored"
+ (filename . "~/Documents/Wiki/worg/TODO.org")
+ (front-context-string . "** TODO Create a")
+ (rear-context-string . "Request via MCP\n")
+ (position . 9338044))
+("proj_hiXIPv6"
+ (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
+ (front-context-string . "IPv6\n\n\n* Create ")
+ (rear-context-string . "LE: Project hiX ")
+ (position . 268))
+("dir_hiXIPv6"
+ (filename . "~/Documents/hiXIPv6/")
+ (front-context-string . "2017.FSY_FC093_0")
+ (rear-context-string . "256 08-13 08:57 ")
+ (position . 278))
+("dir_Downloads"
+ (filename . "/cygdrive/c/Users/twirkner/Downloads/")
+ (front-context-string . "002_2009.pdf\n  -")
+ (rear-context-string . "2  6. Dez 2013  ")
+ (position . 266))
+("dir_Team-G2"
+ (filename . "/cygdrive/s/Org-Abl/CPDAS/Team G2/")
+ (front-context-string . "About_DSL.pdf\n  ")
+ (rear-context-string . "322 07-04 11:40 ")
+ (position . 274))
+("dir_Documents"
+ (filename . "/cygdrive/c/Users/twirkner/Documents/")
+ (front-context-string . "Review_PSI5-1\n  ")
+ (rear-context-string . "  0 11-23 16:55 ")
+ (position . 1958))
+("proj_cxu-g11"
+ (filename . "~/Documents/Wiki/worg/project_cxu-g11.org")
+ (front-context-string . "# -*- coding: is")
+ (rear-context-string)
+ (position . 1))
+("dir_CXU-G11"
+ (filename . "~/Documents/CXU-G11/")
+ (front-context-string)
+ (rear-context-string . "odes_hix_41.xls\n")
+ (position . 288))
+("twirkner"
+ (filename . "~/.emacs.d/twirkner.org")
+ (front-context-string . "#+TITLE: Tilo's ")
+ (rear-context-string)
+ (position . 1))
+("proj_r28.org"
+ (filename . "~/Documents/Wiki/worg/project_r28.org")
+ (front-context-string . "\n\n\n* Project R2.")
+ (rear-context-string)
+ (position . 1))
+("dir_hiXVectoring"
+ (filename . "~/Documents/hiXVectoring/")
+ (front-context-string . "12080033.jpg\n  -")
+ (rear-context-string . "340 08-23 11:57 ")
+ (position . 272))
+("proj_hiXVectoring"
+ (filename . "~/Documents/Wiki/worg/project_hixvectoring.org")
+ (front-context-string . "#-*- coding: utf")
+ (rear-context-string)
+ (position . 1))
+("bezeq_vinax_stuck"
+ (filename . "~/Desktop/Symptoms/hiX00063607/")
+ (front-context-string . "Bezeq sympton sa")
+ (rear-context-string . "849 01-19 08:15 ")
+ (position . 271))
+("Symptoms"
+ (filename . "~/Desktop/Symptoms/")
+ (front-context-string . "Bezeq network ou")
+ (rear-context-string . "  0 11-10 14:22 ")
+ (position . 262))
+("aps-r28m"
+ (filename . "//10.141.7.147/SCM_Release/saps/hix56xxr28m.36/")
+ (front-context-string . "000\n  drwxrwxrwx")
+ (rear-context-string . "  0 2010-03-22  ")
+ (position . 275))
+("merge-excel.org"
+ (filename . "~/Projects/python-excel/merge-excel.org")
+ (front-context-string . "* Function to me")
+ (rear-context-string)
+ (position . 1))
+("cxu-b"
+ ((filename . "x:/she_cxu-b/")
+  (front-context-string . "cs\n  -rw-rw-rw- ")
+  (rear-context-string . "  0 03-16 16:14 ")
+  (position . 243)))
+("coc_Agile"
+ ((filename . "~/Documents/coc_Agile/")
+  (front-context-string . "ATT_ReleasePlann")
+  (rear-context-string . "019 03-14 14:19 ")
+  (position . 266)))
+("she_dlv-03"
+ (filename . "v:/wt000780_r28m_aps_work/she_dlv-03/aps/")
+ (front-context-string . "cfg\n  drwxrwxrwx")
+ (rear-context-string . "s 0 02-02 14:14 ")
+ (position . 296))
+("ppe_r38m"
+ ((filename . "~/Documents/ppe_r38m/")
+  (front-context-string . "Review_R3 8M_FSp")
+  (rear-context-string . "384 06-16 15:09 ")
+  (position . 262)))
+("ip-dslam-r28"
+ ((filename . "q:/Org-Abl/ComFNADST2_shared/Entw/IP-DSLAM/R2.8/")
+  (front-context-string . "ATMN\n  drwxrwxrw")
+  (rear-context-string . "  0 12-15 16:27 ")
+  (position . 276)))
+("lib_dsl_api.h"
+ ((filename . "x:/cots_infineon/lib_dsl_api/src/include/lib_dsl_api.h")
+  (front-context-string . "/***************")
+  (rear-context-string)
+  (position . 1)))
+("aps-r28"
+ ((filename . "z:/acc_ne_release_11/hix56xx/r28/")
+  (front-context-string . "hix56xxr28.tar.g")
+  (rear-context-string . "246 12-17 11:27 ")
+  (position . 265)))
+("tst_regr"
+ ((filename . "x:/tst_regr/")
+  (front-context-string . "cm_tst\n  drwxrwx")
+  (rear-context-string . "  0 06-12 14:08 ")
+  (position . 239)))
+("she_iu_vdsl_cg"
+ ((filename . "v:/wt000780_r28_iu-cgd_work/she_iu_vdsl_cg/")
+  (front-context-string)
+  (rear-context-string . "  0 2006-06-14  ")
+  (position . 398)))
+("iu-vdsl-cg"
+ ((filename . "x:/she_iu_vdsl_cg/")
+  (front-context-string . "cs\n  drwxrwxrwx ")
+  (rear-context-string . "  0 2009-04-01  ")
+  (position . 245)))
+("iu-shdsl-cg"
+ ((filename . "x:/she_iu-shdsl-cg/")
+  (front-context-string . "cs\n  drwxrwxrwx ")
+  (rear-context-string . "  0 2007-07-13  ")
+  (position . 246)))
+("iu-adsl-cg"
+ ((filename . "x:/she_iu_adsl_cg/")
+  (front-context-string . "cs\n  drwxrwxrwx ")
+  (rear-context-string . "  0 2007-03-02  ")
+  (position . 245)))
+("startup.db_convert"
+ ((filename . "x:/she_ramdisk/Files/base/etc/startup.db_convert")
+  (front-context-string . "#!/bin/sh\n#=+cch")
+  (rear-context-string)
+  (position . 1)))
+("reports"
+ ((filename . "~/Documents/Wiki/worg/reports.org")
+  (front-context-string . "#+OPTIONS:   H:4")
+  (rear-context-string)
+  (position . 1)))
+("org-remember-last-stored"
+ (filename . "~/Documents/Wiki/worg/TODO.org")
+ (front-context-string . "** TODO Sprint R")
+ (rear-context-string . "U-B21, CXU-C2).\n")
+ (position . 1815702))
+("ST2_shared"
+ ((filename . "q:/Org-Abl/ComFNADST2_shared/Entw/")
+  (front-context-string . "1_SW_GPON\n  drwx")
+  (rear-context-string . "  0 01-28 08:11 ")
+  (position . 332)))
+("notes.org"
+ ((filename . "~/Documents/Wiki/worg/notes.org")
+  (front-context-string . "\n* Notes\n** QUOT")
+  (rear-context-string)
+  (position . 1)))
+("TODO.org"
+ ((filename . "~/Documents/Wiki/worg/TODO.org")
+  (rear-context-string)
+  (position . 228)))
+("JOURNAL.org"
+ ((filename . "~/Documents/Wiki/worg/JOURNAL.org")
+  (front-context-string . "* Journal\n** [20")
+  (rear-context-string)
+  (position . 2)))
+("ppe_r28"
+ ((filename . "~/Documents/ppe_r28/")
+  (front-context-string . "CLI\n  -rw-rw-rw-")
+  (rear-context-string . "  0 10-09 11:46 ")
+  (position . 247)))
+("kernel-2.4"
+ ((filename . "x:/she_kernel-2.4/")
+  (front-context-string . ".config\n  -r--r-")
+  (rear-context-string . "491 2008-02-05  ")
+  (position . 246)))
+("CP"
+ ((filename . "z:/she_doc/sys_asp/")
+  (front-context-string . "Common\n  -r--r--")
+  (rear-context-string . "  0 2008-01-17  ")
+  (position . 248)))
+("libliu"
+ ((filename . "x:/she_ramdisk/zebos7/libliu/")
+  (front-context-string . ".cmake.state\n  -")
+  (rear-context-string . "724 09-10 16:25 ")
+  (position . 258)))
+("CLI"
+ ((filename . "z:/she_doc/eng_asp/design/sw/CLI/all_cli_cmds_r28.txt")
+  (front-context-string . "CLI_Spec.doc\n  -")
+  (rear-context-string . "424 2007-10-17  ")
+  (position . 262)))
+("Effort_R27"
+ ((filename . "z:/she_doc/eng_asp/analyse/R2_7/effort_est/")
+  (front-context-string . "effort_est_R2.8_")
+  (rear-context-string . "664 05-15 15:25 ")
+  (position . 518)))
+("RTP_R27"
+ ((filename . "z:/she_doc/org_asp/RTP/R2_7/")
+  (front-context-string . "IU_SHDSL48_A2.mp")
+  (rear-context-string . "976 12-02 15:44 ")
+  (position . 538)))
+("aci_operlog"
+ ((filename . "c:/Program Files/Siemens AG/AccessIntegrator EM GX-LCT R2.5 Server/operlog/")
+  (front-context-string . "acis_emgx25_win3")
+  (rear-context-string . "52 Nov 29 15:37 ")
+  (position . 351)))
+("changes"
+ ((filename . "v:/wt000780_r28m_sip_work/she_cxu-b/cs/doc/changes_r28.txt")
+  (front-context-string . "################")
+  (rear-context-string)
+  (position . 1)))
+("config_spec"
+ ((filename . "x:/she_cxu-b/cs/she_cxu-b_02.ascs")
+  (front-context-string . "\nelement * CHECK")
+  (rear-context-string)
+  (position . 1)))
+("diary"
+ ((filename . "d:/wt000780/diary")
+  (front-context-string . "win32\n	set PATH=")
+  (rear-context-string . "D_HOST_TYPE=x86-")
+  (position . 193)))
+("ibs"
+ ((filename . "x:/she_ramdisk/eqm/eqmif.h")
+  (front-context-string . "    iu_32i4_e   ")
+  (rear-context-string . " (optical port)\n")
+  (position . 7807)))
+("load_comment"
+ ((filename . "x:/she_cxu-b/cs/load_comment.xml")
+  (front-context-string . "\n<LoadComment>\n ")
+  (rear-context-string . "ndalone=\"yes\"?>\n")
+  (position . 57)))
+("mibs"
+ ((filename . "x:/she_ramdisk/snmp/mibs/")
+  (front-context-string . ".index\n  -r--r--")
+  (rear-context-string . "92 Jan 26 15:13 ")
+  (position . 219)))
+("ramdisk"
+ ((filename . "x:/she_ramdisk/")
+  (front-context-string . "Files\n  drwxrwxr")
+  (rear-context-string . "  0 2006-07-12  ")
+  (position . 240)))
+("saps"
+ ((filename . "q:/lin-disk/l303disk/tftproot/wtl00780/saps/")
+  (front-context-string . "saps.hix56xxr251")
+  (rear-context-string . "603 09-20 11:57 ")
+  (position . 402)))
+)

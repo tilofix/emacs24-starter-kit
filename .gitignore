@@ -55,7 +55,7 @@ abbrev_defs
 scratch
 secret.org
 .emacs.desktop*
-.*~
+*~
 agent/*
 *.bak
 ## package directory
