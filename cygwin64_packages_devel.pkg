@@ -1,7 +1,7 @@
 gcc-g++
 make
 gdb
-emacs-25.2-0.1.src 
+emacs-25.2-1.src 
 emacs-el
 guile-2.0.14-1-src
 cygport
