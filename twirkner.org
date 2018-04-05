@@ -3437,6 +3437,9 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
   - (customize-variable 'org-confirm-babel-evaluate)
 - REPL (Inferior Emacs Lisp Mode) 
   - M-x ielm
+- Debugging Edebug
+  - C-u C-M-x ('eval-defun' with prefix argument)
+  - C-M-x ('eval-defun')
 - Profiler 
   - M-x profiler-start
   - Execute code in question
