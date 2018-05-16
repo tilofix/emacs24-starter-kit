@@ -2,7 +2,6 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-<<<<<<< HEAD
 (("dir_perforcePkgIgmpTme"
  (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pkg_igmp_tme_main/")
  (front-context-string . ".dockerignore\n  ")
@@ -18,13 +17,11 @@
  (front-context-string . "* PI#05 Backlog ")
  (rear-context-string . "s (Triage) \n\n\n\n\n")
  (position . 385))
-=======
-(("dir_ProjectSvGwdTest"
+("dir_ProjectSvGwdTest"
  (filename . "~/Projects/sv-gwd-tests@ADTRAN/")
  (front-context-string . ".gitignore\n  drw")
  (rear-context-string . "88 Feb 22 16:22 ")
  (position . 330))
->>>>>>> 6747630de5a2a8c6e8eed52ccaec4fadf2fca8b4
 ("proj_pi04"
  (filename . "~/Documents/Wiki/worg/project_pi04.org")
  (front-context-string . "* PI#04 Preparat")
