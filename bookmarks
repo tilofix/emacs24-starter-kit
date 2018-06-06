@@ -113,7 +113,7 @@
  (rear-context-string . "0 14. Jun 08:43 ")
  (position . 237))
 ("dir_perforcePma"
- (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pma_main_virt/")
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pmas_main/")
  (front-context-string . "oss\n  drwxrwx---")
  (rear-context-string . "0  5. Apr 14:51 ")
  (position . 237))

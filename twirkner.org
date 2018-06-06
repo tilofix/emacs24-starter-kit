@@ -2510,7 +2510,7 @@ Change back to yes and check of module =ox-confluence= is available.
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(;; other Babel languages
-     (sh . t)))
+     (shell . t)))
   
 #+END_SRC
 
