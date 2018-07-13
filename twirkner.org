@@ -3231,7 +3231,7 @@ Query file example from repository's homepage ~README.md~.
   #
   # Gets user timeline, formats JSON, shows response status and headers underneath
   #
-  GET http://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitterapi&count=2
+  GET https://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitterapi&count=2
   #
   # XML is supported - highlight, pretty-print
   #

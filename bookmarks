@@ -1,8 +1,13 @@
-;;;; Emacs Bookmark Format Version 1 ;;;;
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("dir_perforcePkgIgmpTme"
+(("proj_pi06"
+ (filename . "~/Documents/Wiki/worg/project_pi06.org")
+ (front-context-string . "* PI#06 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 398))
+("dir_perforcePkgIgmpTme"
  (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pkg_igmp_tme_main/")
  (front-context-string . ".dockerignore\n  ")
  (rear-context-string . "5 19. Sep 2016  ")
@@ -218,10 +223,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO DT's FTT")
- (rear-context-string . " \n#+END_EXAMPLE\n")
- (position . 9850162))
+ (filename . "~/Documents/Wiki/worg/JOURNAL.org")
+ (front-context-string . "** [2018-07-12 D")
+ (rear-context-string . "e (etcd/consul)\n")
+ (position . 1736772))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
