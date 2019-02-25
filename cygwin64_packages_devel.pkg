@@ -39,3 +39,4 @@ binutils
 gcc
 libxml2-devel
 libxslt-devel
+libzmq-devel
