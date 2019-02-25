@@ -2,7 +2,27 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi06"
+(("proj_pi09"
+ (filename . "~/Documents/Wiki/worg/project_pi09.org")
+ (front-context-string . "* PI#09 Preparat")
+ (rear-context-string . "t-PI]]\n\nPSI#36\n\n")
+ (position . 416))
+("proj_pi08"
+ (filename . "~/Documents/Wiki/worg/project_pi08.org")
+ (front-context-string . "* PI#08 Preparat")
+ (rear-context-string . "t-PI]]\n\nPSI#35\n\n")
+ (position . 406))
+("dir_osaA4"
+ (filename . "~/Documents/OSA_A4/")
+ (front-context-string . "6SDXNGPON2V-29D.")
+ (rear-context-string . "6  7. Aug 16:16 ")
+ (position . 266))
+("proj_pi07"
+ (filename . "~/Documents/Wiki/worg/project_pi07.org")
+ (front-context-string . "PSI#34\n\n* PI#07 ")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 398))
+("proj_pi06"
  (filename . "~/Documents/Wiki/worg/project_pi06.org")
  (front-context-string . "* PI#06 Preparat")
  (rear-context-string . "org][Next-PI]]\n\n")
@@ -107,7 +127,7 @@
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
-("dir_OsaNe"
+("dir_osaNE"
  (filename . "~/Documents/OSA_NE/")
  (front-context-string . "APS_NV8424.docx\n")
  (rear-context-string . "7  4. Mrz 14:53 ")
@@ -223,10 +243,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/JOURNAL.org")
- (front-context-string . "** [2018-07-12 D")
- (rear-context-string . "e (etcd/consul)\n")
- (position . 1736772))
+ (filename . "~/Documents/Wiki/worg/TODO.org")
+ (front-context-string . "** TODO Study ON")
+ (rear-context-string . "\n\n#+END_EXAMPLE\n")
+ (position . 1352081))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
