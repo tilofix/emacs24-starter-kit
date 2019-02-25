@@ -3489,6 +3489,26 @@ Org-mode Testing
 
 
 
+* Tilo's Keyboard Macros
+
+** Keyboard macro with name ~kdb-macro-org-heading-block~
+- navigating to the next heading <C-c C-n>
+- going to the next line <C-n>
+- setting the mark <C-SPC>
+- navigating to the next heading <C-c C-n>
+- executing command ~org-block_example-convert-region~
+
+#+CAPTION: A kbd marco for a org-buffer kdb-macro-org-heading-block
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (fset 'kbd-macro-org-headings-block
+        (lambda
+          (&optional arg)
+          "Keyboard macro."
+          (interactive "p")
+          (kmacro-exec-ring-item
+           (quote ([3 14 down 67108896 3 14 134217848 up f1] 0 "%d"))
+           arg)))
+#+END_SRC
 
 * Notes on running starter-kit branch tilofix-emacs24 on Fedora
 - issue with ~ox-confluence~ and path to =$ORG_HOME/contrib/lisp= directory 
