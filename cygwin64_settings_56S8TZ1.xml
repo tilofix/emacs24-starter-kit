@@ -4,12 +4,12 @@
     <RootInstallDir>C:\cygwin64</RootInstallDir>
     <LocalDir>D:\zip\cygwin-x86_64</LocalDir>
     <SetupExe>setup-x86_64.exe</SetupExe>
-    <CygwinSiteUrl>http://ftp.inf.tu-dresden.de/software/windows/cygwin32/</CygwinSiteUrl>
+    <CygwinSiteUrl>http://ftp-stud.hs-esslingen.de/pub/Mirrors/sources.redhat.com/cygwin/</CygwinSiteUrl>
   </Setup>
   <Other>
-    <PackageFile>cygwin64_packages.pkg</PackageFile>
     <!--
-    <PackageFile>cygwin64_packages_devel.pkg</PackageFile>
+    <PackageFile>cygwin64_packages.pkg</PackageFile>
         -->
+    <PackageFile>cygwin64_packages_devel.pkg</PackageFile>
   </Other>
 </Settings>
