@@ -7,9 +7,9 @@
     <CygwinSiteUrl>http://ftp-stud.hs-esslingen.de/pub/Mirrors/sources.redhat.com/cygwin/</CygwinSiteUrl>
   </Setup>
   <Other>
-    <!--
     <PackageFile>cygwin64_packages.pkg</PackageFile>
-        -->
+    <!--
     <PackageFile>cygwin64_packages_devel.pkg</PackageFile>
+        -->
   </Other>
 </Settings>
