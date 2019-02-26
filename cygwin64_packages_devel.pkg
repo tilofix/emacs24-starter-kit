@@ -1,11 +1,11 @@
-# Only beinning of line comments supported
+# Only beginning of line comments supported
 # For Emacs Development
 gcc-g++
 make
 gdb
-emacs-25.2-0.1.src 
+emacs-25.3-1-src 
 emacs-el
-guile-2.0.14-1-src
+guile-2.0.14-2-src
 cygport
 libtiff-devel
 libgif-devel
