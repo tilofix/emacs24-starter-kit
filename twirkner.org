@@ -3524,7 +3524,7 @@ Org-mode Testing
            arg)))
 #+END_SRC
 
-* Notes on running starter-kit branch tilofix-emacs24 on Fedora
+* Tilo's Notes on running starter-kit branch tilofix-emacs24 on Fedora
 - issue with ~ox-confluence~ and path to =$ORG_HOME/contrib/lisp= directory 
 - issue with missing directory =~/Documents/Wiki/org= 
 - issue with ~org-eww~ and missing packages? 
@@ -3582,3 +3582,55 @@ which uses following files:
   which is up-to-now to be executed manually 
   with command ~patch -p1 < ~/.emacs.d/cygwin64_etc_nsswitch.conf.patch~ 
   executed under ~/~.
+
+* Tilo's Backup of custom.el
+Not every entry in ~custom-set-variables~ 
+is generated out of this org-file ~twirkner.org~. 
+Let's have a copy with timestamp.
+
+#+CAPTION: Copy of custom.el from [2019-02-26 Di]
+#+BEGIN_SRC emacs-lisp :tangle no
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(Info-additional-directory-list
+     (quote
+      ("~/share/info" "c:/cygwin/usr/share/info" "~/.emacs.d/src/org/doc")))
+   '(ange-ftp-ftp-program-name "c:/cygwin/bin/ftp.exe")
+   '(ange-ftp-gateway-ftp-program-name "c:/cygwin/bin/ftp.exe")
+   '(calendar-intermonth-text
+     (quote
+      (propertize
+       (format "%2d"
+               (car
+                (calendar-iso-from-absolute
+                 (calendar-absolute-from-gregorian
+                  (list month day year)))))
+       (quote font-lock-face)
+       (quote font-lock-function-name-face))))
+   '(calendar-week-start-day 1)
+   '(ispell-extra-args (quote ("--sug-mode=ultra")))
+   '(ispell-list-command "list")
+   '(ispell-program-name "aspell")
+   '(line-number-display-limit-width 600)
+   '(message-send-mail-function (quote message-send-mail-with-outlook))
+   '(org-file-apps
+     (quote
+      ((auto-mode . emacs)
+       ("\\.mm\\'" . default)
+       ("\\.x?html?\\'" . system)
+       ("\\.pdf\\'" . default))))
+   '(package-selected-packages
+     (quote
+      (ein ipython ipython-shell-send ob-ipython yang-mode elnode yasnippet yaml-mode rust-mode restclient markdown-mode magit json-mode js2-mode gnuplot)))
+   '(sentence-end-double-space nil)
+   '(shell-mode-hook (prefer-coding-system (quote utf-8))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+#+END_SRC
