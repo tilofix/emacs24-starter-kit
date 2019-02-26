@@ -275,14 +275,12 @@ don't set these variables.
 Have a look below for environment variable =PYMACS_PYTHON=.
 #+begin_src emacs-lisp :tangle yes
   ; Set python-interpreter to be used.
-  (if (eq system-type 'windows-nt)
+  (if (eq system-type 'cygwin)
       (custom-set-variables
        ; For python-mode.el
-       '(python-python-command "python2.7" t)
-       ; Don't know any more, maybe pymacs?
-       '(py-python-command "python2.7" t)
+       '(py-shell-name "python3")
        ; For python.el
-       '(python-shell-interpreter "python2.7" t)
+       '(python-shell-interpreter "python3")
        )
     )
   ; Enable python as a org-babel language.
@@ -290,7 +288,6 @@ Have a look below for environment variable =PYMACS_PYTHON=.
    'org-babel-load-languages
    '((python . t))
    )
-  
 #+end_src
 
 Now it is working with Python-2.5
@@ -330,8 +327,16 @@ VERSION
 >>> 
 #+end_example
 
-*** Enable Pymacs support
+*** Enable Pymacs support (temporally disabled to introduce Python 3)
 Quickstart: http://wiki.python.de/Pymacs
+
+~pymacs~ seems not to be supported with python3:
+#+BEGIN_EXAMPLE
+  56S8TZ1[.emacs.d]$ pip3 install pymacs
+  Collecting pymacs
+    Could not find a version that satisfies the requirement pymacs (from versions: )
+  No matching distribution found for pymacs
+#+END_EXAMPLE
 
 **** Insatll Pymacs module for Python
 #+begin_example
@@ -388,7 +393,7 @@ included in Python module, only local copy.
 Documentation can be found is ReST
 [[file:~/Projects/Pymacs/pymacs.rst::..%20role::%20code(strong)][file:~/Projects/Pymacs/pymacs.rst::.. role:: code(strong)]]. 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ; (load "c:\python25\lib\site-packages\pymacs-0.23-py2.5.egg")
   (require 'pymacs)
   (eval-after-load "pymacs"
@@ -464,7 +469,6 @@ Debugger entered--Lisp error: (void-variable python-python-command)
   #[nil "...full of back-slash numbers..." [init-file-user system-type user-init-file-1 user-init-file otherfile source ms-dos "~" "/_emacs" windows-nt directory-files nil "^\\.emacs\\(\\.elc?\\)?$" "~/.emacs" "^_emacs\\(\\.elc?\\)?$" "~/_emacs" "/.emacs" t load expand-file-name "init" file-name-as-directory "/.emacs.d" file-name-extension "elc" file-name-sans-extension ".el" file-exists-p file-newer-than-file-p message "Warning: %s is newer than %s" sit-for 1 "default" alt inhibit-default-init inhibit-startup-screen] 7]()
   command-line()
   normal-top-level()
-
 #+END_EXAMPLE
 
 Indeed function =custom-set-variables= only stores an expression
@@ -491,10 +495,33 @@ handle SYMBOL properly.
 
 COMMENT is a comment string about SYMBOL.
 
-
 ***** NOW, pymacs works after start-up
 Please see changed customization for =python-python-command=.
 
+** IPython
+IPython is installed via emac's package manager.
+See [[*Packages to be installed by package][selected-packages]] to be installed.
+
+By the way, jupyter is an interesting thing 
+which is somehow also supported by emacs
+and has [[https://nbviewer.jupyter.org/][notbook viewer]] based on GitHub.
+
+IPython can be executed via command [[help:run-ipython][run-ipython]].
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (custom-set-variables
+   '(ipython-command "ipython3")
+   )
+  (require 'ipython)
+#+END_SRC
+
+[2019-02-26 Di] I cannot make function ~py-shell~ 
+starting up ~ipython3~ instead of ~python3~. 
+Somehow it might be related to the fact, 
+variable ~py-shell-name~ is made a [[help:make-variable-buffer-local][make-variable-buffer-local]].
+Furthermore the error message when start ~python3~ "NameError: name 'olors' is not defined"
+might be caused by ~ipython~ setting variable ~py-python-command-args~ 
+for ~ipython3~. ~python3~ has no command line switch ~-colors LightBG~.
 
 ** Setting up org-mode
 Don't need to check for running org-mode as org-mode is up and running
@@ -3425,8 +3452,8 @@ from ~custom.el~ which is not under source control.
   (custom-set-variables
    '(package-selected-packages
      (quote
-      (ein ipython ipython-shell-send ob-ipython yang-mode elnode yasnippet yaml-mode rust-mode restclient markdown-mode magit json-mode js2-mode gnuplot))))
-  (package-install-selected-packages)
+      (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode ipython-shell-send ipython helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein))))
+  (package-install-selected-packages); delays startup 
 #+END_SRC
 
 
