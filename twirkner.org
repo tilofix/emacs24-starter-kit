@@ -2301,52 +2301,56 @@ up tp 200 MByte. Just switch off loading pymacs for outlook.
 
 **** Install pywin32
 
-Python extensions for Microsoft Windows
-Provides access to much of the Win32 API, the
-ability to create and use COM objects, and the
-Pythonwin environment.
+#+BEGIN_EXAMPLE
+  Python extensions for Microsoft Windows
+  Provides access to much of the Win32 API, the
+  ability to create and use COM objects, and the
+  Pythonwin environment.
 
-    Author: Mark Hammond (et al)
-    Author_email: mhammond@users.sourceforge.net
-    Description: Python for Window Extensions
-    Name: pywin32
-    Url: http://sourceforge.net/projects/pywin32/
-    Version: 217
+      Author: Mark Hammond (et al)
+      Author_email: mhammond@users.sourceforge.net
+      Description: Python for Window Extensions
+      Name: pywin32
+      Url: http://sourceforge.net/projects/pywin32/
+      Version: 217
 
-Copied pythoncom25.dll to C:\WINDOWS\system32\pythoncom25.dll
-Copied pywintypes25.dll to C:\WINDOWS\system32\pywintypes25.dll
-Registered: Python.Interpreter 
-Registered: Python.Dictionary 
-Registered: Python 
--> Software\Python\PythonCore\2.5\Help[None]=None
--> Software\Python\PythonCore\2.5\Help\Pythonwin Reference[None]='C:\\Python25\\Lib\\site-packages\\PyWin32.chm'
-Pythonwin has been registered in context menu
-Creating directory C:\Python25\Lib\site-packages\win32com\gen_py
-Shortcut for Pythonwin created
-Shortcut to documentation created
-The pywin32 extensions were successfully installed.
+  Copied pythoncom25.dll to C:\WINDOWS\system32\pythoncom25.dll
+  Copied pywintypes25.dll to C:\WINDOWS\system32\pywintypes25.dll
+  Registered: Python.Interpreter 
+  Registered: Python.Dictionary 
+  Registered: Python 
+  -> Software\Python\PythonCore\2.5\Help[None]=None
+  -> Software\Python\PythonCore\2.5\Help\Pythonwin Reference[None]='C:\\Python25\\Lib\\site-packages\\PyWin32.chm'
+  Pythonwin has been registered in context menu
+  Creating directory C:\Python25\Lib\site-packages\win32com\gen_py
+  Shortcut for Pythonwin created
+  Shortcut to documentation created
+  The pywin32 extensions were successfully installed.
+#+END_EXAMPLE
 
 **** Log of first call
-Skipping unmodified file d:/wt000780/Documents/Wiki/org/reports.org
-Saving file d:/wt000780/Documents/Wiki/org/reports.org...
-Wrote d:/wt000780/Documents/Wiki/org/reports.org
-Publishing file d:/wt000780/Documents/Wiki/org/reports.org using `org-publish-org-to-html-outlook-mail'
-Exporting...
-Loading d:/wt000780/.emacs.d/src/cedet/semantic/semanticdb-file.el (source)...done
-Exporting...
-Saving file d:/wt000780/public_html/outlook/reports.html...
-Wrote d:/wt000780/public_html/outlook/reports.html
-HTML export done, pushed to kill ring and clipboard
-Mark set
-pymacs-report-error: Python: Traceback (most recent call last):
-  File "build\bdist.win32\egg\Pymacs\pymacs.py", line 147, in loop
-    value = eval(text)
-  File "<string>", line 1, in <module>
-  File "d:/wt000780/.emacs.d/src\outlook.py", line 21, in publish_html_to_outlook_mail
-    item.HTMLBody = a_html_buffer
-  File "C:\Python25\lib\site-packages\win32com\client\dynamic.py", line 554, in __setattr__
-    self._oleobj_.Invoke(entry.dispid, 0, invoke_type, 0, value)
-TypeError: Objects of type 'Buffer' can not be converted to a COM VARIANT (but obtaining the buffer() of this object could)
+#+BEGIN_EXAMPLE
+  Skipping unmodified file d:/wt000780/Documents/Wiki/org/reports.org
+  Saving file d:/wt000780/Documents/Wiki/org/reports.org...
+  Wrote d:/wt000780/Documents/Wiki/org/reports.org
+  Publishing file d:/wt000780/Documents/Wiki/org/reports.org using `org-publish-org-to-html-outlook-mail'
+  Exporting...
+  Loading d:/wt000780/.emacs.d/src/cedet/semantic/semanticdb-file.el (source)...done
+  Exporting...
+  Saving file d:/wt000780/public_html/outlook/reports.html...
+  Wrote d:/wt000780/public_html/outlook/reports.html
+  HTML export done, pushed to kill ring and clipboard
+  Mark set
+  pymacs-report-error: Python: Traceback (most recent call last):
+    File "build\bdist.win32\egg\Pymacs\pymacs.py", line 147, in loop
+      value = eval(text)
+    File "<string>", line 1, in <module>
+    File "d:/wt000780/.emacs.d/src\outlook.py", line 21, in publish_html_to_outlook_mail
+      item.HTMLBody = a_html_buffer
+    File "C:\Python25\lib\site-packages\win32com\client\dynamic.py", line 554, in __setattr__
+      self._oleobj_.Invoke(entry.dispid, 0, invoke_type, 0, value)
+  TypeError: Objects of type 'Buffer' can not be converted to a COM VARIANT (but obtaining the buffer() of this object could)
+#+END_EXAMPLE
 
 *** Link Adtran-Jira in org-mode
 With help of org-modes' link abbreviation.
@@ -3141,7 +3145,7 @@ Under Windows, tramp is integrated with the PuTTY package, using the ~plink~ pro
 #+BEGIN_SRC emacs-lisp
   (if (eq system-type 'windows-nt)
       (progn
-        (setenv "PATH" (concat "C:\\Program Files\\PuTTY;" (getenv "PATH")))
+        (setenv "PATH" (concat "C:\\Program Files (x86)\\PuTTY;" (getenv "PATH")))
         ))
 #+END_SRC
 
@@ -3409,6 +3413,23 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
 #+END_SRC
 
 
+** Packages to be installed by package
+According to help for variable [[help:package-selected-packages][package-selected-packages]] 
+this list of selected packages could be installed 
+when calling ~package-install-selected-packages~. 
+
+List of selected packages has been copied 
+from ~custom.el~ which is not under source control.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (custom-set-variables
+   '(package-selected-packages
+     (quote
+      (ein ipython ipython-shell-send ob-ipython yang-mode elnode yasnippet yaml-mode rust-mode restclient markdown-mode magit json-mode js2-mode gnuplot))))
+  (package-install-selected-packages)
+#+END_SRC
+
+
 * Tilo's Favourit Key Combinations
 
 - Edebug
@@ -3454,7 +3475,6 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
   - M-x re-builder
 
 * Tilo's Notes on Testing Org Functions
-
 Emacs-Lisp Testing
 - Overview on unit testing of emacs-lisp scripts: 
   [[http://www.emacswiki.org/emacs/UnitTesting][Unit Testing in we]].
@@ -3484,13 +3504,7 @@ Org-mode Testing
   do "M-x ert RET test-org/org-link-escape-ascii-character-demo-of-fail RET" 
   was successful. 
 
-
-
-
-
-
 * Tilo's Keyboard Macros
-
 ** Keyboard macro with name ~kdb-macro-org-heading-block~
 - navigating to the next heading <C-c C-n>
 - going to the next line <C-n>
@@ -3541,3 +3555,30 @@ Org-mode Testing
   magit              20171018.628  installed             A Git porcelain inside Emacs
   yang-mode          20170323.1104 installed             major mode for editing YANG files
 #+END_EXAMPLE
+
+* Tilo's Notes on a fresh Install of Cygwin64
+Installation of cygwin is a little automated 
+by powershell script ~cygwin64_update.ps1~ 
+which uses following files:
+- ~cygwin64_settings_56S8TZ1.xml~ : 
+  contains definitions of "my" laptop at work
+- ~cygwin64_settings_EGON-10.xml~ : 
+  contains definitions of my desktop at home
+- ~cygwin64_packages.pkg~ : 
+  list of packages required for daily work
+- ~cygwin64_packages_devel.pkg~ : 
+  list of packages required for development work
+  which has once been to compile emacs and guile
+  and which is often to install python packages via pip
+- ~cygwin64_pip_requirements.pkg~ : 
+  list of python packages for daily work 
+  which is up-to-now to be executed manually 
+  with command ~pip3 install -r cygwin64_pip_requirements.pkg~
+  executed anywhere, for instance ~$HOME~.
+- ~cygwin64_etc_nsswitch.conf.patch~ : 
+  a patch to turn a user's home directory 
+  from ~/home/%U~ to ~/cygdrive/d/%U~ 
+  after a fresh installation of cygwin64 
+  which is up-to-now to be executed manually 
+  with command ~patch -p1 < ~/.emacs.d/cygwin64_etc_nsswitch.conf.patch~ 
+  executed under ~/~.
