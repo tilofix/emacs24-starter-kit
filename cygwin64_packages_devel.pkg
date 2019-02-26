@@ -1,7 +1,6 @@
 # Only beginning of line comments supported
 # For Emacs Development
 gcc-g++
-make
 gdb
 emacs-25.3-1-src 
 emacs-el
@@ -38,8 +37,6 @@ calm
 # For ???
 mercurial
 autoconf
-binutils
-gcc
 # For YANG-Explorer
 libxml2-devel
 libxslt-devel
