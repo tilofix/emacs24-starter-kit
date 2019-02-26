@@ -1,3 +1,4 @@
+# Only beginning of line comments supported
 xinit
 emacs-w32
 git
@@ -8,12 +9,15 @@ texlive-collection-langgerman
 texlive-collection-latexextra
 texmaker
 texinfo
-python3-pip
-python3-devel
+python36-pip
+python36-devel
+python36-virtualenv
 net-snmp-utils
 perl-net-snmp
 curl
 libcurl-devel
 openssl-devel
 graphviz
-python3-virtualenv
+python3-ipython
+# Required for pip3 install -r cygwin64_pip_requirements.pkg
+gcc-core
