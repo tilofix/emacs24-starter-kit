@@ -523,6 +523,7 @@ Furthermore the error message when start ~python3~ "NameError: name 'olors' is n
 might be caused by ~ipython~ setting variable ~py-python-command-args~ 
 for ~ipython3~. ~python3~ has no command line switch ~-colors LightBG~.
 
+
 ** Setting up org-mode
 Don't need to check for running org-mode as org-mode is up and running
 when org-babel reads and tangles this file.
@@ -3192,9 +3193,13 @@ DIRED displays wrong files created by Windows with Umlaut;
 - UTF-8: ~SoC_Erg?nzung_TS 0373_96 Teil 4_MSAN_CL_V5 _0_20082012.xls~
 - ISO-8859-1: ~SoC_Ergänzung_TS 0373_96 Teil 4_MSAN_CL_V5 _0_20082012.xls~
 
+SHELL displays wrong help text with german Umlaut
+- customize variable to set coding-system when shell is called.
+
 #+BEGIN_SRC emacs-lisp
   (prefer-coding-system 'iso-8859-1)
-  
+  (custom-set-variables
+   '(shell-mode-hook (prefer-coding-system (quote utf-8))))
 #+END_SRC
 
 
@@ -3452,7 +3457,7 @@ from ~custom.el~ which is not under source control.
   (custom-set-variables
    '(package-selected-packages
      (quote
-      (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode ipython-shell-send ipython helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein))))
+      (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein))))
   (package-install-selected-packages); delays startup 
 #+END_SRC
 
