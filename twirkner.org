@@ -508,7 +508,7 @@ and has [[https://nbviewer.jupyter.org/][notbook viewer]] based on GitHub.
 
 IPython can be executed via command [[help:run-ipython][run-ipython]].
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+BEGIN_SRC emacs-lisp :tangle no
   (custom-set-variables
    '(ipython-command "ipython3")
    )
