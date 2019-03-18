@@ -1,0 +1,5 @@
+# Only beginning of line comments supported
+# Required for pip3 install -r cygwin64_pip_requirements.pkg
+gcc-core
+# Required for pip install ryu
+libcrypt-devel

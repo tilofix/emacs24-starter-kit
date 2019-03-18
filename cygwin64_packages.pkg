@@ -19,8 +19,8 @@ libcurl-devel
 openssl-devel
 graphviz
 python3-ipython
-# Required for pip3 install -r cygwin64_pip_requirements.pkg
-gcc-core
 # Required for patching /etc/nsswich.conf after fresh cygwin64 installation
 patch
 make
+# Want to get Jello Dashboard code
+svn

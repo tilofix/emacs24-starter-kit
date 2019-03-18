@@ -36,10 +36,11 @@ else {
 
 # Run your code that needs to be elevated here
 
+# http://stackoverflow.com/questions/1183183/path-of-currently-executing-powershell-script#1183197
 $PathToThisScript = Split-Path $SCRIPT:MyInvocation.MyCommand.Path -parent
 
 $SettingsXml = "cygwin64_settings_$($ENV:computername).xml"
-$PathToSettingsXml = Join-Path -Path $PathToThisScript $SettingsXml
+$PathToSettingsXml = Join-Path -Path $PathToThisScript -ChildPath $SettingsXml
 # http://exchangeserverpro.com/using-xml-settings-file-powershell-scripts/
 [xml]$SettingsFile = Get-Content $PathToSettingsXml 
 
@@ -56,10 +57,10 @@ $CygwinSiteUrl = $SettingsFile.Settings.Setup.CygwinSiteUrl.Trim()
 # has been removed, with the focus of the project 
 # shifting solely on maintaining the Cygwin distribution." 
 
-$PackagesTxt = $SettingsFile.Settings.Other.PackageFile.Trim()
-# http://stackoverflow.com/questions/1183183/path-of-currently-executing-powershell-script#1183197
-$PathToPackagesTxt = Join-Path -Path $PathToThisScript -ChildPath $PackagesTxt 
-$InstallPackages = Get-Content -Path $PathToPackagesTxt | ForEach-Object {if($_ -match '^[^#]') {Write-Output "--packages $_"}}
+$PackagesTxt = $SettingsFile.Settings.PackageFiles
+$PathsToPackagesTxt = $PackagesTxt.ChildNodes | ForEach-Object {if($_.Name -match 'PackageFile') {Join-Path -Path $PathToThisScript -ChildPath $_.InnerText}}
+$InstallPackages = ForEach-Object {Get-Content -Path $_} -InputObject $PathsToPackagesTxt | ForEach-Object {if($_ -match '^[^#]') {Write-Output "--packages $_"}}
+
 $SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl $InstallPackages"
 
 # http://stackoverflow.com/questions/16906170/create-directory-if-it-does-not-exist#16911470

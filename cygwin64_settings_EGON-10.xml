@@ -6,7 +6,7 @@
     <SetupExe>setup-x86_64.exe</SetupExe>
     <CygwinSiteUrl>http://gd.tuwien.ac.at/gnu/cygwin/</CygwinSiteUrl>
   </Setup>
-  <Other>
+  <PackageFiles>
     <PackageFile>cygwin64_packages.pkg</PackageFile>
-  </Other>
+  </PackageFiles>
 </Settings>
