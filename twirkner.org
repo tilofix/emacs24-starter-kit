@@ -281,6 +281,7 @@ Have a look below for environment variable =PYMACS_PYTHON=.
        '(py-shell-name "python3")
        ; For python.el
        '(python-shell-interpreter "python3")
+       '(python-shell-interpreter-args "-i -c \"import IPython; IPython.embed()\""))
        )
     )
   ; Enable python as a org-babel language.
@@ -522,6 +523,10 @@ variable ~py-shell-name~ is made a [[help:make-variable-buffer-local][make-varia
 Furthermore the error message when start ~python3~ "NameError: name 'olors' is not defined"
 might be caused by ~ipython~ setting variable ~py-python-command-args~ 
 for ~ipython3~. ~python3~ has no command line switch ~-colors LightBG~.
+
+[2019-03-21 Do] I could not fix the IPython issue with package ~ipython~.
+Solution is to add command line switch to variable [[help:python-shell-interpreter-args][python-shell-interpreter-args]]
+to import IPython at startup by exectuing python code ~import IPython; IPython.embed()~.
 
 
 ** Setting up org-mode
