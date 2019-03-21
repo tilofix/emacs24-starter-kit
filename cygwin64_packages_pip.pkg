@@ -3,3 +3,8 @@
 gcc-core
 # Required for pip install ryu
 libcrypt-devel
+# Required for lxml (from pyang->-r .emacs.d/cygwin64_pip_requirements.pkg (line 9))
+libxml2-devel
+libxslt-devel
+# Required for pyzmq>=17 (from notebook->jupyter->-r .emacs.d/cygwin64_pip_requirements.pkg (line 16))
+libzmq-devel
