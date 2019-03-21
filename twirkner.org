@@ -281,7 +281,7 @@ Have a look below for environment variable =PYMACS_PYTHON=.
        '(py-shell-name "python3")
        ; For python.el
        '(python-shell-interpreter "python3")
-       '(python-shell-interpreter-args "-i -c \"import IPython; IPython.embed()\""))
+       '(python-shell-interpreter-args "-i -c \"import IPython; IPython.embed()\"")
        )
     )
   ; Enable python as a org-babel language.
