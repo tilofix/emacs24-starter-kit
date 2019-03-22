@@ -528,6 +528,22 @@ for ~ipython3~. ~python3~ has no command line switch ~-colors LightBG~.
 Solution is to add command line switch to variable [[help:python-shell-interpreter-args][python-shell-interpreter-args]]
 to import IPython at startup by exectuing python code ~import IPython; IPython.embed()~.
 
+I also run in trouble playing around with Jupyter 
+which installs IPython 5.x, currently installed via Cygwin 64 is Ipython 4.x.
+Starting with IPython 5.x I will run in trouble with this IPython setup
+due to IPython is changing from ~readline~ to ~prompt-toolkit~. 
+I learnt this in post [[https://stackoverflow.com/questions/38659721/ipython-5-0-and-key-bindings-in-console][IPython 5.0 and key bindings in console]].
+Then I wil get following error message 
+when IPython runs in an shell controlled by an Emacs buffer:
+"WARNING: your terminal doesn't support cursor position requests (CPR)."
+
+[2019-03-22 Fr] Just today it looks as I found a solution 
+in post "[[https://stackoverflow.com/questions/51169655/integrating-jupyter-notebook-ipython-into-org-mode-notebook][Integrating jupyter notebook (ipython) into org-mode notebook]]" 
+for the problem eventually arises with IPython 5.x:
+=(setq org-babel-python-command "ipython3 --no-banner --classic --no-confirm-exit")=
+
+By the way this is worth to be keept in mind:
+"[[http://kitchingroup.cheme.cmu.edu/blog/2017/01/21/Exporting-org-mode-to-Jupyter-notebooks/][Exporting org-mode to Jupyter notebooks]]".
 
 ** Setting up org-mode
 Don't need to check for running org-mode as org-mode is up and running

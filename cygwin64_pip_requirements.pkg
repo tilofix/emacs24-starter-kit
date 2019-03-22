@@ -7,3 +7,5 @@ pysnmp
 rst2html5
 # For Review of YANG models
 pyang
+# Learnt from docs.python-guide.org
+pipenv
