@@ -545,6 +545,7 @@ for the problem eventually arises with IPython 5.x:
 By the way this is worth to be keept in mind:
 "[[http://kitchingroup.cheme.cmu.edu/blog/2017/01/21/Exporting-org-mode-to-Jupyter-notebooks/][Exporting org-mode to Jupyter notebooks]]".
 
+
 ** Setting up org-mode
 Don't need to check for running org-mode as org-mode is up and running
 when org-babel reads and tangles this file.
@@ -2493,9 +2494,13 @@ Change back to yes and check of module =ox-confluence= is available.
       ;; Protect single brackets as they are meta character for links in JIRA.
       ;; plain-text seems to be never called for a link including two opening brackets.
       (replace-regexp-in-string
-      "\\[\\([ -:[:alnum:]]+\\)\\]"
-      "\\\\[\\1\\\\]" 
-      text) )
+       "\\[\\([ -:[:alnum:]]+\\)\\]"
+       "\\\\[\\1\\\\]"
+       ;; Protect single curly braces as they are meta character for blocks in JIRA
+       (replace-regexp-in-string
+        "\\([{}]\\)"
+        "\\\\\\1" 
+        text)) )
 
   ;;;; Timestamp
 
@@ -2556,6 +2561,27 @@ Change back to yes and check of module =ox-confluence= is available.
 
 #+RESULTS:
 : ox-jira
+
+**** Specific JIRA exports
+Following specific JIRA exports are implemented
+- code and verbatim
+  - ~verbatim text~ and =also verbatim text=
+  - =verbatim with a { between text=
+  - and code block
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (browse-url "file:///c:/cygwin64/usr/share/doc/git/html/user-manual.html")
+    #+END_SRC
+  - and example block
+    #+BEGIN_EXAMPLE
+      56S8TZ1[.emacs.d]$ ls
+    #+END_EXAMPLE
+- plain-text
+  - {a text within curly braces} 
+  - {{ a text within double curly braces }} 
+  - [a text in brackets]
+  - (a text in parenthesis)
+- timestamp, which uses plain-text
+  - An org-mode's time stamp: [2019-03-25 Mo]
 
 *** Org-babel language
 #+BEGIN_SRC emacs-lisp
