@@ -2465,7 +2465,9 @@ Change back to yes and check of module =ox-confluence= is available.
       :type 'integer)
 
     (org-export-define-derived-backend 'jira 'confluence
-      :export-block '("JIRA")
+    ;; With new ORG-Version 9.2.3
+    ;; org-export-define-derived-backend: Unknown keyword: :export-block
+    ;  :export-block '("JIRA")
       :menu-entry
       '(?i "Export to JIRA"
            ((?I "As JIRA buffer" org-jira-export-as-jira-buffer)
@@ -2847,6 +2849,22 @@ for modules from =$ORG_HOME/contrib/lisp= directory)
 
 #+RESULTS:
 : org-eww
+
+*** Export to reStructuredText
+    [2019-04-09 Di]
+
+Found [[https://github.com/msnoigrs/ox-rst][reStructuredText Back-End for Org Export Engine]] 
+which is also part of melpa installed in ~ox-rst-20180315.13/~.
+
+According to the project's README.org it "relies on the Org-mode 9.0 export framework."
+Used as a trigger to change from =org-tilofix_release_8.3.6= to =org-tilofix_release_9.2.3=.
+Surprisingly in list of packages it requires: emacs-24.4, org-8.2.4!?
+
+Added ~ox-rst~ to list of [[*Packages to be installed by package][packages to be installed by package]]. 
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'ox-rst)
+#+END_SRC
 
 
 ** Calendar
@@ -3504,7 +3522,7 @@ from ~custom.el~ which is not under source control.
   (custom-set-variables
    '(package-selected-packages
      (quote
-      (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein))))
+      (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein ox-rst))))
   (package-install-selected-packages); delays startup 
 #+END_SRC
 
