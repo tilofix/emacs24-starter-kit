@@ -283,6 +283,12 @@ So change to Python2.5.
 As long as there is no separate python installation, 
 don't set these variables.
 Have a look below for environment variable =PYMACS_PYTHON=.
+
+Change from ~IPython.embed()~ to ~IPython.start_ipython()~
+to overcome issue described years ago here: 
+[[https://github.com/ipython/ipython/issues/62][Global variables undefined in interactive use of embedded ipython shell #62]].
+A variable defined in global scope has not been accessible 
+in scope of a list comprehension. 
 #+begin_src emacs-lisp :tangle yes
   ; Set python-interpreter to be used.
   (if (eq system-type 'cygwin)
@@ -291,7 +297,7 @@ Have a look below for environment variable =PYMACS_PYTHON=.
        '(py-shell-name "python3")
        ; For python.el
        '(python-shell-interpreter "python3")
-       '(python-shell-interpreter-args "-i -c \"import IPython; IPython.embed()\"")
+       '(python-shell-interpreter-args "-i -c \"import IPython; IPython.start_ipython(); raise SystemExit\"")
        )
     )
   ; Enable python as a org-babel language.
