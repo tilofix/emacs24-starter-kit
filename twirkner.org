@@ -8,6 +8,16 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 My config.
 
+** Changes done to move from org-8/Emacs-24 to org-9
+
+In some version the default of tangling source code blocks
+seemed to have changed from ~:tangle yes~ to ~:tangle no~. 
+
+Replace all ~begin_src emacs-lisp~ with ~begin_src emacs-lisp :tangle yes~.
+
+Detected by tool-bar and menu-bar has not be disabled
+because =(starter-kit-load "misc-recommended")= has not been tangled.
+
 ** Changes done to move from org-7/Emacs-23 to org-8/Emacs-24
 
 New environment variable necessary =ORG_HOME=.
@@ -42,7 +52,7 @@ Disabled modes to be installed via package-el later:
 
 Add starter kit configuration moved into [[file:starter-kit-misc-recommended.org][starter-kit-misc-recommended]]
 - Starter kit recommended function with tag "visual"
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle yes
   (starter-kit-load "misc-recommended")
   #+end_src
 - Somehow following lisp code ~(starter-kit-load "misc-recommended" "visual")~
@@ -550,7 +560,7 @@ By the way this is worth to be keept in mind:
 Don't need to check for running org-mode as org-mode is up and running
 when org-babel reads and tangles this file.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
@@ -572,7 +582,7 @@ when org-babel reads and tangles this file.
 (skipped \"show all waiting toto items\").
 source: http://www.newartisans.com/2007/08/using-org-mode-as-a-day-planner.html
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq org-agenda-custom-commands 
         (quote 
          (("c" "List all completed todo items." todo "DONE|DEFERRED|CANCELLED" nil) 
@@ -595,13 +605,13 @@ Source: [[http://orgmode.org/manual/Capture.html][Org-Manual Capture]]
 
 Variable =org-default-notes-file= is set above.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (define-key global-map "\C-cc" 'org-capture)
 #+end_src
 
 **** Setting up Capture templates
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
     (setq org-capture-templates
           '(("n" "Note" entry
              (file+headline "~/Documents/Wiki/worg/notes.org" "Notes")
@@ -623,7 +633,7 @@ Variable =org-default-notes-file= is set above.
 
 *** Project to Publish
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'ox-publish)
   (require 'ox-html)
   (add-to-list
@@ -641,7 +651,7 @@ Variable =org-default-notes-file= is set above.
       :auto-index t))
 #+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'ox-publish)
   (require 'ox-html)
   (add-to-list
@@ -666,7 +676,7 @@ Variable =org-default-notes-file= is set above.
 ;  (require 'org-mediawiki)
 
 *** org-mode plain lists starting with alphanumeric
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq org-list-allow-alphabetical t) 
 #+end_src
 
@@ -677,7 +687,7 @@ based on another link type. Anyway I copied content of "org-man.el"
 into this emacs-lisp code block.
 
 #+srcname: org-man
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'org)
   
   (org-add-link-type "man" 'org-man-open)
@@ -716,7 +726,7 @@ into this emacs-lisp code block.
 #+end_src
 
 **** Load org-man
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'org-man)
 #+end_src
 
@@ -732,7 +742,7 @@ groups of words as =verbatim= of *bold*. After line wrap having a goup
 of verbatim words on two lines org-export does not recognize format
 information. I switch of auto-fill mode for org-mode.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (add-hook 'org-mode-hook 'turn-off-auto-fill)
 #+END_SRC
 
@@ -958,7 +968,7 @@ into the load path, and put the following in =~/.emacs=:
 Downloaded ~message-outlook.el~ into starter-kit:
 file:src/message-outlook.el.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq mail-user-agent 'message-user-agent)
   (require 'message-outlook)
   (custom-set-variables
@@ -1540,7 +1550,7 @@ Thanks to Zhang Weize for adding this support.
 Additionally I needed to install plantuml-java-archive 
 from http://plantuml.sourceforge.net/download.html.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; active Org-babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -1661,7 +1671,7 @@ D:\twirkner\lib>
 Based on help from [[info:org#Faces%20for%20TODO%20keywords][info:org#Faces for TODO keywords]].
 Available colors can access via command [[elisp:list-colors-display]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq org-todo-keyword-faces
         '(("STARTED" . "DarkOrange")
           ("WAITING" . "RoyalBlue")))
@@ -1886,7 +1896,7 @@ Even the ditaa tool iteself being a [[file:src/org/contrib/scripts/ditaa.jar][ja
 **** Enable ob-ditaa
 After I changed to org-8, ditaa needs to be required.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'ob-ditaa)
   
 #+END_SRC
@@ -2406,7 +2416,7 @@ up tp 200 MByte. Just switch off loading pymacs for outlook.
 With help of org-modes' link abbreviation.
 See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
 (add-to-list 'org-link-abbrev-alist '("rfc" . "https://tools.ietf.org/html/%s"))
 (add-to-list 'org-link-abbrev-alist '("dwb" . "http://www.woerterbuchnetz.de/DWB?lemma=%s"))
@@ -2431,7 +2441,7 @@ a optionally tree that defines the resources for this project.
 It then creates a TaskJuggler file based on these trees and
 the attributes defined in all the nodes.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-export-backends 'taskjuggler)
 #+END_SRC
 
@@ -2586,7 +2596,7 @@ Following specific JIRA exports are implemented
   - An org-mode's time stamp: [2019-03-25 Mo]
 
 *** Org-babel language
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; active Org-babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -2634,7 +2644,7 @@ supporting header level 1 to 4 only.
 #+END_SRC
 
 *** Convert Region into Block
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (defun org-block_example-convert-region (beg0 end0 &optional mode)
     "Convert region to a block.
   The region goes from BEG0 to END0.
@@ -2954,7 +2964,7 @@ Hunk #3 succeeded at 2168 (offset 2 lines).
 
 **** Emacs-23 Calendar Week Numbers customization
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (custom-set-variables
    '(calendar-intermonth-text 
      (quote 
@@ -3191,7 +3201,7 @@ Source: http://stackoverflow.com/questions/1800199/is-there-a-bnf-mode-for-emacs
 I looked for it as I stored Python's grammer in org file.
 I assume pybnf means special definition of python's documentation.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (define-generic-mode 'bnf-mode
     () ;; comment char: inapplicable because # must be at start of line
     nil ;; keywords
@@ -3211,7 +3221,7 @@ I assume pybnf means special definition of python's documentation.
 
 
 ** Windows Shell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (defun cmd-shell (&optional arg)
     "Run cmd.exe (WinNT) or command.com shell. A numeric prefix
   arg switches to the specified session, creating it if necessary."
@@ -3235,7 +3245,7 @@ Source: http://www.gnu.org/software/tramp/
 
 Under Windows, tramp is integrated with the PuTTY package, using the ~plink~ program. 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (if (eq system-type 'windows-nt)
       (progn
         (setenv "PATH" (concat "C:\\Program Files (x86)\\PuTTY;" (getenv "PATH")))
@@ -3261,7 +3271,7 @@ DIRED displays wrong files created by Windows with Umlaut;
 SHELL displays wrong help text with german Umlaut
 - customize variable to set coding-system when shell is called.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (prefer-coding-system 'iso-8859-1)
   (custom-set-variables
    '(shell-mode-hook (prefer-coding-system (quote utf-8))))
@@ -3570,6 +3580,13 @@ from ~custom.el~ which is not under source control.
   - M-x occur 
 - Regex-Builder to check a RE during contruction for a buffer
   - M-x re-builder
+
+* Tilo's Notes of lisp code
+- to understand issue in starter-kit flow of control: 
+  =(message (concat "Window System " (symbol-name window-system)))=
+  - variable ~window-system~ contains a symbol w32
+  - a symbol cannot be concatenated with a string
+  - to make string from a symbol ask for its name.
 
 * Tilo's Notes on Testing Org Functions
 Emacs-Lisp Testing
