@@ -18,6 +18,12 @@ Replace all ~begin_src emacs-lisp~ with ~begin_src emacs-lisp :tangle yes~.
 Detected by tool-bar and menu-bar has not be disabled
 because =(starter-kit-load "misc-recommended")= has not been tangled.
 
+Update [2019-05-14 Di] : after edited this file to document 
+a workaround for ~ditaa~ I encountered again the tool-bar issue.
+Looks as if tangling this file via starter-kit's function [[file:starter-kit.org::starter-kit-load][starter-kit-load]] 
+which utilizes function [[help:org-babel-load-file][org-babel-load-file]] 
+is different from calling it via org's function [[help:org-babel-tangle][org-babel-tangle]] directly.
+
 ** Changes done to move from org-7/Emacs-23 to org-8/Emacs-24
 
 New environment variable necessary =ORG_HOME=.
@@ -1898,6 +1904,9 @@ module above: =message-send-mail-with-outlook=.
 *** org-mode and ditaa
 Ditaa is fully integrated and distributed with org-mode.
 Even the ditaa tool iteself being a [[file:src/org/contrib/scripts/ditaa.jar][jar-file]] is part of org-mode.
+
+Note ([2019-05-13 Mo]): [[https://sourceforge.net/p/ditaa/bugs/2/][Rendering of dashes in text broken]]. 
+Solve this issue by using an utf-8 dash "–" instead of ascii "-".
 
 **** Enable ob-ditaa
 After I changed to org-8, ditaa needs to be required.
