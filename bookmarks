@@ -2,7 +2,22 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi10"
+(("dir_githubPioneer"
+ (filename . "/cygdrive/d/GitHub/Pioneer/")
+ (front-context-string)
+ (rear-context-string . "0 25. Jun 14:10 ")
+ (position . 212))
+("proj_pi11"
+ (filename . "~/Documents/Wiki/worg/project_pi11.org")
+ (front-context-string . "* PI#11 Preparat")
+ (rear-context-string . "g][Next-PI]]\n\n\n\n")
+ (position . 409))
+("dir_perforceOlt"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_1u_olt_jenkins_virt/osa_ne_olt/")
+ (front-context-string . "1u_olt_16port_me")
+ (rear-context-string . "1  3. Jul 2018  ")
+ (position . 267))
+("proj_pi10"
  (filename . "~/Documents/Wiki/worg/project_pi10.org")
  (front-context-string . "* PI#10 Preparat")
  (rear-context-string . "t-PI]]\n\nPSI#37\n\n")
@@ -248,10 +263,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/JOURNAL.org")
- (front-context-string . "** [2019-03-21 D")
- (rear-context-string . "$\n#+END_EXAMPLE\n")
- (position . 1773526))
+ (filename . "~/Documents/Wiki/worg/TODO.org")
+ (front-context-string . "** TODO Prepare ")
+ (rear-context-string . "b organization.\n")
+ (position . 1368885))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")

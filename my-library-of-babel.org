@@ -77,9 +77,7 @@ snmpTrapOID of SNMP PDU parsed from Example PPT Testcase
       else:
           for oid, val in pMod.apiPDU.getVarBinds(rspPDU):
               if oid.prettyPrint() == snmpTrapOID: 
-                  snmpTrapOID_value = val.prettyPrint() 
-
-  print snmpTrapOID_value
+                  print('%s' % val.prettyPrint())
 #+END_SRC
 
 #+RESULTS: mlob-get-snmp-trap-oid

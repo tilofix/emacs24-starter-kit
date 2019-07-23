@@ -304,6 +304,8 @@ in scope of a list comprehension.
        ; For python.el
        '(python-shell-interpreter "python3")
        '(python-shell-interpreter-args "-i -c \"import IPython; IPython.start_ipython(); raise SystemExit\"")
+       ; Set org-babel to use right python command
+       '(org-babel-python-command "python3")
        )
     )
   ; Enable python as a org-babel language.
