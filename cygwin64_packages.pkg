@@ -24,3 +24,5 @@ patch
 make
 # Want to get Jello Dashboard code
 svn
+# For tunneling UDP packets through SSH
+socat
