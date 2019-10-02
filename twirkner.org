@@ -83,7 +83,7 @@ For setting up org-Mode some modules are required from org/contrib
 
 
 ** Extend dired-mode with a key to open a file for browsing
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle yes 
   (add-hook 'dired-mode-hook
     (function (lambda ()
       (local-set-key "\C-co" 
@@ -295,6 +295,13 @@ to overcome issue described years ago here:
 [[https://github.com/ipython/ipython/issues/62][Global variables undefined in interactive use of embedded ipython shell #62]].
 A variable defined in global scope has not been accessible 
 in scope of a list comprehension. 
+
+[2019-08-09 Fr] After upgrading to ~GNU Emacs 26.2 (build 1, x86_64-pc-cygwin) of 2019-04-15~
+I've got this error message, when calling [[help:run-python][run-python]]:
+"Warning (python): Your ‘python-shell-interpreter’ doesn’t seem to support readline, 
+yet ‘python-shell-completion-native-enable’ was t 
+and "python3" is not part of the ‘python-shell-completion-native-disabled-interpreters’ list.  
+Native completions have been disabled locally."
 #+begin_src emacs-lisp :tangle yes
   ; Set python-interpreter to be used.
   (if (eq system-type 'cygwin)
@@ -306,6 +313,8 @@ in scope of a list comprehension.
        '(python-shell-interpreter-args "-i -c \"import IPython; IPython.start_ipython(); raise SystemExit\"")
        ; Set org-babel to use right python command
        '(org-babel-python-command "python3")
+       ; Set python-shell-completion to avoid waring
+       '(python-shell-completion-native-enable nil)
        )
     )
   ; Enable python as a org-babel language.
