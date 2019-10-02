@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("dir_githubPioneer"
+(("proj_pi12"
+ (filename . "~/Documents/Wiki/worg/project_pi12.org")
+ (front-context-string . "* PI#12 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("dir_gitHubPioneer"
  (filename . "/cygdrive/d/GitHub/Pioneer/")
  (front-context-string)
  (rear-context-string . "0 25. Jun 14:10 ")
@@ -263,10 +268,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO Prepare ")
- (rear-context-string . "b organization.\n")
- (position . 1368885))
+ (filename . "~/Documents/Wiki/worg/JOURNAL.org")
+ (front-context-string . "** [2019-09-25 M")
+ (rear-context-string . "mode active; \",\n")
+ (position . 1811180))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
