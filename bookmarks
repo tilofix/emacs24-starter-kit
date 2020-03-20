@@ -2,7 +2,17 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi12"
+(("proj_pi14"
+ (filename . "~/Documents/Wiki/worg/project_pi14.org")
+ (front-context-string . "* PI#14 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi13"
+ (filename . "~/Documents/Wiki/worg/project_pi13.org")
+ (front-context-string . "* PI#13 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi12"
  (filename . "~/Documents/Wiki/worg/project_pi12.org")
  (front-context-string . "* PI#12 Preparat")
  (rear-context-string . "org][Next-PI]]\n\n")
@@ -268,10 +278,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/JOURNAL.org")
- (front-context-string . "** [2019-09-25 M")
- (rear-context-string . "mode active; \",\n")
- (position . 1811180))
+ (filename . "~/Documents/Wiki/worg/TODO.org")
+ (front-context-string . "** TODO Investig")
+ (rear-context-string . "TILO: supported\n")
+ (position . 5854097))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
