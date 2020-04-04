@@ -4,7 +4,7 @@
     <RootInstallDir>C:\cygwin64</RootInstallDir>
     <LocalDir>C:\Users\Public\Downloads\cygwin-x86_64</LocalDir>
     <SetupExe>setup-x86_64.exe</SetupExe>
-    <CygwinSiteUrl>http://gd.tuwien.ac.at/gnu/cygwin/</CygwinSiteUrl>
+    <CygwinSiteUrl>http://linux.rz.ruhr-uni-bochum.de/download/cygwin/</CygwinSiteUrl>
   </Setup>
   <Other>
     <!--
