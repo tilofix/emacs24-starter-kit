@@ -1,3 +1,4 @@
+# Only beginning of line comments supported
 xinit
 emacs-w32
 git
@@ -8,11 +9,21 @@ texlive-collection-langgerman
 texlive-collection-latexextra
 texmaker
 texinfo
-python2-pip
-python2-devel
+python36-pip
+python36-devel
+python36-virtualenv
 net-snmp-utils
 perl-net-snmp
 curl
 libcurl-devel
 openssl-devel
 zip
+graphviz
+python3-ipython
+# Required for patching /etc/nsswich.conf after fresh cygwin64 installation
+patch
+make
+# Want to get Jello Dashboard code
+svn
+# For tunneling UDP packets through SSH
+socat

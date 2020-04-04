@@ -8,6 +8,22 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 My config.
 
+** Changes done to move from org-8/Emacs-24 to org-9
+
+In some version the default of tangling source code blocks
+seemed to have changed from ~:tangle yes~ to ~:tangle no~. 
+
+Replace all ~begin_src emacs-lisp~ with ~begin_src emacs-lisp :tangle yes~.
+
+Detected by tool-bar and menu-bar has not be disabled
+because =(starter-kit-load "misc-recommended")= has not been tangled.
+
+Update [2019-05-14 Di] : after edited this file to document 
+a workaround for ~ditaa~ I encountered again the tool-bar issue.
+Looks as if tangling this file via starter-kit's function [[file:starter-kit.org::starter-kit-load][starter-kit-load]] 
+which utilizes function [[help:org-babel-load-file][org-babel-load-file]] 
+is different from calling it via org's function [[help:org-babel-tangle][org-babel-tangle]] directly.
+
 ** Changes done to move from org-7/Emacs-23 to org-8/Emacs-24
 
 New environment variable necessary =ORG_HOME=.
@@ -42,7 +58,7 @@ Disabled modes to be installed via package-el later:
 
 Add starter kit configuration moved into [[file:starter-kit-misc-recommended.org][starter-kit-misc-recommended]]
 - Starter kit recommended function with tag "visual"
-  #+begin_src emacs-lisp
+  #+begin_src emacs-lisp :tangle yes
   (starter-kit-load "misc-recommended")
   #+end_src
 - Somehow following lisp code ~(starter-kit-load "misc-recommended" "visual")~
@@ -67,7 +83,7 @@ For setting up org-Mode some modules are required from org/contrib
 
 
 ** Extend dired-mode with a key to open a file for browsing
-#+begin_src emacs-lisp 
+#+begin_src emacs-lisp :tangle yes 
   (add-hook 'dired-mode-hook
     (function (lambda ()
       (local-set-key "\C-co" 
@@ -273,16 +289,32 @@ So change to Python2.5.
 As long as there is no separate python installation, 
 don't set these variables.
 Have a look below for environment variable =PYMACS_PYTHON=.
+
+Change from ~IPython.embed()~ to ~IPython.start_ipython()~
+to overcome issue described years ago here: 
+[[https://github.com/ipython/ipython/issues/62][Global variables undefined in interactive use of embedded ipython shell #62]].
+A variable defined in global scope has not been accessible 
+in scope of a list comprehension. 
+
+[2019-08-09 Fr] After upgrading to ~GNU Emacs 26.2 (build 1, x86_64-pc-cygwin) of 2019-04-15~
+I've got this error message, when calling [[help:run-python][run-python]]:
+"Warning (python): Your ‘python-shell-interpreter’ doesn’t seem to support readline, 
+yet ‘python-shell-completion-native-enable’ was t 
+and "python3" is not part of the ‘python-shell-completion-native-disabled-interpreters’ list.  
+Native completions have been disabled locally."
 #+begin_src emacs-lisp :tangle yes
   ; Set python-interpreter to be used.
-  (if (eq system-type 'windows-nt)
+  (if (eq system-type 'cygwin)
       (custom-set-variables
        ; For python-mode.el
-       '(python-python-command "python2.7" t)
-       ; Don't know any more, maybe pymacs?
-       '(py-python-command "python2.7" t)
+       '(py-shell-name "python3")
        ; For python.el
-       '(python-shell-interpreter "python2.7" t)
+       '(python-shell-interpreter "python3")
+       '(python-shell-interpreter-args "-i -c \"import IPython; IPython.start_ipython(); raise SystemExit\"")
+       ; Set org-babel to use right python command
+       '(org-babel-python-command "python3")
+       ; Set python-shell-completion to avoid waring
+       '(python-shell-completion-native-enable nil)
        )
     )
   ; Enable python as a org-babel language.
@@ -290,7 +322,6 @@ Have a look below for environment variable =PYMACS_PYTHON=.
    'org-babel-load-languages
    '((python . t))
    )
-  
 #+end_src
 
 Now it is working with Python-2.5
@@ -330,8 +361,16 @@ VERSION
 >>> 
 #+end_example
 
-*** Enable Pymacs support
+*** Enable Pymacs support (temporally disabled to introduce Python 3)
 Quickstart: http://wiki.python.de/Pymacs
+
+~pymacs~ seems not to be supported with python3:
+#+BEGIN_EXAMPLE
+  56S8TZ1[.emacs.d]$ pip3 install pymacs
+  Collecting pymacs
+    Could not find a version that satisfies the requirement pymacs (from versions: )
+  No matching distribution found for pymacs
+#+END_EXAMPLE
 
 **** Insatll Pymacs module for Python
 #+begin_example
@@ -388,7 +427,7 @@ included in Python module, only local copy.
 Documentation can be found is ReST
 [[file:~/Projects/Pymacs/pymacs.rst::..%20role::%20code(strong)][file:~/Projects/Pymacs/pymacs.rst::.. role:: code(strong)]]. 
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
   ; (load "c:\python25\lib\site-packages\pymacs-0.23-py2.5.egg")
   (require 'pymacs)
   (eval-after-load "pymacs"
@@ -464,7 +503,6 @@ Debugger entered--Lisp error: (void-variable python-python-command)
   #[nil "...full of back-slash numbers..." [init-file-user system-type user-init-file-1 user-init-file otherfile source ms-dos "~" "/_emacs" windows-nt directory-files nil "^\\.emacs\\(\\.elc?\\)?$" "~/.emacs" "^_emacs\\(\\.elc?\\)?$" "~/_emacs" "/.emacs" t load expand-file-name "init" file-name-as-directory "/.emacs.d" file-name-extension "elc" file-name-sans-extension ".el" file-exists-p file-newer-than-file-p message "Warning: %s is newer than %s" sit-for 1 "default" alt inhibit-default-init inhibit-startup-screen] 7]()
   command-line()
   normal-top-level()
-
 #+END_EXAMPLE
 
 Indeed function =custom-set-variables= only stores an expression
@@ -491,16 +529,61 @@ handle SYMBOL properly.
 
 COMMENT is a comment string about SYMBOL.
 
-
 ***** NOW, pymacs works after start-up
 Please see changed customization for =python-python-command=.
+
+** IPython
+IPython is installed via emac's package manager.
+See [[*Packages to be installed by package][selected-packages]] to be installed.
+
+By the way, jupyter is an interesting thing 
+which is somehow also supported by emacs
+and has [[https://nbviewer.jupyter.org/][notbook viewer]] based on GitHub.
+
+IPython can be executed via command [[help:run-ipython][run-ipython]].
+
+#+BEGIN_SRC emacs-lisp :tangle no
+  (custom-set-variables
+   '(ipython-command "ipython3")
+   )
+  (require 'ipython)
+#+END_SRC
+
+[2019-02-26 Di] I cannot make function ~py-shell~ 
+starting up ~ipython3~ instead of ~python3~. 
+Somehow it might be related to the fact, 
+variable ~py-shell-name~ is made a [[help:make-variable-buffer-local][make-variable-buffer-local]].
+Furthermore the error message when start ~python3~ "NameError: name 'olors' is not defined"
+might be caused by ~ipython~ setting variable ~py-python-command-args~ 
+for ~ipython3~. ~python3~ has no command line switch ~-colors LightBG~.
+
+[2019-03-21 Do] I could not fix the IPython issue with package ~ipython~.
+Solution is to add command line switch to variable [[help:python-shell-interpreter-args][python-shell-interpreter-args]]
+to import IPython at startup by exectuing python code ~import IPython; IPython.embed()~.
+
+I also run in trouble playing around with Jupyter 
+which installs IPython 5.x, currently installed via Cygwin 64 is Ipython 4.x.
+Starting with IPython 5.x I will run in trouble with this IPython setup
+due to IPython is changing from ~readline~ to ~prompt-toolkit~. 
+I learnt this in post [[https://stackoverflow.com/questions/38659721/ipython-5-0-and-key-bindings-in-console][IPython 5.0 and key bindings in console]].
+Then I wil get following error message 
+when IPython runs in an shell controlled by an Emacs buffer:
+"WARNING: your terminal doesn't support cursor position requests (CPR)."
+
+[2019-03-22 Fr] Just today it looks as I found a solution 
+in post "[[https://stackoverflow.com/questions/51169655/integrating-jupyter-notebook-ipython-into-org-mode-notebook][Integrating jupyter notebook (ipython) into org-mode notebook]]" 
+for the problem eventually arises with IPython 5.x:
+=(setq org-babel-python-command "ipython3 --no-banner --classic --no-confirm-exit")=
+
+By the way this is worth to be keept in mind:
+"[[http://kitchingroup.cheme.cmu.edu/blog/2017/01/21/Exporting-org-mode-to-Jupyter-notebooks/][Exporting org-mode to Jupyter notebooks]]".
 
 
 ** Setting up org-mode
 Don't need to check for running org-mode as org-mode is up and running
 when org-babel reads and tangles this file.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (global-set-key "\C-cl" 'org-store-link)
   (global-set-key "\C-ca" 'org-agenda)
   (global-set-key "\C-cb" 'org-iswitchb)
@@ -522,7 +605,7 @@ when org-babel reads and tangles this file.
 (skipped \"show all waiting toto items\").
 source: http://www.newartisans.com/2007/08/using-org-mode-as-a-day-planner.html
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq org-agenda-custom-commands 
         (quote 
          (("c" "List all completed todo items." todo "DONE|DEFERRED|CANCELLED" nil) 
@@ -545,13 +628,13 @@ Source: [[http://orgmode.org/manual/Capture.html][Org-Manual Capture]]
 
 Variable =org-default-notes-file= is set above.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (define-key global-map "\C-cc" 'org-capture)
 #+end_src
 
 **** Setting up Capture templates
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
     (setq org-capture-templates
           '(("n" "Note" entry
              (file+headline "~/Documents/Wiki/worg/notes.org" "Notes")
@@ -573,7 +656,7 @@ Variable =org-default-notes-file= is set above.
 
 *** Project to Publish
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'ox-publish)
   (require 'ox-html)
   (add-to-list
@@ -591,7 +674,7 @@ Variable =org-default-notes-file= is set above.
       :auto-index t))
 #+end_src
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'ox-publish)
   (require 'ox-html)
   (add-to-list
@@ -616,7 +699,7 @@ Variable =org-default-notes-file= is set above.
 ;  (require 'org-mediawiki)
 
 *** org-mode plain lists starting with alphanumeric
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq org-list-allow-alphabetical t) 
 #+end_src
 
@@ -627,7 +710,7 @@ based on another link type. Anyway I copied content of "org-man.el"
 into this emacs-lisp code block.
 
 #+srcname: org-man
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'org)
   
   (org-add-link-type "man" 'org-man-open)
@@ -666,7 +749,7 @@ into this emacs-lisp code block.
 #+end_src
 
 **** Load org-man
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'org-man)
 #+end_src
 
@@ -682,7 +765,7 @@ groups of words as =verbatim= of *bold*. After line wrap having a goup
 of verbatim words on two lines org-export does not recognize format
 information. I switch of auto-fill mode for org-mode.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (add-hook 'org-mode-hook 'turn-off-auto-fill)
 #+END_SRC
 
@@ -908,7 +991,7 @@ into the load path, and put the following in =~/.emacs=:
 Downloaded ~message-outlook.el~ into starter-kit:
 file:src/message-outlook.el.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq mail-user-agent 'message-user-agent)
   (require 'message-outlook)
   (custom-set-variables
@@ -1490,7 +1573,7 @@ Thanks to Zhang Weize for adding this support.
 Additionally I needed to install plantuml-java-archive 
 from http://plantuml.sourceforge.net/download.html.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; active Org-babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
@@ -1611,7 +1694,7 @@ D:\twirkner\lib>
 Based on help from [[info:org#Faces%20for%20TODO%20keywords][info:org#Faces for TODO keywords]].
 Available colors can access via command [[elisp:list-colors-display]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (setq org-todo-keyword-faces
         '(("STARTED" . "DarkOrange")
           ("WAITING" . "RoyalBlue")))
@@ -1833,10 +1916,13 @@ module above: =message-send-mail-with-outlook=.
 Ditaa is fully integrated and distributed with org-mode.
 Even the ditaa tool iteself being a [[file:src/org/contrib/scripts/ditaa.jar][jar-file]] is part of org-mode.
 
+Note ([2019-05-13 Mo]): [[https://sourceforge.net/p/ditaa/bugs/2/][Rendering of dashes in text broken]]. 
+Solve this issue by using an utf-8 dash "–" instead of ascii "-".
+
 **** Enable ob-ditaa
 After I changed to org-8, ditaa needs to be required.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (require 'ob-ditaa)
   
 #+END_SRC
@@ -2301,58 +2387,62 @@ up tp 200 MByte. Just switch off loading pymacs for outlook.
 
 **** Install pywin32
 
-Python extensions for Microsoft Windows
-Provides access to much of the Win32 API, the
-ability to create and use COM objects, and the
-Pythonwin environment.
+#+BEGIN_EXAMPLE
+  Python extensions for Microsoft Windows
+  Provides access to much of the Win32 API, the
+  ability to create and use COM objects, and the
+  Pythonwin environment.
 
-    Author: Mark Hammond (et al)
-    Author_email: mhammond@users.sourceforge.net
-    Description: Python for Window Extensions
-    Name: pywin32
-    Url: http://sourceforge.net/projects/pywin32/
-    Version: 217
+      Author: Mark Hammond (et al)
+      Author_email: mhammond@users.sourceforge.net
+      Description: Python for Window Extensions
+      Name: pywin32
+      Url: http://sourceforge.net/projects/pywin32/
+      Version: 217
 
-Copied pythoncom25.dll to C:\WINDOWS\system32\pythoncom25.dll
-Copied pywintypes25.dll to C:\WINDOWS\system32\pywintypes25.dll
-Registered: Python.Interpreter 
-Registered: Python.Dictionary 
-Registered: Python 
--> Software\Python\PythonCore\2.5\Help[None]=None
--> Software\Python\PythonCore\2.5\Help\Pythonwin Reference[None]='C:\\Python25\\Lib\\site-packages\\PyWin32.chm'
-Pythonwin has been registered in context menu
-Creating directory C:\Python25\Lib\site-packages\win32com\gen_py
-Shortcut for Pythonwin created
-Shortcut to documentation created
-The pywin32 extensions were successfully installed.
+  Copied pythoncom25.dll to C:\WINDOWS\system32\pythoncom25.dll
+  Copied pywintypes25.dll to C:\WINDOWS\system32\pywintypes25.dll
+  Registered: Python.Interpreter 
+  Registered: Python.Dictionary 
+  Registered: Python 
+  -> Software\Python\PythonCore\2.5\Help[None]=None
+  -> Software\Python\PythonCore\2.5\Help\Pythonwin Reference[None]='C:\\Python25\\Lib\\site-packages\\PyWin32.chm'
+  Pythonwin has been registered in context menu
+  Creating directory C:\Python25\Lib\site-packages\win32com\gen_py
+  Shortcut for Pythonwin created
+  Shortcut to documentation created
+  The pywin32 extensions were successfully installed.
+#+END_EXAMPLE
 
 **** Log of first call
-Skipping unmodified file d:/wt000780/Documents/Wiki/org/reports.org
-Saving file d:/wt000780/Documents/Wiki/org/reports.org...
-Wrote d:/wt000780/Documents/Wiki/org/reports.org
-Publishing file d:/wt000780/Documents/Wiki/org/reports.org using `org-publish-org-to-html-outlook-mail'
-Exporting...
-Loading d:/wt000780/.emacs.d/src/cedet/semantic/semanticdb-file.el (source)...done
-Exporting...
-Saving file d:/wt000780/public_html/outlook/reports.html...
-Wrote d:/wt000780/public_html/outlook/reports.html
-HTML export done, pushed to kill ring and clipboard
-Mark set
-pymacs-report-error: Python: Traceback (most recent call last):
-  File "build\bdist.win32\egg\Pymacs\pymacs.py", line 147, in loop
-    value = eval(text)
-  File "<string>", line 1, in <module>
-  File "d:/wt000780/.emacs.d/src\outlook.py", line 21, in publish_html_to_outlook_mail
-    item.HTMLBody = a_html_buffer
-  File "C:\Python25\lib\site-packages\win32com\client\dynamic.py", line 554, in __setattr__
-    self._oleobj_.Invoke(entry.dispid, 0, invoke_type, 0, value)
-TypeError: Objects of type 'Buffer' can not be converted to a COM VARIANT (but obtaining the buffer() of this object could)
+#+BEGIN_EXAMPLE
+  Skipping unmodified file d:/wt000780/Documents/Wiki/org/reports.org
+  Saving file d:/wt000780/Documents/Wiki/org/reports.org...
+  Wrote d:/wt000780/Documents/Wiki/org/reports.org
+  Publishing file d:/wt000780/Documents/Wiki/org/reports.org using `org-publish-org-to-html-outlook-mail'
+  Exporting...
+  Loading d:/wt000780/.emacs.d/src/cedet/semantic/semanticdb-file.el (source)...done
+  Exporting...
+  Saving file d:/wt000780/public_html/outlook/reports.html...
+  Wrote d:/wt000780/public_html/outlook/reports.html
+  HTML export done, pushed to kill ring and clipboard
+  Mark set
+  pymacs-report-error: Python: Traceback (most recent call last):
+    File "build\bdist.win32\egg\Pymacs\pymacs.py", line 147, in loop
+      value = eval(text)
+    File "<string>", line 1, in <module>
+    File "d:/wt000780/.emacs.d/src\outlook.py", line 21, in publish_html_to_outlook_mail
+      item.HTMLBody = a_html_buffer
+    File "C:\Python25\lib\site-packages\win32com\client\dynamic.py", line 554, in __setattr__
+      self._oleobj_.Invoke(entry.dispid, 0, invoke_type, 0, value)
+  TypeError: Objects of type 'Buffer' can not be converted to a COM VARIANT (but obtaining the buffer() of this object could)
+#+END_EXAMPLE
 
 *** Link Adtran-Jira in org-mode
 With help of org-modes' link abbreviation.
 See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
 (add-to-list 'org-link-abbrev-alist '("rfc" . "https://tools.ietf.org/html/%s"))
 (add-to-list 'org-link-abbrev-alist '("dwb" . "http://www.woerterbuchnetz.de/DWB?lemma=%s"))
@@ -2377,7 +2467,7 @@ a optionally tree that defines the resources for this project.
 It then creates a TaskJuggler file based on these trees and
 the attributes defined in all the nodes.
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (add-to-list 'org-export-backends 'taskjuggler)
 #+END_SRC
 
@@ -2411,7 +2501,9 @@ Change back to yes and check of module =ox-confluence= is available.
       :type 'integer)
 
     (org-export-define-derived-backend 'jira 'confluence
-      :export-block '("JIRA")
+    ;; With new ORG-Version 9.2.3
+    ;; org-export-define-derived-backend: Unknown keyword: :export-block
+    ;  :export-block '("JIRA")
       :menu-entry
       '(?i "Export to JIRA"
            ((?I "As JIRA buffer" org-jira-export-as-jira-buffer)
@@ -2440,9 +2532,13 @@ Change back to yes and check of module =ox-confluence= is available.
       ;; Protect single brackets as they are meta character for links in JIRA.
       ;; plain-text seems to be never called for a link including two opening brackets.
       (replace-regexp-in-string
-      "\\[\\([ -:[:alnum:]]+\\)\\]"
-      "\\\\[\\1\\\\]" 
-      text) )
+       "\\[\\([ -:[:alnum:]]+\\)\\]"
+       "\\\\[\\1\\\\]"
+       ;; Protect single curly braces as they are meta character for blocks in JIRA
+       (replace-regexp-in-string
+        "\\([{}]\\)"
+        "\\\\\\1" 
+        text)) )
 
   ;;;; Timestamp
 
@@ -2504,13 +2600,34 @@ Change back to yes and check of module =ox-confluence= is available.
 #+RESULTS:
 : ox-jira
 
+**** Specific JIRA exports
+Following specific JIRA exports are implemented
+- code and verbatim
+  - ~verbatim text~ and =also verbatim text=
+  - =verbatim with a { between text=
+  - and code block
+    #+BEGIN_SRC emacs-lisp :tangle no
+      (browse-url "file:///c:/cygwin64/usr/share/doc/git/html/user-manual.html")
+    #+END_SRC
+  - and example block
+    #+BEGIN_EXAMPLE
+      56S8TZ1[.emacs.d]$ ls
+    #+END_EXAMPLE
+- plain-text
+  - {a text within curly braces} 
+  - {{ a text within double curly braces }} 
+  - [a text in brackets]
+  - (a text in parenthesis)
+- timestamp, which uses plain-text
+  - An org-mode's time stamp: [2019-03-25 Mo]
+
 *** Org-babel language
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   ;; active Org-babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
    '(;; other Babel languages
-     (sh . t)))
+     (shell . t)))
   
 #+END_SRC
 
@@ -2553,7 +2670,7 @@ supporting header level 1 to 4 only.
 #+END_SRC
 
 *** Convert Region into Block
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (defun org-block_example-convert-region (beg0 end0 &optional mode)
     "Convert region to a block.
   The region goes from BEG0 to END0.
@@ -2769,6 +2886,22 @@ for modules from =$ORG_HOME/contrib/lisp= directory)
 #+RESULTS:
 : org-eww
 
+*** Export to reStructuredText
+    [2019-04-09 Di]
+
+Found [[https://github.com/msnoigrs/ox-rst][reStructuredText Back-End for Org Export Engine]] 
+which is also part of melpa installed in ~ox-rst-20180315.13/~.
+
+According to the project's README.org it "relies on the Org-mode 9.0 export framework."
+Used as a trigger to change from =org-tilofix_release_8.3.6= to =org-tilofix_release_9.2.3=.
+Surprisingly in list of packages it requires: emacs-24.4, org-8.2.4!?
+
+Added ~ox-rst~ to list of [[*Packages to be installed by package][packages to be installed by package]]. 
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (require 'ox-rst)
+#+END_SRC
+
 
 ** Calendar
 
@@ -2857,7 +2990,7 @@ Hunk #3 succeeded at 2168 (offset 2 lines).
 
 **** Emacs-23 Calendar Week Numbers customization
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (custom-set-variables
    '(calendar-intermonth-text 
      (quote 
@@ -3094,7 +3227,7 @@ Source: http://stackoverflow.com/questions/1800199/is-there-a-bnf-mode-for-emacs
 I looked for it as I stored Python's grammer in org file.
 I assume pybnf means special definition of python's documentation.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (define-generic-mode 'bnf-mode
     () ;; comment char: inapplicable because # must be at start of line
     nil ;; keywords
@@ -3114,7 +3247,7 @@ I assume pybnf means special definition of python's documentation.
 
 
 ** Windows Shell
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (defun cmd-shell (&optional arg)
     "Run cmd.exe (WinNT) or command.com shell. A numeric prefix
   arg switches to the specified session, creating it if necessary."
@@ -3138,10 +3271,10 @@ Source: http://www.gnu.org/software/tramp/
 
 Under Windows, tramp is integrated with the PuTTY package, using the ~plink~ program. 
 
-#+BEGIN_SRC emacs-lisp
+#+begin_src emacs-lisp :tangle yes
   (if (eq system-type 'windows-nt)
       (progn
-        (setenv "PATH" (concat "C:\\Program Files\\PuTTY;" (getenv "PATH")))
+        (setenv "PATH" (concat "C:\\Program Files (x86)\\PuTTY;" (getenv "PATH")))
         ))
 #+END_SRC
 
@@ -3161,9 +3294,13 @@ DIRED displays wrong files created by Windows with Umlaut;
 - UTF-8: ~SoC_Erg?nzung_TS 0373_96 Teil 4_MSAN_CL_V5 _0_20082012.xls~
 - ISO-8859-1: ~SoC_Ergänzung_TS 0373_96 Teil 4_MSAN_CL_V5 _0_20082012.xls~
 
-#+BEGIN_SRC emacs-lisp
+SHELL displays wrong help text with german Umlaut
+- customize variable to set coding-system when shell is called.
+
+#+begin_src emacs-lisp :tangle yes
   (prefer-coding-system 'iso-8859-1)
-  
+  (custom-set-variables
+   '(shell-mode-hook (prefer-coding-system (quote utf-8))))
 #+END_SRC
 
 
@@ -3231,7 +3368,7 @@ Query file example from repository's homepage ~README.md~.
   #
   # Gets user timeline, formats JSON, shows response status and headers underneath
   #
-  GET http://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitterapi&count=2
+  GET https://api.twitter.com/1/statuses/user_timeline.json?screen_name=twitterapi&count=2
   #
   # XML is supported - highlight, pretty-print
   #
@@ -3409,6 +3546,23 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
 #+END_SRC
 
 
+** Packages to be installed by package
+According to help for variable [[help:package-selected-packages][package-selected-packages]] 
+this list of selected packages could be installed 
+when calling ~package-install-selected-packages~. 
+
+List of selected packages has been copied 
+from ~custom.el~ which is not under source control.
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (custom-set-variables
+   '(package-selected-packages
+     (quote
+      (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein ox-rst))))
+  (package-install-selected-packages); delays startup 
+#+END_SRC
+
+
 * Tilo's Favourit Key Combinations
 
 - Edebug
@@ -3437,6 +3591,9 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
   - (customize-variable 'org-confirm-babel-evaluate)
 - REPL (Inferior Emacs Lisp Mode) 
   - M-x ielm
+- Debugging Edebug
+  - C-u C-M-x ('eval-defun' with prefix argument)
+  - C-M-x ('eval-defun')
 - Profiler 
   - M-x profiler-start
   - Execute code in question
@@ -3450,8 +3607,14 @@ Lets increase it to meet requirements of DSM-CTRL and PPT.
 - Regex-Builder to check a RE during contruction for a buffer
   - M-x re-builder
 
-* Tilo's Notes on Testing Org Functions
+* Tilo's Notes of lisp code
+- to understand issue in starter-kit flow of control: 
+  =(message (concat "Window System " (symbol-name window-system)))=
+  - variable ~window-system~ contains a symbol w32
+  - a symbol cannot be concatenated with a string
+  - to make string from a symbol ask for its name.
 
+* Tilo's Notes on Testing Org Functions
 Emacs-Lisp Testing
 - Overview on unit testing of emacs-lisp scripts: 
   [[http://www.emacswiki.org/emacs/UnitTesting][Unit Testing in we]].
@@ -3481,13 +3644,27 @@ Org-mode Testing
   do "M-x ert RET test-org/org-link-escape-ascii-character-demo-of-fail RET" 
   was successful. 
 
+* Tilo's Keyboard Macros
+** Keyboard macro with name ~kdb-macro-org-heading-block~
+- navigating to the next heading <C-c C-n>
+- going to the next line <C-n>
+- setting the mark <C-SPC>
+- navigating to the next heading <C-c C-n>
+- executing command ~org-block_example-convert-region~
 
+#+CAPTION: A kbd marco for a org-buffer kdb-macro-org-heading-block
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (fset 'kbd-macro-org-headings-block
+        (lambda
+          (&optional arg)
+          "Keyboard macro."
+          (interactive "p")
+          (kmacro-exec-ring-item
+           (quote ([3 14 down 67108896 3 14 134217848 up f1] 0 "%d"))
+           arg)))
+#+END_SRC
 
-
-
-
-
-* Notes on running starter-kit branch tilofix-emacs24 on Fedora
+* Tilo's Notes on running starter-kit branch tilofix-emacs24 on Fedora
 - issue with ~ox-confluence~ and path to =$ORG_HOME/contrib/lisp= directory 
 - issue with missing directory =~/Documents/Wiki/org= 
 - issue with ~org-eww~ and missing packages? 
@@ -3518,3 +3695,82 @@ Org-mode Testing
   magit              20171018.628  installed             A Git porcelain inside Emacs
   yang-mode          20170323.1104 installed             major mode for editing YANG files
 #+END_EXAMPLE
+
+* Tilo's Notes on a fresh Install of Cygwin64
+Installation of cygwin is a little automated 
+by powershell script ~cygwin64_update.ps1~ 
+which uses following files:
+- ~cygwin64_settings_56S8TZ1.xml~ : 
+  contains definitions of "my" laptop at work
+- ~cygwin64_settings_EGON-10.xml~ : 
+  contains definitions of my desktop at home
+- ~cygwin64_packages.pkg~ : 
+  list of packages required for daily work
+- ~cygwin64_packages_devel.pkg~ : 
+  list of packages required for development work
+  which has once been to compile emacs and guile
+  and which is often to install python packages via pip
+- ~cygwin64_pip_requirements.pkg~ : 
+  list of python packages for daily work 
+  which is up-to-now to be executed manually 
+  with command ~pip3 install -r cygwin64_pip_requirements.pkg~
+  executed anywhere, for instance ~$HOME~.
+- ~cygwin64_etc_nsswitch.conf.patch~ : 
+  a patch to turn a user's home directory 
+  from ~/home/%U~ to ~/cygdrive/d/%U~ 
+  after a fresh installation of cygwin64 
+  which is up-to-now to be executed manually 
+  with command ~patch -p1 < ~/.emacs.d/cygwin64_etc_nsswitch.conf.patch~ 
+  executed under ~/~.
+
+* Tilo's Backup of custom.el
+Not every entry in ~custom-set-variables~ 
+is generated out of this org-file ~twirkner.org~. 
+Let's have a copy with timestamp.
+
+#+CAPTION: Copy of custom.el from [2019-02-26 Di]
+#+BEGIN_SRC emacs-lisp :tangle no
+  (custom-set-variables
+   ;; custom-set-variables was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(Info-additional-directory-list
+     (quote
+      ("~/share/info" "c:/cygwin/usr/share/info" "~/.emacs.d/src/org/doc")))
+   '(ange-ftp-ftp-program-name "c:/cygwin/bin/ftp.exe")
+   '(ange-ftp-gateway-ftp-program-name "c:/cygwin/bin/ftp.exe")
+   '(calendar-intermonth-text
+     (quote
+      (propertize
+       (format "%2d"
+               (car
+                (calendar-iso-from-absolute
+                 (calendar-absolute-from-gregorian
+                  (list month day year)))))
+       (quote font-lock-face)
+       (quote font-lock-function-name-face))))
+   '(calendar-week-start-day 1)
+   '(ispell-extra-args (quote ("--sug-mode=ultra")))
+   '(ispell-list-command "list")
+   '(ispell-program-name "aspell")
+   '(line-number-display-limit-width 600)
+   '(message-send-mail-function (quote message-send-mail-with-outlook))
+   '(org-file-apps
+     (quote
+      ((auto-mode . emacs)
+       ("\\.mm\\'" . default)
+       ("\\.x?html?\\'" . system)
+       ("\\.pdf\\'" . default))))
+   '(package-selected-packages
+     (quote
+      (ein ipython ipython-shell-send ob-ipython yang-mode elnode yasnippet yaml-mode rust-mode restclient markdown-mode magit json-mode js2-mode gnuplot)))
+   '(sentence-end-double-space nil)
+   '(shell-mode-hook (prefer-coding-system (quote utf-8))))
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   )
+#+END_SRC

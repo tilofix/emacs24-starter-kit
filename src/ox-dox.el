@@ -38,7 +38,9 @@ This variable can be set to either `atx' or `setext'."
 ;; TILO: derive directly from another backend than ox-md,
 ;; to overcome issue of empty lines in output of a transcoded table.
 (org-export-define-derived-backend 'dox 'ascii
-  :export-block '("MD")
+  ;; With new ORG-Version 9.2.3
+  ;; org-export-define-derived-backend: Unknown keyword: :export-block
+  ;  :export-block '("MD")
   :menu-entry
   '(?y "Export to Doxygen Documents with Markdown"
        ((?Y "To temporary buffer"

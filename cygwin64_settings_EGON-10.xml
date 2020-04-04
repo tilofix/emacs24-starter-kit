@@ -6,10 +6,11 @@
     <SetupExe>setup-x86_64.exe</SetupExe>
     <CygwinSiteUrl>http://linux.rz.ruhr-uni-bochum.de/download/cygwin/</CygwinSiteUrl>
   </Setup>
-  <Other>
+  <PackageFiles>
+    <PackageFile>cygwin64_packages.pkg</PackageFile>
+    <PackageFile>cygwin64_packages_pip.pkg</PackageFile>
     <!--
-        <PackageFile>cygwin64_packages.pkg</PackageFile>
-    -->  
     <PackageFile>cygwin64_packages_devel.pkg</PackageFile>
-</Other>
+    -->  
+  </PackageFiles>
 </Settings>

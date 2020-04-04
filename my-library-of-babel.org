@@ -77,9 +77,7 @@ snmpTrapOID of SNMP PDU parsed from Example PPT Testcase
       else:
           for oid, val in pMod.apiPDU.getVarBinds(rspPDU):
               if oid.prettyPrint() == snmpTrapOID: 
-                  snmpTrapOID_value = val.prettyPrint() 
-
-  print snmpTrapOID_value
+                  print('%s' % val.prettyPrint())
 #+END_SRC
 
 #+RESULTS: mlob-get-snmp-trap-oid
@@ -175,11 +173,11 @@ information of affected MIB-Module.
   for item in mib_changes :
      for mib_change in mib_content :
               if item in mib_change :
-                  print '- Task ID: %s' % item
+                  print( '- Task ID: %s' % item )
                   TaskId, Summary, Description, EpicLink = mib_change
-                  print '  - Summary: %s' % Summary
-                  print '  - Description: %s' % Description
-                  print '  - MIB-Release: %s' % EpicLink
+                  print( '  - Summary: %s' % Summary )
+                  print( '  - Description: %s' % Description )
+                  print( '  - MIB-Release: %s' % EpicLink )
   
 #+END_SRC
 

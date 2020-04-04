@@ -1,0 +1,7 @@
+--- /etc/nsswitch.conf.orig	2019-02-25 15:42:32.010233600 +0100
++++ /etc/nsswitch.conf	2019-02-26 10:47:04.210773300 +0100
+@@ -11,3 +11,4 @@
+ # db_home:  /home/%U
+ # db_shell: /bin/bash
+ # db_gecos: <empty>
++db_home:  /cygdrive/d/%U

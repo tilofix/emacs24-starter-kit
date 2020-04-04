@@ -1,8 +1,88 @@
-;;;; Emacs Bookmark Format Version 1 ;;;;
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi04"
+(("proj_pi14"
+ (filename . "~/Documents/Wiki/worg/project_pi14.org")
+ (front-context-string . "* PI#14 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi13"
+ (filename . "~/Documents/Wiki/worg/project_pi13.org")
+ (front-context-string . "* PI#13 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi12"
+ (filename . "~/Documents/Wiki/worg/project_pi12.org")
+ (front-context-string . "* PI#12 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("dir_gitHubPioneer"
+ (filename . "/cygdrive/d/GitHub/Pioneer/")
+ (front-context-string)
+ (rear-context-string . "0 25. Jun 14:10 ")
+ (position . 212))
+("proj_pi11"
+ (filename . "~/Documents/Wiki/worg/project_pi11.org")
+ (front-context-string . "* PI#11 Preparat")
+ (rear-context-string . "g][Next-PI]]\n\n\n\n")
+ (position . 409))
+("dir_perforceOlt"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_1u_olt_jenkins_virt/osa_ne_olt/")
+ (front-context-string . "1u_olt_16port_me")
+ (rear-context-string . "1  3. Jul 2018  ")
+ (position . 267))
+("proj_pi10"
+ (filename . "~/Documents/Wiki/worg/project_pi10.org")
+ (front-context-string . "* PI#10 Preparat")
+ (rear-context-string . "t-PI]]\n\nPSI#37\n\n")
+ (position . 416))
+("proj_pi09"
+ (filename . "~/Documents/Wiki/worg/project_pi09.org")
+ (front-context-string . "* PI#09 Preparat")
+ (rear-context-string . "t-PI]]\n\nPSI#36\n\n")
+ (position . 416))
+("proj_pi08"
+ (filename . "~/Documents/Wiki/worg/project_pi08.org")
+ (front-context-string . "* PI#08 Preparat")
+ (rear-context-string . "t-PI]]\n\nPSI#35\n\n")
+ (position . 406))
+("dir_osaA4"
+ (filename . "~/Documents/OSA_A4/")
+ (front-context-string . "6SDXNGPON2V-29D.")
+ (rear-context-string . "6  7. Aug 16:16 ")
+ (position . 266))
+("proj_pi07"
+ (filename . "~/Documents/Wiki/worg/project_pi07.org")
+ (front-context-string . "PSI#34\n\n* PI#07 ")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 398))
+("proj_pi06"
+ (filename . "~/Documents/Wiki/worg/project_pi06.org")
+ (front-context-string . "* PI#06 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 398))
+("dir_perforcePkgIgmpTme"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pkg_igmp_tme_main/")
+ (front-context-string . ".dockerignore\n  ")
+ (rear-context-string . "5 19. Sep 2016  ")
+ (position . 251))
+("dir_perforcePkgTmb"
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pkg_tmb_main/package/")
+ (front-context-string . "packet_tx_rx_abs")
+ (rear-context-string . "0 10. Apr 15:35 ")
+ (position . 244))
+("proj_pi05"
+ (filename . "~/Documents/Wiki/worg/project_pi05.org")
+ (front-context-string . "* PI#05 Backlog ")
+ (rear-context-string . "s (Triage) \n\n\n\n\n")
+ (position . 385))
+("dir_ProjectSvGwdTest"
+ (filename . "~/Projects/sv-gwd-tests@ADTRAN/")
+ (front-context-string . ".gitignore\n  drw")
+ (rear-context-string . "88 Feb 22 16:22 ")
+ (position . 330))
+("proj_pi04"
  (filename . "~/Documents/Wiki/worg/project_pi04.org")
  (front-context-string . "* PI#04 Preparat")
  (rear-context-string . "org][Next-PI]]\n\n")
@@ -82,7 +162,7 @@
  (front-context-string . "# -*- coding: ut")
  (rear-context-string)
  (position . 1))
-("dir_OsaNe"
+("dir_osaNE"
  (filename . "~/Documents/OSA_NE/")
  (front-context-string . "APS_NV8424.docx\n")
  (rear-context-string . "7  4. Mrz 14:53 ")
@@ -93,7 +173,7 @@
  (rear-context-string . "0 14. Jun 08:43 ")
  (position . 237))
 ("dir_perforcePma"
- (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pma_main_virt/")
+ (filename . "/cygdrive/d/perforce/twirkner_56S8TZ1_pmas_main/")
  (front-context-string . "oss\n  drwxrwx---")
  (rear-context-string . "0  5. Apr 14:51 ")
  (position . 237))
@@ -199,9 +279,9 @@
  (position . 133))
 ("org-capture-last-stored"
  (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO Create a")
- (rear-context-string . "Request via MCP\n")
- (position . 9338044))
+ (front-context-string . "** TODO Investig")
+ (rear-context-string . "TILO: supported\n")
+ (position . 5854097))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
