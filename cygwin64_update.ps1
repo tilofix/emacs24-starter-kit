@@ -61,7 +61,13 @@ $PackagesTxt = $SettingsFile.Settings.PackageFiles
 $PathsToPackagesTxt = $PackagesTxt.ChildNodes | ForEach-Object {if($_.Name -match 'PackageFile') {Join-Path -Path $PathToThisScript -ChildPath $_.InnerText}}
 $InstallPackages = ForEach-Object {Get-Content -Path $_} -InputObject $PathsToPackagesTxt | ForEach-Object {if($_ -match '^[^#]') {Write-Output "--packages $_"}}
 
-$SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl $InstallPackages"
+# Original list of arguments
+# $SetupExeArgumentList = "--upgrade-also --quiet-mode --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl $InstallPackages"
+# List of arguments when encoutering issues like "download error in unattended_mode"
+# " --package-manager" displays only the package manager at the beginning, issue not solved
+$SetupExeArgumentList = "--upgrade-also --no-desktop --local-package-dir $LocalDirectory --root $RootInstallDirectory --site $CygwinSiteUrl $InstallPackages"
+# Following packages had download errors:
+#   socat-2.0.0-b8-1 --> package search displays 'socat-2.0.0-b9-1'
 
 # http://stackoverflow.com/questions/16906170/create-directory-if-it-does-not-exist#16911470
 $isLocalDirectory = Test-Path -PathType Container $LocalDirectory

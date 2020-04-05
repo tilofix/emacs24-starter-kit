@@ -4,4 +4,4 @@
  # db_home:  /home/%U
  # db_shell: /bin/bash
  # db_gecos: <empty>
-+db_home:  /cygdrive/d/%U
++db_home:  /%H/Cygwin # https://cygwin.com/cygwin-ug-net/ntsec.html#ntsec-mapping-nsswitch

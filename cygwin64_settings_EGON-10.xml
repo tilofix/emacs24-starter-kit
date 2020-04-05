@@ -4,7 +4,10 @@
     <RootInstallDir>C:\cygwin64</RootInstallDir>
     <LocalDir>C:\Users\Public\Downloads\cygwin-x86_64</LocalDir>
     <SetupExe>setup-x86_64.exe</SetupExe>
-    <CygwinSiteUrl>http://linux.rz.ruhr-uni-bochum.de/download/cygwin/</CygwinSiteUrl>
+    <!--
+    <CygwinSiteUrl>http://ftp-stud.hs-esslingen.de/pub/Mirrors/sources.redhat.com/cygwin/</CygwinSiteUrl>
+    -->  
+    <CygwinSiteUrl>http://cygwin.mbwarez.dk/</CygwinSiteUrl>
   </Setup>
   <PackageFiles>
     <PackageFile>cygwin64_packages.pkg</PackageFile>
