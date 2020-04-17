@@ -2,7 +2,7 @@
 # For Emacs Development
 gcc-g++
 gdb
-emacs-25.3-1-src 
+emacs-26.3-2-src
 emacs-el
 guile-2.0.14-2-src
 cygport

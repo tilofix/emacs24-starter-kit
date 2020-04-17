@@ -17,6 +17,7 @@ perl-net-snmp
 curl
 libcurl-devel
 openssl-devel
+zip
 graphviz
 python3-ipython
 # Required for patching /etc/nsswich.conf after fresh cygwin64 installation
@@ -25,7 +26,8 @@ make
 # Want to get Jello Dashboard code
 svn
 # For tunneling UDP packets through SSH
-socat
+# commented out, made some trouble downloading version socat-2.0.0-b8-1, and not socat-2.0.0-b9-1  
+# socat
 # Install dependencies for pyang under python2
 # python27-pip
 # python27-devel
