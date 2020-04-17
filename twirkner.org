@@ -6,7 +6,7 @@ This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
 * Tilo's Starter Kit Config
 
-My config.
+My config, which is called by [[file:starter-kit.org][starter-kit]].
 
 ** Changes done to move from org-8/Emacs-24 to org-9
 
@@ -280,6 +280,14 @@ Start msys shell taken from ErgoEmacs installation:
 
 
 ** Python
+
+Just learnt now after so many years [2020-04-17 Fr],
+let's use start up [[file:starter-kit-python.org][python]] from optional starter kit packages.
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (starter-kit-load "python")
+  (require 'python)
+#+END_SRC
+
 *** Python interpreter to be started
 Without customization command "python" will be executed. In my
 environment due to cygwin intergration above
@@ -302,6 +310,19 @@ I've got this error message, when calling [[help:run-python][run-python]]:
 yet ‘python-shell-completion-native-enable’ was t 
 and "python3" is not part of the ‘python-shell-completion-native-disabled-interpreters’ list.  
 Native completions have been disabled locally."
+
+[2020-04-17 Fr] After introducing starter-kit's python I've got following error message
+'inferior-python-mode: Wrong type argument: stringp, nil'
+and maybe also after Emacs has been upgraded 
+to 'GNU Emacs 26.3 (build 1, x86_64-pc-cygwin) of 2019-08-30'
+but the (I)Python shell is running, but has got a side effect
+#+BEGIN_EXAMPLE
+  In [2]: [?25
+  In [2]: 
+
+  In [2]: [?25
+#+END_EXAMPLE
+
 #+begin_src emacs-lisp :tangle yes
   ; Set python-interpreter to be used.
   (if (eq system-type 'cygwin)
@@ -313,7 +334,7 @@ Native completions have been disabled locally."
        '(python-shell-interpreter-args "-i -c \"import IPython; IPython.start_ipython(); raise SystemExit\"")
        ; Set org-babel to use right python command
        '(org-babel-python-command "python3")
-       ; Set python-shell-completion to avoid waring
+       ; Set python-shell-completion to avoid warning
        '(python-shell-completion-native-enable nil)
        )
     )
@@ -533,12 +554,12 @@ COMMENT is a comment string about SYMBOL.
 Please see changed customization for =python-python-command=.
 
 ** IPython
-IPython is installed via emac's package manager.
+IPython is installed via emacs' package manager.
 See [[*Packages to be installed by package][selected-packages]] to be installed.
 
 By the way, jupyter is an interesting thing 
 which is somehow also supported by emacs
-and has [[https://nbviewer.jupyter.org/][notbook viewer]] based on GitHub.
+and has [[https://nbviewer.jupyter.org/][notebook viewer]] based on GitHub.
 
 IPython can be executed via command [[help:run-ipython][run-ipython]].
 
@@ -3554,12 +3575,41 @@ when calling ~package-install-selected-packages~.
 List of selected packages has been copied 
 from ~custom.el~ which is not under source control.
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+Just learnt from =starter-kit-python.org= to use a Starter-Kit's function
+instead of customize variable =package-selected-packages= and 
+call function [[help:package-install-selected-packages][package-install-selected-packages]].
+#+BEGIN_EXAMPLE
   (custom-set-variables
    '(package-selected-packages
      (quote
       (python-mode yasnippet yang-mode yaml-mode rust-mode ruby-mode restclient powershell ob-ipython markdown-mode magit json-mode helm-core gnuplot git-rebase-mode git-commit-mode gh elnode ein ox-rst))))
   (package-install-selected-packages); delays startup 
+#+END_EXAMPLE
+
+Starter-Kit function is define in =starter-kit.org= 
+with headline [[file:starter-kit.org::*Starter%20kit%20basics][ELPA archive repositories and two packages to install by default]].
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (starter-kit-install-if-needed
+   'yasnippet
+   'yang-mode
+   'yaml-mode
+   'rust-mode
+   'ruby-mode
+   'restclient
+   'powershell
+   'ob-ipython
+   'markdown-mode
+   'magit
+   'json-mode
+   'helm-core
+   'gnuplot
+   'git-rebase-mode
+   'git-commit-mode
+   'gh
+   'elnode
+   'ein
+   'ox-rst
+   )
 #+END_SRC
 
 
