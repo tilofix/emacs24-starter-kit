@@ -4,7 +4,7 @@
 
 This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
 
-* Tilo's Stater Kit Config
+* Tilo's Starter Kit Config
 
 My config.
 
