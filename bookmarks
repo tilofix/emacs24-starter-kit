@@ -279,9 +279,9 @@
  (position . 133))
 ("org-capture-last-stored"
  (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO Investig")
- (rear-context-string . "TILO: supported\n")
- (position . 5854097))
+ (front-context-string . "** TODO Create a")
+ (rear-context-string . "roller (rev 05)\n")
+ (position . 5920528))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
