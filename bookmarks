@@ -278,10 +278,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO Create a")
- (rear-context-string . "roller (rev 05)\n")
- (position . 5920528))
+ (filename . "~/Documents/Wiki/worg/JOURNAL.org")
+ (front-context-string . "** [2020-04-17 F")
+ (rear-context-string . "indispensable. \n")
+ (position . 1822008))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
