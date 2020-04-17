@@ -26,3 +26,7 @@ make
 svn
 # For tunneling UDP packets through SSH
 socat
+# Install dependencies for pyang under python2
+# python27-pip
+# python27-devel
+unzip
