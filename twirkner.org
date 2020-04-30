@@ -2464,19 +2464,22 @@ With help of org-modes' link abbreviation.
 See also [[info:org#Link%2520abbreviations][info:org#Link%20abbreviations]].
 
 #+begin_src emacs-lisp :tangle yes
-(add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
-(add-to-list 'org-link-abbrev-alist '("rfc" . "https://tools.ietf.org/html/%s"))
-(add-to-list 'org-link-abbrev-alist '("dwb" . "http://www.woerterbuchnetz.de/DWB?lemma=%s"))
+  (add-to-list 'org-link-abbrev-alist '("jira" . "http://jira.adtran.com/browse/%s"))
+  (add-to-list 'org-link-abbrev-alist '("rfc" . "https://tools.ietf.org/html/%s"))
+  (add-to-list 'org-link-abbrev-alist '("dwb" . "http://www.woerterbuchnetz.de/DWB?lemma=%s"))
+  (add-to-list 'org-link-abbrev-alist '("rediscmd" . "https://redis.io/commands/%s"))
 #+END_SRC
 
 #+RESULTS:
-: ((dwb . http://www.woerterbuchnetz.de/DWB?lemma=%s) (rfc . https://tools.ietf.org/html/%s) (jira . http://jira.adtran.com/browse/%s))
+: ((rediscmd . https://redis.io/commands/%s) (dwb . http://www.woerterbuchnetz.de/DWB?lemma=%s) (rfc . https://tools.ietf.org/html/%s) (jira . http://jira.adtran.com/browse/%s))
 
 Test Link [[jira:BN-6671]]
 
 DWB = Deutsches Wörterbuch von Jacob und Wilhelm Grimm. 16 Bde. in 32 Teilbänden. Leipzig 1854-1961.
 
 Test Link [[dwb:sollen]]
+
+Test Link [[rediscmd:object][rediscmd:object]]
 
 *** Export to TaskJuggler
 Exporter of org-8.x supports ~tj3~.
