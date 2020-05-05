@@ -3612,6 +3612,7 @@ with headline [[file:starter-kit.org::*Starter%20kit%20basics][ELPA archive repo
    'elnode
    'ein
    'ox-rst
+   'vc-hgcmd
    )
 #+END_SRC
 
