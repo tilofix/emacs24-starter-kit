@@ -32,3 +32,5 @@ svn
 # python27-pip
 # python27-devel
 unzip
+# For python-text
+mercurial

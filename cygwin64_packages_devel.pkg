@@ -4,7 +4,9 @@ gcc-g++
 gdb
 emacs-26.3-2-src
 emacs-el
-guile-2.0.14-2-src
+guile3.0
+guile3.0-devel
+guile3.0-3.0.2-1-src
 cygport
 libtiff-devel
 libgif-devel
@@ -34,8 +36,6 @@ libgc-devel
 libltdl-devel
 libtool-devel
 calm
-# For ???
-mercurial
 autoconf
 # For YANG-Explorer
 libxml2-devel
