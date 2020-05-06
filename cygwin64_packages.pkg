@@ -19,7 +19,6 @@ libcurl-devel
 openssl-devel
 zip
 graphviz
-python3-ipython
 # Required for patching /etc/nsswich.conf after fresh cygwin64 installation
 patch
 make
@@ -34,3 +33,4 @@ svn
 unzip
 # For python-text
 mercurial
+dos2unix

@@ -1,11 +1,17 @@
 # File contains python packages to be installed by pip
 # In case for development only, see
 # cygwin64_pip_requirements_devel.txt
+# Move to this file package python3-ipython
+ipython
 # For my-library-of-babel
 pysnmp
 # For rst2html
 rst2html5
 # For Review of YANG models
-pyang
+# Don't install pyang,
+# or at least remove standard YANG files after installation
+# pyang
 # Learnt from docs.python-guide.org
 pipenv
+pipenv-to-requirements
+pipenv-setup
