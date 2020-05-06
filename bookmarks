@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi14"
+(("proj_pi15"
+ (filename . "~/Documents/Wiki/worg/project_pi15.org")
+ (front-context-string . "* PI#15 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi14"
  (filename . "~/Documents/Wiki/worg/project_pi14.org")
  (front-context-string . "* PI#14 Preparat")
  (rear-context-string . "org][Next-PI]]\n\n")
@@ -279,9 +284,9 @@
  (position . 133))
 ("org-capture-last-stored"
  (filename . "~/Documents/Wiki/worg/JOURNAL.org")
- (front-context-string . "** [2020-04-17 F")
- (rear-context-string . "indispensable. \n")
- (position . 1822008))
+ (front-context-string . "** [2020-05-04 M")
+ (rear-context-string . "#\n#+END_EXAMPLE\n")
+ (position . 1857124))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
