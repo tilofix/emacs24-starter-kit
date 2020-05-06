@@ -106,3 +106,8 @@ if ($p.ExitCode -ne 0) {
 
 Write-Host -NoNewLine "Press any key to continue..."
 $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+# Note: someday TODO to call pip to install required packages
+# pip3 install --upgrade --requirement cygwin64_pip_requirements.pkg 
+# we need to start a shell and than do the pip call
+# cheat from Emacs: C:\cygwin64\bin\run.exe bash '-l -c "emacs-w32.exe"'
