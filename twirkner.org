@@ -145,7 +145,6 @@ One of the two must not be tangled.
 
 #+begin_src emacs-lisp 
   (custom-set-variables
-   '(Info-additional-directory-list (quote ("~/share/info" "c:/cygwin/usr/share/info" "~/.emacs.d/src/org/doc")))
    '(ange-ftp-ftp-program-name "c:/cygwin/bin/ftp.exe")
    '(ange-ftp-gateway-ftp-program-name "c:/cygwin/bin/ftp.exe")
    )
@@ -186,6 +185,13 @@ One of the two must not be tangled.
    )
 
   (setenv "MANPATH" (concat "~/share/man:/usr/share/man" (getenv "MANPATH")))
+  (when (getenv "ORG_HOME")
+    (let (
+          (org-info-dir
+           (expand-file-name "doc" (getenv "ORG_HOME"))))
+      (when (file-directory-p org-info-dir)
+        (setenv "INFOPATH" (concat org-info-dir ":" (getenv "INFOPATH")))
+        )))
 #+end_src
 
 *** Trouble with e-lisp files read doubled
@@ -656,23 +662,27 @@ Variable =org-default-notes-file= is set above.
 **** Setting up Capture templates
 
 #+begin_src emacs-lisp :tangle yes
-    (setq org-capture-templates
-          '(("n" "Note" entry
-             (file+headline "~/Documents/Wiki/worg/notes.org" "Notes")
-             "* %?\n")
-            ("t" "Todo" entry
-             (file+headline "~/Documents/Wiki/worg/TODO.org" "Tasks")
-             "* TODO %?\n %u")
-            ("j" "Journal" entry
-             (file+headline "~/Documents/Wiki/worg/JOURNAL.org" "Journal")
-             "* %U %?\n\n %i\n  %a")
-            ("i" "Idea" entry
-             (file+headline "~/Documents/Wiki/worg/JOURNAL.org" "New Ideas")
-             "* %^{Title}\n %i\n  %a")
-            ("b" "Bug" entry
-             (file+headline "~/Documents/Wiki/worg/BUGS.org" "Bugs")
-             "* BUG %?\n %i\n %a"))
+  (setq org-capture-templates
+        '(("n" "Note" entry
+           (file+headline "~/Documents/Wiki/worg/notes.org" "Notes")
+           "* %?\n")
+          ("t" "Todo" entry
+           (file+headline "~/Documents/Wiki/worg/TODO.org" "Tasks")
+           "* TODO %?\n %u")
+          ("j" "Journal" entry
+           (file+headline "~/Documents/Wiki/worg/JOURNAL.org" "Journal")
+           "* %U %?\n\n %i\n  %a")
+          ("i" "Idea" entry
+           (file+headline "~/Documents/Wiki/worg/JOURNAL.org" "New Ideas")
+           "* %^{Title}\n %i\n  %a")
+          ("b" "Bug" entry
+           (file+headline "~/Documents/Wiki/worg/BUGS.org" "Bugs")
+           "* BUG %?\n %i\n %a")
+          ("p" "Personal Note" entry
+           (file+headline "~/Documents/Wiki/worg/notes_personal.org" "Personal Notes")
+           "* %?\n %u")
           )
+        )
 #+end_src
 
 *** Project to Publish
@@ -3613,6 +3623,7 @@ with headline [[file:starter-kit.org::*Starter%20kit%20basics][ELPA archive repo
    'ein
    'ox-rst
    'vc-hgcmd
+   'htmlize
    )
 #+END_SRC
 
@@ -3653,6 +3664,8 @@ with headline [[file:starter-kit.org::*Starter%20kit%20basics][ELPA archive repo
   - Execute code in question
   - M-x profiler-report
   - M-x profiler-stop
+  - M-x profiler-report-write-profile
+  - M-x profiler-find-profile
 - Find-Function - Find the definition of the FUNCTION near point.
   - M-x find-function 
 - Occur - Show all lines in the current buffer containing a match for REGEXP.
