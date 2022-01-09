@@ -1,8 +1,28 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*- 
+;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi15"
+(("proj_pi19"
+ (filename . "~/Documents/Wiki/worg/project_pi19.org")
+ (front-context-string . "* PI#19 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi18"
+ (filename . "~/Documents/Wiki/worg/project_pi18.org")
+ (front-context-string . "* PI#18 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("personal"
+ (filename . "~/Documents/Wiki/worg/notes_personal.org")
+ (front-context-string . "* Personal Notes")
+ (rear-context-string)
+ (position . 1))
+("proj_pi17"
+ (filename . "~/Documents/Wiki/worg/project_pi17.org")
+ (front-context-string . "* PI#17 Preparat")
+ (rear-context-string . "org][Next-PI]]\n\n")
+ (position . 407))
+("proj_pi15"
  (filename . "~/Documents/Wiki/worg/project_pi15.org")
  (front-context-string . "* PI#15 Preparat")
  (rear-context-string . "org][Next-PI]]\n\n")
@@ -283,10 +303,10 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/JOURNAL.org")
- (front-context-string . "** [2020-05-04 M")
- (rear-context-string . "#\n#+END_EXAMPLE\n")
- (position . 1857124))
+ (filename . "~/Documents/Wiki/worg/TODO.org")
+ (front-context-string . "** TODO Investig")
+ (rear-context-string . "-generic-05.txt\n")
+ (position . 2686412))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
