@@ -9,9 +9,9 @@ texlive-collection-langgerman
 texlive-collection-latexextra
 texmaker
 texinfo
-python36-pip
-python36-devel
-python36-virtualenv
+python3-pip
+python3-devel
+python3-virtualenv
 net-snmp-utils
 perl-net-snmp
 curl

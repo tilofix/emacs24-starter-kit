@@ -1,6 +1,18 @@
 # Script-Hint: http://superuser.com/questions/214831/how-to-update-cygwin-from-cygwins-command-line/1073082#1073082
 # Script-Origin: http://pastebin.com/wMRctAuL
 
+# In a newly installed Windows system you get following error
+#   File C:\Users\twirkner\.emacs.d.starterkit\cygwin64_update.ps1 cannot be loaded because running scripts is disabled on this system. 
+#   For more information, see about_Execution_Policies at https:/go.microsoft.com/fwlink/?LinkID=135170.
+#      + CategoryInfo          : SecurityError: (:) [], ParentContainsErrorRecordException
+#      + FullyQualifiedErrorId : UnauthorizedAccess
+#
+# PS C:\windows\system32> Get-ExecutionPolicy -Verbose
+# Restricted
+# 
+# PS C:\windows\system32> Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
+#
+
 # Get the ID and security principal of the current user account
 $myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()
 $myWindowsPrincipal=new-object System.Security.Principal.WindowsPrincipal($myWindowsID)
