@@ -1,8 +1,18 @@
-;;;; Emacs Bookmark Format Version 1 ;;;; -*- coding: utf-8-emacs -*-
+;;;; Emacs Bookmark Format Version 1;;;; -*- coding: utf-8-emacs; mode: lisp-data -*-
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi19"
+(("proj_pi23"
+ (filename . "~/Documents/Wiki/worg/project_pi23.org")
+ (front-context-string . "* PI#23 Preparat")
+ (rear-context-string . "2022-02-23 Mi>\n\n")
+ (position . 441))
+("proj_pi21"
+ (filename . "~/Documents/Wiki/worg/project_pi21.org")
+ (front-context-string . "* PI#21 Preparat")
+ (rear-context-string . "2021-09-21 Di>\n\n")
+ (position . 441))
+("proj_pi19"
  (filename . "~/Documents/Wiki/worg/project_pi19.org")
  (front-context-string . "* PI#19 Preparat")
  (rear-context-string . "org][Next-PI]]\n\n")
@@ -305,8 +315,8 @@
 ("org-capture-last-stored"
  (filename . "~/Documents/Wiki/worg/TODO.org")
  (front-context-string . "** TODO Investig")
- (rear-context-string . "-generic-05.txt\n")
- (position . 2686412))
+ (rear-context-string . " over Ethernet.\n")
+ (position . 4468141))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
