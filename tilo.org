@@ -1,0 +1,72 @@
+# -*- coding: utf-8-unix -*-
+#+TITLE: Tilo's Starter Kit Config
+#+OPTIONS: num:nil ^:nil
+
+This is part of the [[file:starter-kit.org][Emacs Starter Kit]].
+
+* Tilo's Starter Kit Config
+
+My config, which is called by [[file:starter-kit.org][starter-kit]].
+
+** Starter Kit
+Add starter kit configuration moved into [[file:starter-kit-misc-recommended.org][starter-kit-misc-recommended]]
+- Starter kit recommended function with tag "visual"
+  #+begin_src emacs-lisp :tangle yes
+  (starter-kit-load "misc-recommended")
+  #+end_src
+
+** Packages to be installed by package
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (starter-kit-install-if-needed
+   'eldoc
+   'company
+   'racer
+   'ob-rust
+   'markdown-mode
+   )
+#+END_SRC
+
+** Racer
+
+1. You will need to use a nightly version of rust. If you're using rustup, run
+#+BEGIN_example
+$ rustup toolchain add nightly
+#+END_example
+
+2. Install Racer and download the source code of Rust:
+#+BEGIN_example
+$ rustup component add rust-src
+$ cargo +nightly install racer
+#+END_example
+
+3. Allow Emacs to install packages from MELPA:
+#+BEGIN_example
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
+#+END_example
+
+4. Install the Emacs package for Racer: 
+#+BEGIN_example
+M-x package-install RET racer RET
+#+END_example
+
+5. Configure Emacs to activate racer when rust-mode starts:
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+#+END_SRC
+
+For completions, install company with 
+#+BEGIN_example
+M-x package-install RET company RET
+#+END_example
+
+A sample configuration:
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (add-hook 'racer-mode-hook #'company-mode)
+
+  (require 'rust-mode)
+  (define-key rust-mode-map (kbd "TAB") #'company-indent-or-complete-common)
+  (setq company-tooltip-align-annotations t)
+#+END_SRC
