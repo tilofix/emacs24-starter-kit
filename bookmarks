@@ -2,7 +2,13 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("proj_pi23"
+(("dir_osaSDX"
+ (filename . "~/Documents/OSA_SDX/")
+ (front-context-string . "11971105F1 SDX 8")
+ (rear-context-string . "4  6. Jun 09:04 ")
+ (position . 256)
+ (last-modified 26696 15309 441031 500000))
+("proj_pi23"
  (filename . "~/Documents/Wiki/worg/project_pi23.org")
  (front-context-string . "* PI#23 Preparat")
  (rear-context-string . "2022-02-23 Mi>\n\n")
@@ -313,10 +319,11 @@
  (rear-context-string . "096 2012-07-04  ")
  (position . 133))
 ("org-capture-last-stored"
- (filename . "~/Documents/Wiki/worg/TODO.org")
- (front-context-string . "** TODO Investig")
- (rear-context-string . " over Ethernet.\n")
- (position . 4468141))
+ (filename . "~/Documents/Wiki/worg/JOURNAL.org")
+ (front-context-string . "** [2025-12-08 M")
+ (rear-context-string . "17:23\n#+END_SRC\n")
+ (position . 2278415)
+ (last-modified 26934 55066 845987 500000))
 ("proj_hiXIPv6"
  (filename . "~/Documents/Wiki/worg/project_hixipv6.org")
  (front-context-string . "IPv6\n\n\n* Create ")
@@ -328,7 +335,7 @@
  (rear-context-string . "256 08-13 08:57 ")
  (position . 278))
 ("dir_Downloads"
- (filename . "/cygdrive/c/Users/twirkner/Downloads/")
+ (filename . "~/Downloads/")
  (front-context-string . "002_2009.pdf\n  -")
  (rear-context-string . "2  6. Dez 2013  ")
  (position . 266))
@@ -338,7 +345,7 @@
  (rear-context-string . "322 07-04 11:40 ")
  (position . 274))
 ("dir_Documents"
- (filename . "/cygdrive/c/Users/twirkner/Documents/")
+ (filename . "~/Documents/")
  (front-context-string . "Review_PSI5-1\n  ")
  (rear-context-string . "  0 11-23 16:55 ")
  (position . 1958))
@@ -480,7 +487,7 @@
 ("TODO.org"
  ((filename . "~/Documents/Wiki/worg/TODO.org")
   (rear-context-string)
-  (position . 228)))
+  (position . 229)))
 ("JOURNAL.org"
  ((filename . "~/Documents/Wiki/worg/JOURNAL.org")
   (front-context-string . "* Journal\n** [20")
