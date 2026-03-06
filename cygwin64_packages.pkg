@@ -9,9 +9,10 @@ texlive-collection-langgerman
 texlive-collection-latexextra
 texmaker
 texinfo
-python3-pip
-python3-devel
-python3-virtualenv
+python39-pip
+python39-devel
+# Had issues with venv utilized by pipenv installed through pip3.9
+# python39-virtualenv
 net-snmp-utils
 perl-net-snmp
 curl
@@ -35,3 +36,12 @@ unzip
 mercurial
 dos2unix
 dia
+p7zip
+rcs
+jq
+sqlite3
+sshpass
+# Doom Emacs braucht Emacs an Kommandozeile
+emacs
+python312-pip
+python312-devel

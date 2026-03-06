@@ -12,7 +12,8 @@ rst2html5
 # or at least remove standard YANG files after installation
 # pyang
 # Learnt from docs.python-guide.org
-pipenv
-pipenv-to-requirements
-pipenv-setup
-lxml
+# pipenv
+# pipenv-to-requirements
+# pipenv-setup
+# lxml
+xml2rfc

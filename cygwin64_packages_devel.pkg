@@ -2,7 +2,7 @@
 # For Emacs Development
 gcc-g++
 gdb
-emacs-26.3-2-src
+emacs-29.3-1-src
 emacs-el
 guile3.0
 guile3.0-devel
