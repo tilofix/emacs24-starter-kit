@@ -26,6 +26,8 @@ elpa/*
 themes/*
 url/*
 server/
+## Since emacs 29.3 emacs-lisp-native-compile is active
+eln-cache/*
 
 ## exported and encrypted files
 *gpg
@@ -63,3 +65,4 @@ agent/*
 literate-starter-kit/
 literate-starter-kit.tar
 network-security.data
+tilo.org
